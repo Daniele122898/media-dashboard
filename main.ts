@@ -1,13 +1,44 @@
-import { app, BrowserWindow, screen } from 'electron';
+import {app, BrowserWindow, screen, Menu, Tray} from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 import * as windowStateKeeper from 'electron-window-state';
 
 let win: BrowserWindow = null;
+let tray: Tray = null;
 const args = process.argv.slice(1),
   serve = args.some(val => val === '--serve');
 
+const mainMenu = Menu.buildFromTemplate([
+  {
+    label: 'Media Dashboard'
+  }
+]);
+
+const trayMenu = Menu.buildFromTemplate([
+  {
+    label: 'Quit Media Dashboard',
+    role: "quit"
+  }
+]);
+
+function createTray(): Tray {
+  tray = new Tray('trayTemplate@2x.png');
+  tray.setToolTip('Media Dashboard');
+
+  tray.on('click', e => {
+    win.show();
+  });
+
+  tray.on('right-click', e => {
+    trayMenu.popup();
+  });
+
+  return tray;
+}
+
 function createWindow(): BrowserWindow {
+
+  createTray();
 
   const electronScreen = screen;
   const size = electronScreen.getPrimaryDisplay().workAreaSize;
@@ -34,9 +65,12 @@ function createWindow(): BrowserWindow {
       nodeIntegration: true,
       allowRunningInsecureContent: (serve) ? true : false,
       contextIsolation: false,  // false if you want to run 2e2 test with Spectron
-      enableRemoteModule : true // true if you want to run 2e2 test  with Spectron or use remote module in renderer context (ie. Angular)
+      enableRemoteModule: true // true if you want to run 2e2 test  with Spectron or use remote module in renderer context (ie. Angular)
     },
   });
+
+  // can only see this menue on mac or linux. Since frame is turned off u cant see it on windows.
+  Menu.setApplicationMenu(mainMenu);
 
   if (serve) {
 
