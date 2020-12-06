@@ -1,15 +1,18 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 
-import { TranslateModule } from '@ngx-translate/core';
+import {TranslateModule} from '@ngx-translate/core';
 
-import { PageNotFoundComponent } from './components/';
-import { WebviewDirective } from './directives/';
-import { FormsModule } from '@angular/forms';
+import {PageNotFoundComponent} from './components/';
+import {WebviewDirective} from './directives/';
+import {FormsModule} from '@angular/forms';
+import {HeaderComponent} from './components/header/header.component';
+import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 
 @NgModule({
-  declarations: [PageNotFoundComponent, WebviewDirective],
-  imports: [CommonModule, TranslateModule, FormsModule],
-  exports: [TranslateModule, WebviewDirective, FormsModule]
+  declarations: [PageNotFoundComponent, WebviewDirective, HeaderComponent],
+  imports: [CommonModule, TranslateModule, FormsModule, FontAwesomeModule],
+  exports: [TranslateModule, WebviewDirective, FormsModule, HeaderComponent]
 })
-export class SharedModule {}
+export class SharedModule {
+}

@@ -1,0 +1,23 @@
+@import "src/app/shared/scss/settings";
+
+header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  -webkit-app-region: drag;
+
+  padding: 3px 5px;
+  background-color: $dark-grey;
+  color: $grey;
+
+  strong span {
+    color: $vibrant-blue;
+  }
+
+  .icon-container {
+    -webkit-app-region: no-drag;
+    fa-icon {
+      margin-left: 10px;
+    }
+  }
+}
