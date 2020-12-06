@@ -1,7 +1,8 @@
-import {app, BrowserWindow, screen, Menu, Tray} from 'electron';
+import {app, BrowserWindow, screen, Menu, Tray, ipcMain} from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 import * as windowStateKeeper from 'electron-window-state';
+import {WindowEvents} from "./shared/models/windowEvents";
 
 let win: BrowserWindow = null;
 let tray: Tray = null;
@@ -65,7 +66,7 @@ function createWindow(): BrowserWindow {
       nodeIntegration: true,
       allowRunningInsecureContent: (serve) ? true : false,
       contextIsolation: false,  // false if you want to run 2e2 test with Spectron
-      enableRemoteModule: true // true if you want to run 2e2 test  with Spectron or use remote module in renderer context (ie. Angular)
+      enableRemoteModule: false // true if you want to run 2e2 test  with Spectron or use remote module in renderer context (ie. Angular)
     },
   });
 
@@ -88,6 +89,32 @@ function createWindow(): BrowserWindow {
       slashes: true
     }));
   }
+
+  ipcMain.on('channel1', (e, args)=> {
+    console.log(args);
+    // e.sender.send('channel1', response)
+  });
+
+  ipcMain.handle('window-events', (e, windowEvent: WindowEvents) => {
+    switch (windowEvent) {
+      case WindowEvents.maximize:
+        win.maximize();
+        break;
+      case WindowEvents.unmaximize:
+        win.unmaximize();
+        break;
+      case WindowEvents.minimize:
+        win.minimize();
+        break;
+      case WindowEvents.close:
+        win.close();
+        break;
+      case WindowEvents.isMaximized:
+        return win.isMaximized();
+      default:
+        console.error('Missing switch case in window event handler');
+    }
+  });
 
   // Emitted when the window is closed.
   win.on('closed', () => {

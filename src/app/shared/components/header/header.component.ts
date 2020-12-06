@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {faTimes, faMinus} from '@fortawesome/free-solid-svg-icons';
 import {faSquare} from '@fortawesome/free-regular-svg-icons';
 import {ElectronService} from "../../../core/services";
+import {WindowEvents} from "../../../../../shared/models/windowEvents";
 
 @Component({
   selector: 'app-header',
@@ -16,24 +17,32 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     private electronService: ElectronService,
-  ) { }
+  ) {
+  }
 
   ngOnInit(): void {
   }
 
   public minimizeWindow(): void {
-    this.electronService.window.minimize();
+    this.electronService.invokeHandler('window-events', WindowEvents.minimize);
   }
 
   public fullScreenWindow(): void {
-    if (this.electronService.window.isMaximized()) {
-      this.electronService.window.unmaximize();
-    } else {
-      this.electronService.window.maximize();
-    }
+    this.electronService.invokeHandler('window-events', WindowEvents.isMaximized)
+      .subscribe(
+        (isMaximized) => {
+          if (isMaximized) {
+            this.electronService.invokeHandler('window-events', WindowEvents.unmaximize);
+          } else {
+            this.electronService.invokeHandler('window-events', WindowEvents.maximize);
+          }
+        }, err => {
+          console.error(err);
+        });
+
   }
 
   public closeWindow(): void {
-    this.electronService.window.close();
+    this.electronService.invokeHandler('window-events', WindowEvents.close);
   }
 }
