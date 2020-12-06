@@ -69,6 +69,12 @@ function createWindow(): BrowserWindow {
 
   winState.manage(win);
 
+  const wc = win.webContents;
+  wc.on('new-window', (e, url) => {
+    e.preventDefault();
+    console.log('Prevented creation of new window for ', url);
+  });
+
   return win;
 }
 
