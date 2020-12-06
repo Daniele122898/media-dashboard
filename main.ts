@@ -3,6 +3,7 @@ import * as path from 'path';
 import * as url from 'url';
 import * as windowStateKeeper from 'electron-window-state';
 import {WindowEvents} from "./shared/models/windowEvents";
+import {registerWindowHandlers} from "./core/events/windowEventHandlers";
 
 let win: BrowserWindow = null;
 let tray: Tray = null;
@@ -95,26 +96,7 @@ function createWindow(): BrowserWindow {
     // e.sender.send('channel1', response)
   });
 
-  ipcMain.handle('window-events', (e, windowEvent: WindowEvents) => {
-    switch (windowEvent) {
-      case WindowEvents.maximize:
-        win.maximize();
-        break;
-      case WindowEvents.unmaximize:
-        win.unmaximize();
-        break;
-      case WindowEvents.minimize:
-        win.minimize();
-        break;
-      case WindowEvents.close:
-        win.close();
-        break;
-      case WindowEvents.isMaximized:
-        return win.isMaximized();
-      default:
-        console.error('Missing switch case in window event handler');
-    }
-  });
+  registerWindowHandlers(ipcMain, win);
 
   // Emitted when the window is closed.
   win.on('closed', () => {
