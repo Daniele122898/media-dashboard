@@ -21,6 +21,9 @@ export class AppComponent {
       console.log('Run in electron');
       console.log('Electron ipcRenderer', this.electronService.ipcRenderer);
       console.log('NodeJS childProcess', this.electronService.childProcess);
+      // new Notification('Media Dashboard', {
+      //   body: 'Dashboard has started'
+      // });
     } else {
       console.log('Run in browser');
     }
