@@ -14,9 +14,13 @@ export class HomeComponent implements OnInit {
     private electronService: ElectronService,
   ) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
-  sendExampleIpc() {
+  public sendExampleIpc(): void {
     this.electronService.sendIpcMessage('channel1', {message: 'hello'});
+  }
+
+  public openFileLocation(): void {
+    this.electronService.openFileLocation('F:\\Coding\\media-dashboard\\_config.yml');
   }
 }
