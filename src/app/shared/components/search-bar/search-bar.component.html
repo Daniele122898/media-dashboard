@@ -1,0 +1,9 @@
+<div class="search-bar" [ngClass]="{'small': enableSmall}">
+  <div class="search-bar__padder">
+    <input type="text" placeholder="{{'IMPUTS.SEARCH.SEARCH_BAR_PLACEHOLDER' | translate}}" [ngModel]="searchString"
+           (ngModelChange)="searchChanged($event)">
+    <div class="search-bar__icon">
+      <img src="assets/images/search-icon.svg">
+    </div>
+  </div>
+</div>

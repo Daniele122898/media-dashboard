@@ -1,0 +1,46 @@
+@import "src/app/shared/scss/settings";
+
+.search-bar {
+  width: 100%;
+  display: flex;
+  border-radius: 5px;
+  z-index: 3;
+  height: 35px;
+  margin: 0 auto;
+  background-color: $disc-grey-dark;
+
+  > .search-bar__padder {
+    flex: 1;
+    display: flex;
+    padding: 0 14px;
+
+    > .search-bar__icon {
+      color: white;
+      filter: brightness(0) invert(0.3);
+      margin: auto 0;
+      img {
+        margin-top: 4px
+      }
+    }
+
+    > input {
+      background-color: transparent;
+      border: none;
+      margin: 0 0 0 3px;
+      padding: 0;
+      outline: none;
+      display: flex;
+      flex: 100%;
+      color: white;
+      font-size: 15px;
+
+      &::placeholder {
+        color: $disc-dark-text;
+      }
+    }
+  }
+}
+
+.small {
+  height: 30px;
+}

@@ -1,9 +1,38 @@
 <div class="container">
-  <h1 class="title">
-    {{ 'PAGES.HOME.TITLE' | translate }}
-  </h1>
+  <div class="side-bar">
+    <div class="side-bar-header">
+      <div class="search-container">
+        <app-search-bar (searchChangedEvent)="sidebarSearchChanged($event)"></app-search-bar>
+      </div>
+      <div class="button">
+        Add new Category
+      </div>
+    </div>
+    <div class="side-bar-content custom-scrollbar">
+      <div class="side-bar-item" *ngFor="let item of testArray; index as i">
+        <fa-icon [icon]="faFolder"></fa-icon>
+        <p>Lectures {{i}}</p>
+      </div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="content-header">
+      <div class="header-container">
+        <div class="button">
+          <fa-icon [icon]="faArrowUp"></fa-icon>
+        </div>
+        <span>Lectures / Semester 5 / Algorithms</span>
+      </div>
+      <div class="header-container">
+        <div class="button">
+          Open in Explorer
+        </div>
+        <app-search-bar (searchChangedEvent)="contentSearchChanged($event)" [enableSmall]="true">
+        </app-search-bar>
+      </div>
+    </div>
+    <div class="content-container">
 
-  <a routerLink="/detail">{{ 'PAGES.HOME.GO_TO_DETAIL' | translate }}</a>
-  <button (click)="sendExampleIpc()">Send IPC</button>
-  <button (click)="openFileLocation()">Open File location</button>
+    </div>
+  </div>
 </div>

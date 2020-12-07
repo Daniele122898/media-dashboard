@@ -1,0 +1,16 @@
+@import "src/app/shared/scss/settings";
+
+.button {
+  background-color: $disc-grey-dark;
+  padding: 7px 12px;
+  text-align: center;
+  border-radius: 5px;
+  font-weight: bold;
+  color: $disc-medium-text;
+
+  &:hover {
+    background-color: lighten($disc-grey-dark, 1%);
+    cursor: pointer;
+    color: $disc-light-text;
+  }
+}
