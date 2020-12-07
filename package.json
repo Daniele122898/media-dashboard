@@ -1,8 +1,9 @@
 {
   "name": "media-dashboard",
-  "version": "1.0.0",
+  "version": "1.0.0-alpha.2",
   "description": "Media Dashbaord",
   "homepage": "https://github.com/Daniele122898/media-dashboard",
+  "repository": "https://github.com/Daniele122898/media-dashboard",
   "author": {
     "name": "Serenity"
   },
@@ -24,7 +25,9 @@
     "test:watch": "ng test",
     "e2e": "npm run build:prod && cross-env TS_NODE_PROJECT='e2e/tsconfig.e2e.json' mocha --timeout 300000 --require ts-node/register e2e/**/*.e2e.ts",
     "version": "conventional-changelog -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "win-cert": "electron-builder create-self-signed-cert -p ArgonautDevelopments",
+    "release": "npm run build:prod && electron-builder -w -p 'onTagOrDraft'"
   },
   "dependencies": {
     "@fortawesome/angular-fontawesome": "0.8.0",
@@ -32,6 +35,8 @@
     "@fortawesome/free-brands-svg-icons": "^5.15.1",
     "@fortawesome/free-regular-svg-icons": "^5.15.1",
     "@fortawesome/free-solid-svg-icons": "^5.15.1",
+    "electron-log": "4.3.0",
+    "electron-updater": "4.3.5",
     "electron-window-state": "5.0.3"
   },
   "devDependencies": {

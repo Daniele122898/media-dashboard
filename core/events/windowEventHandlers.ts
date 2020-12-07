@@ -6,7 +6,7 @@ let win: BrowserWindow = null;
 const registerWindowHandlers = (ipcMain: IpcMain, window: BrowserWindow) => {
   ipcMain.handle('window-events', handleWindowEvents);
   win = window;
-}
+};
 
 const handleWindowEvents = (e, windowEvent: WindowEvents) => {
   switch (windowEvent) {

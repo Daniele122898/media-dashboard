@@ -2,7 +2,7 @@ import {app, BrowserWindow, screen, Menu, Tray, ipcMain} from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 import * as windowStateKeeper from 'electron-window-state';
-import {WindowEvents} from "./shared/models/windowEvents";
+import autoUpdater from "./core/helpers/autoUpdater";
 import {registerWindowHandlers} from "./core/events/windowEventHandlers";
 
 let win: BrowserWindow = null;
@@ -40,6 +40,7 @@ function createTray(): Tray {
 
 function createWindow(): BrowserWindow {
 
+
   createTray();
 
   const electronScreen = screen;
@@ -70,6 +71,8 @@ function createWindow(): BrowserWindow {
       enableRemoteModule: false // true if you want to run 2e2 test  with Spectron or use remote module in renderer context (ie. Angular)
     },
   });
+
+  autoUpdater(win);
 
   // can only see this menue on mac or linux. Since frame is turned off u cant see it on windows.
   Menu.setApplicationMenu(mainMenu);
