@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {ElectronService} from "../core/services";
 import {faFolder, faFolderOpen, faArrowUp} from '@fortawesome/free-solid-svg-icons';
+import {DatabaseService} from "../shared/services/database.service";
 
 
 @Component({
@@ -22,6 +23,7 @@ export class HomeComponent implements OnInit {
   constructor(
     private router: Router,
     private electronService: ElectronService,
+    private db: DatabaseService,
   ) { }
 
   ngOnInit(): void {

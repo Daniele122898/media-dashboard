@@ -37,7 +37,8 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.1",
     "electron-log": "4.3.0",
     "electron-updater": "4.3.5",
-    "electron-window-state": "5.0.3"
+    "electron-window-state": "5.0.3",
+    "hasha": "5.2.2"
   },
   "devDependencies": {
     "@angular-builders/custom-webpack": "10.0.1",
