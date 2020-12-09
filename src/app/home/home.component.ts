@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 import {ElectronService} from "../core/services";
 import {faFolder, faFolderOpen, faArrowUp} from '@fortawesome/free-solid-svg-icons';
 import {DatabaseService} from "../shared/services/database.service";
+import {Category} from "../shared/models/Category";
+import {first} from "rxjs/operators";
 
 
 @Component({
@@ -18,19 +20,22 @@ export class HomeComponent implements OnInit {
   public faFolderOpen = faFolderOpen;
   public faArrowUp = faArrowUp;
 
-  public testArray = []
+  public categories: Category[] = [];
 
   constructor(
     private router: Router,
     private electronService: ElectronService,
+    private changeDetection: ChangeDetectorRef,
     private db: DatabaseService,
   ) { }
 
   ngOnInit(): void {
-    this.testArray.length = 15;
     this.db.getAllCategories()
+      .pipe(first())
       .subscribe((res) => {
-        console.log(res);
+        this.categories = res;
+        this.changeDetection.detectChanges();
+        console.log(this.categories);
       }, err => {
         console.error(err);
       });

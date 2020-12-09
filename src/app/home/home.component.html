@@ -9,9 +9,9 @@
       </div>
     </div>
     <div class="side-bar-content custom-scrollbar">
-      <div class="side-bar-item" *ngFor="let item of testArray; index as i">
+      <div class="side-bar-item" *ngFor="let category of categories">
         <fa-icon [icon]="faFolder"></fa-icon>
-        <p>Lectures {{i}}</p>
+        <p>{{category.Name}}</p>
       </div>
     </div>
   </div>
