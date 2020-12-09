@@ -28,6 +28,12 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.testArray.length = 15;
+    this.db.getAllCategories()
+      .subscribe((res) => {
+        console.log(res);
+      }, err => {
+        console.error(err);
+      });
   }
 
   public sendExampleIpc(): void {
