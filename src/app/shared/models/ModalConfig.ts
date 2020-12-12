@@ -1,6 +1,4 @@
-import {ComponentRef} from "@angular/core";
-import {ModalComponent} from "../components/modal/modal.component";
-import {Observable, Subject} from "rxjs";
+import {ModalRef} from "./ModalRef";
 
 export class ModalConfig {
   data?: any;
@@ -26,18 +24,4 @@ export class ModalConfig {
   getData(prop: string): any {
     return (this.data && this.data.hasOwnProperty(prop)) ? this.data[prop] : undefined;
   }
-}
-
-export class ModalRef {
-  public componentRef: ComponentRef<ModalComponent>;
-
-  private readonly _onClose = new Subject<any>();
-
-  constructor() { }
-
-  close(result?: any) {
-    this._onClose.next(result);
-  }
-
-  onClose: Observable<any> = this._onClose.asObservable();
 }

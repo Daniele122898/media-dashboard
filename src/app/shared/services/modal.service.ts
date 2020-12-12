@@ -1,14 +1,16 @@
 import {ComponentFactoryResolver, ComponentRef, Injectable, Injector, Type} from '@angular/core';
 import {BehaviorSubject} from "rxjs";
-import {ModalConfig, ModalRef} from "../models/ModalConfig";
+import {ModalConfig} from "../models/ModalConfig";
 import {DynamicInjector} from "../injectors/dynamic.injector";
+import {ModalRef} from "../models/ModalRef";
+import {ModalData} from "../models/ModalData";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ModalService {
 
-  private contentSubj = new BehaviorSubject<ComponentRef<any>>(null);
+  private contentSubj = new BehaviorSubject<ModalData>(null);
   public Content$ = this.contentSubj.asObservable();
 
   private displaySubj = new BehaviorSubject<boolean>(false);
@@ -23,7 +25,7 @@ export class ModalService {
     this.displaySubj.next(show);
   }
 
-  public createModal(componentType: Type<any>, config: Partial<ModalConfig> = {}): ModalRef {
+  public createModal(componentType: Type<any>, config: ModalConfig): ModalRef {
     if (config.modalRef)
       config.modalRef.close();
 
@@ -38,7 +40,7 @@ export class ModalService {
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(componentType);
     const componentRef = componentFactory.create(new DynamicInjector(this.injector, map))
 
-    this.contentSubj.next(componentRef);
+    this.contentSubj.next({componentRef, modalConfig: config, modalRef});
 
     return modalRef;
   }

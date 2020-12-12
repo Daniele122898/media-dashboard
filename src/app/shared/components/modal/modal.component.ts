@@ -12,13 +12,15 @@ import {ModalInjectorDirective} from "../../directives/modal-injector.directive"
 export class ModalComponent implements OnInit, AfterViewInit ,OnDestroy {
 
   @ViewChild(ModalInjectorDirective, {static: true}) modalContent: ModalInjectorDirective;
+  @ViewChild('modalContent', {static: false}) modalContentContainer: ElementRef;
 
   private static readonly CLOSE_COOLDOWN_MS = 200;
+  private modalContentNative: any;
 
   @HostListener('document:click', ['$event']) onDomClick(e: any): void {
-    // if (!this.modalContentNative.contains(e.target) && this.showModal && (Date.now() - this.lastShow > ModalComponent.CLOSE_COOLDOWN_MS)) {
-    //   this.modalService.showModal(false);
-    // }
+    if (!this.modalContentNative.contains(e.target) && (Date.now() - this.lastShow > ModalComponent.CLOSE_COOLDOWN_MS)) {
+      this.modalService.showModal(false);
+    }
   }
 
   @HostListener('document:keydown', ['$event']) onKeyDown(e: KeyboardEvent): void {
@@ -34,9 +36,6 @@ export class ModalComponent implements OnInit, AfterViewInit ,OnDestroy {
     }
   }
 
-  public showModal = false;
-  public content: any;
-
   private lastShow = Date.now();
 
   private destroy$ = new Subject();
@@ -50,7 +49,7 @@ export class ModalComponent implements OnInit, AfterViewInit ,OnDestroy {
   }
 
   public ngAfterViewInit(): void {
-
+    this.modalContentNative = this.modalContentContainer.nativeElement;
   }
 
   private setupModalSubscriptions(): void {
@@ -58,10 +57,11 @@ export class ModalComponent implements OnInit, AfterViewInit ,OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(
         (show) => {
-          this.showModal = show;
-          if (this.showModal)
+          if (show) {
             this.lastShow = Date.now();
-          console.log('Show modal: ', this.showModal)
+          } else {
+            this.modalContent.viewContainerRef.clear();
+          }
         }, err => {
           console.error(err);
         }
@@ -74,10 +74,7 @@ export class ModalComponent implements OnInit, AfterViewInit ,OnDestroy {
           // Bind component ref
           const viewRef = this.modalContent.viewContainerRef;
           viewRef.clear();
-          viewRef.insert(content.hostView);
-
-          // this.content = content;
-          console.log('Modal content: ', this.content)
+          viewRef.insert(content.componentRef.hostView);
         }, err => {
           console.error(err);
         }
