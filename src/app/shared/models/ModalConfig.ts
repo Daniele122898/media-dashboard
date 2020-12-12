@@ -1,5 +1,3 @@
-import {ModalRef} from "./ModalRef";
-
 export class ModalConfig {
   data?: any;
   header?: string;
@@ -10,7 +8,6 @@ export class ModalConfig {
   closeOnEscape?: boolean = true;
   baseZIndex?: number = 9000;
   autoZIndex?: boolean;
-  modalRef: ModalRef;
   style?: any;
   contentStyle?: any;
   styleClass?: string;

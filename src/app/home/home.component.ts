@@ -54,7 +54,6 @@ export class HomeComponent implements OnInit {
   }
 
   public onCreateCategory():void {
-    // this.modalService.modalContent(this.createCategoryModalNative.innerHTML);
     this.modalService.createModal(CreateCategoryModalComponent, {
       header: 'Create New Category',
       subheader: 'Categories represent Folders on your PC to easily organize your ' +
