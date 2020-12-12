@@ -14,10 +14,7 @@ import {CreateCategoryModalComponent} from "../shared/components/modal/modals/cr
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit, AfterViewInit {
-
-  // @ViewChild('createCategoryModal', {static: false}) createCategoryModal: ElementRef;
-  // private createCategoryModalNative: any;
+export class HomeComponent implements OnInit {
 
   public sidebarSearchString: string;
   private contentSearchString: string;
@@ -68,9 +65,5 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // this.modalService.modalContent(this.createCategoryModalNative.innerHTML);
     this.modalService.createModal(CreateCategoryModalComponent, {})
     this.modalService.showModal(true);
-  }
-
-  public ngAfterViewInit(): void {
-    // this.createCategoryModalNative = this.createCategoryModal.nativeElement;
   }
 }
