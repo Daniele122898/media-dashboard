@@ -8,13 +8,13 @@ import {WebviewDirective} from './directives/';
 import {FormsModule} from '@angular/forms';
 import {HeaderComponent} from './components/header/header.component';
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
-import { SearchBarComponent } from './components/search-bar/search-bar.component';
+import { DarkInputComponent } from './components/input/dark-input.component';
 import { ModalComponent } from './components/modal/modal.component';
 
 @NgModule({
-  declarations: [PageNotFoundComponent, WebviewDirective, HeaderComponent, SearchBarComponent, ModalComponent],
+  declarations: [PageNotFoundComponent, WebviewDirective, HeaderComponent, DarkInputComponent, ModalComponent],
   imports: [CommonModule, TranslateModule, FormsModule, FontAwesomeModule],
-    exports: [TranslateModule, WebviewDirective, FormsModule, HeaderComponent, SearchBarComponent, ModalComponent]
+    exports: [TranslateModule, WebviewDirective, FormsModule, HeaderComponent, DarkInputComponent, ModalComponent]
 })
 export class SharedModule {
 }

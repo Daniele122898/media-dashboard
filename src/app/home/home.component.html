@@ -2,7 +2,7 @@
   <div class="side-bar">
     <div class="side-bar-header">
       <div class="search-container">
-        <app-search-bar (searchChangedEvent)="sidebarSearchChanged($event)"></app-search-bar>
+        <app-input (searchChangedEvent)="sidebarSearchChanged($event)"></app-input>
       </div>
       <div class="button" (click)="onCreateCategory()">
         Add new Category
@@ -27,8 +27,8 @@
         <div class="button">
           Open in Explorer
         </div>
-        <app-search-bar (searchChangedEvent)="contentSearchChanged($event)" [enableSmall]="true">
-        </app-search-bar>
+        <app-input (searchChangedEvent)="contentSearchChanged($event)" [enableSmall]="true">
+        </app-input>
       </div>
     </div>
     <div class="content-container">
@@ -39,7 +39,14 @@
 
 <div style="display: none">
   <div #createCategoryModal>
-    <h1>test modal</h1>
-    <p>see if this works</p>
+    <div>
+      <div>
+        <app-input [showSearchIcon]="false" [customPlaceholder]="'INPUTS.PLACEHOLDERS.DIR_PATH'"></app-input>
+      </div>
+      <div>
+        <app-input [showSearchIcon]="false" [customPlaceholder]="'INPUTS.PLACEHOLDERS.CATEGORY_NAME'"></app-input>
+      </div>
+
+    </div>
   </div>
 </div>

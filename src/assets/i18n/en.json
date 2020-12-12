@@ -9,9 +9,13 @@
         "BACK_TO_HOME": "Back to Home"
     }
   },
-  "IMPUTS": {
+  "INPUTS": {
     "SEARCH": {
       "SEARCH_BAR_PLACEHOLDER": "Search"
+    },
+    "PLACEHOLDERS": {
+      "DIR_PATH": "Path to Directory",
+      "CATEGORY_NAME": "Category Name"
     }
   }
 }
