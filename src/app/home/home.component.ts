@@ -1,10 +1,11 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import { Router } from '@angular/router';
 import {ElectronService} from "../core/services";
 import {faFolder, faFolderOpen, faArrowUp} from '@fortawesome/free-solid-svg-icons';
 import {DatabaseService} from "../shared/services/database.service";
 import {Category} from "../shared/models/Category";
 import {first} from "rxjs/operators";
+import {ModalService} from "../shared/services/modal.service";
 
 
 @Component({
@@ -12,7 +13,11 @@ import {first} from "rxjs/operators";
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, AfterViewInit {
+
+  @ViewChild('createCategoryModal', {static: false}) createCategoryModal: ElementRef;
+  private createCategoryModalNative: any;
+
   public sidebarSearchString: string;
   private contentSearchString: string;
 
@@ -27,6 +32,7 @@ export class HomeComponent implements OnInit {
     private electronService: ElectronService,
     private changeDetection: ChangeDetectorRef,
     private db: DatabaseService,
+    private modalService: ModalService,
   ) { }
 
   ngOnInit(): void {
@@ -55,5 +61,14 @@ export class HomeComponent implements OnInit {
 
   public contentSearchChanged(e: string): void {
     this.contentSearchString = e;
+  }
+
+  public onCreateCategory():void {
+    this.modalService.modalContent(this.createCategoryModalNative.innerHTML);
+    this.modalService.showModal(true);
+  }
+
+  public ngAfterViewInit(): void {
+    this.createCategoryModalNative = this.createCategoryModal.nativeElement;
   }
 }

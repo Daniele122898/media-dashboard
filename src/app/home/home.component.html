@@ -4,7 +4,7 @@
       <div class="search-container">
         <app-search-bar (searchChangedEvent)="sidebarSearchChanged($event)"></app-search-bar>
       </div>
-      <div class="button">
+      <div class="button" (click)="onCreateCategory()">
         Add new Category
       </div>
     </div>
@@ -34,5 +34,12 @@
     <div class="content-container">
 
     </div>
+  </div>
+</div>
+
+<div style="display: none">
+  <div #createCategoryModal>
+    <h1>test modal</h1>
+    <p>see if this works</p>
   </div>
 </div>

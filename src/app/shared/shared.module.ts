@@ -9,11 +9,12 @@ import {FormsModule} from '@angular/forms';
 import {HeaderComponent} from './components/header/header.component';
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import { SearchBarComponent } from './components/search-bar/search-bar.component';
+import { ModalComponent } from './components/modal/modal.component';
 
 @NgModule({
-  declarations: [PageNotFoundComponent, WebviewDirective, HeaderComponent, SearchBarComponent],
+  declarations: [PageNotFoundComponent, WebviewDirective, HeaderComponent, SearchBarComponent, ModalComponent],
   imports: [CommonModule, TranslateModule, FormsModule, FontAwesomeModule],
-  exports: [TranslateModule, WebviewDirective, FormsModule, HeaderComponent, SearchBarComponent]
+    exports: [TranslateModule, WebviewDirective, FormsModule, HeaderComponent, SearchBarComponent, ModalComponent]
 })
 export class SharedModule {
 }
