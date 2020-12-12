@@ -27,7 +27,7 @@
         <div class="button">
           Open in Explorer
         </div>
-        <app-input (inputChangedEvent)="contentSearchChanged($event)" [enableSmall]="true">
+        <app-input [(input)]="contentSearchString" [enableSmall]="true">
         </app-input>
       </div>
     </div>

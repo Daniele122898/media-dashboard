@@ -17,7 +17,7 @@ import {CreateCategoryModalComponent} from "../shared/components/modal/modals/cr
 export class HomeComponent implements OnInit {
 
   public sidebarSearchString: string;
-  private contentSearchString: string;
+  public contentSearchString = "";
 
   public faFolder = faFolder;
   public faFolderOpen = faFolderOpen;
@@ -57,16 +57,12 @@ export class HomeComponent implements OnInit {
     this.sidebarSearchString = e;
   }
 
-  public contentSearchChanged(e: string): void {
-    this.contentSearchString = e;
-  }
-
   public onCreateCategory():void {
     // this.modalService.modalContent(this.createCategoryModalNative.innerHTML);
     this.modalService.createModal(CreateCategoryModalComponent, {
       header: 'Test header',
       showHeader: true
-    })
+    });
     this.modalService.showModal(true);
   }
 }
