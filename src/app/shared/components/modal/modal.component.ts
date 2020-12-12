@@ -2,6 +2,7 @@ import {AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, V
 import {ModalService} from "../../services/modal.service";
 import {Subject} from "rxjs";
 import {takeUntil} from "rxjs/operators";
+import {ModalInjectorDirective} from "../../directives/modal-injector.directive";
 
 @Component({
   selector: 'app-modal',
@@ -10,15 +11,14 @@ import {takeUntil} from "rxjs/operators";
 })
 export class ModalComponent implements OnInit, AfterViewInit ,OnDestroy {
 
-  @ViewChild('modalContent', {static: false}) modalContent: ElementRef;
-  private modalContentNative: any;
+  @ViewChild(ModalInjectorDirective, {static: true}) modalContent: ModalInjectorDirective;
 
   private static readonly CLOSE_COOLDOWN_MS = 200;
 
   @HostListener('document:click', ['$event']) onDomClick(e: any): void {
-    if (!this.modalContentNative.contains(e.target) && this.showModal && (Date.now() - this.lastShow > ModalComponent.CLOSE_COOLDOWN_MS)) {
-      this.modalService.showModal(false);
-    }
+    // if (!this.modalContentNative.contains(e.target) && this.showModal && (Date.now() - this.lastShow > ModalComponent.CLOSE_COOLDOWN_MS)) {
+    //   this.modalService.showModal(false);
+    // }
   }
 
   @HostListener('document:keydown', ['$event']) onKeyDown(e: KeyboardEvent): void {
@@ -46,6 +46,14 @@ export class ModalComponent implements OnInit, AfterViewInit ,OnDestroy {
   ) { }
 
   ngOnInit(): void {
+    this.setupModalSubscriptions();
+  }
+
+  public ngAfterViewInit(): void {
+
+  }
+
+  private setupModalSubscriptions(): void {
     this.modalService.ShowModal$
       .pipe(takeUntil(this.destroy$))
       .subscribe(
@@ -63,16 +71,17 @@ export class ModalComponent implements OnInit, AfterViewInit ,OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(
         (content) => {
-          this.content = content;
+          // Bind component ref
+          const viewRef = this.modalContent.viewContainerRef;
+          viewRef.clear();
+          viewRef.insert(content.hostView);
+
+          // this.content = content;
           console.log('Modal content: ', this.content)
         }, err => {
           console.error(err);
         }
       )
-  }
-
-  public ngAfterViewInit(): void {
-    this.modalContentNative =  this.modalContent.nativeElement;
   }
 
   ngOnDestroy() {

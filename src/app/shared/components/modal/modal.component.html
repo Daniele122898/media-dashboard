@@ -1,6 +1,7 @@
-<div class="modal-page" *ngIf="showModal">
+<div class="modal-page">
   <div class="modal-container" #modalContent>
-    <div class="modal-content" [innerHTML]="this.content">
+    <div class="modal-content">
+      <ng-template appModalInjector></ng-template>
     </div>
   </div>
 </div>

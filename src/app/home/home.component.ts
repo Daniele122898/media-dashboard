@@ -6,6 +6,7 @@ import {DatabaseService} from "../shared/services/database.service";
 import {Category} from "../shared/models/Category";
 import {first} from "rxjs/operators";
 import {ModalService} from "../shared/services/modal.service";
+import {CreateCategoryModalComponent} from "../shared/components/modal/modals/create-category-modal/create-category-modal.component";
 
 
 @Component({
@@ -15,8 +16,8 @@ import {ModalService} from "../shared/services/modal.service";
 })
 export class HomeComponent implements OnInit, AfterViewInit {
 
-  @ViewChild('createCategoryModal', {static: false}) createCategoryModal: ElementRef;
-  private createCategoryModalNative: any;
+  // @ViewChild('createCategoryModal', {static: false}) createCategoryModal: ElementRef;
+  // private createCategoryModalNative: any;
 
   public sidebarSearchString: string;
   private contentSearchString: string;
@@ -64,11 +65,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   public onCreateCategory():void {
-    this.modalService.modalContent(this.createCategoryModalNative.innerHTML);
+    // this.modalService.modalContent(this.createCategoryModalNative.innerHTML);
+    this.modalService.createModal(CreateCategoryModalComponent, {})
     this.modalService.showModal(true);
   }
 
   public ngAfterViewInit(): void {
-    this.createCategoryModalNative = this.createCategoryModal.nativeElement;
+    // this.createCategoryModalNative = this.createCategoryModal.nativeElement;
   }
 }

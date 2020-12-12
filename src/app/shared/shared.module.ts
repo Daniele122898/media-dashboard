@@ -10,9 +10,11 @@ import {HeaderComponent} from './components/header/header.component';
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import { DarkInputComponent } from './components/input/dark-input.component';
 import { ModalComponent } from './components/modal/modal.component';
+import { ModalInjectorDirective } from './directives/modal-injector.directive';
+import { CreateCategoryModalComponent } from './components/modal/modals/create-category-modal/create-category-modal.component';
 
 @NgModule({
-  declarations: [PageNotFoundComponent, WebviewDirective, HeaderComponent, DarkInputComponent, ModalComponent],
+  declarations: [PageNotFoundComponent, WebviewDirective, HeaderComponent, DarkInputComponent, ModalComponent, ModalInjectorDirective, CreateCategoryModalComponent],
   imports: [CommonModule, TranslateModule, FormsModule, FontAwesomeModule],
     exports: [TranslateModule, WebviewDirective, FormsModule, HeaderComponent, DarkInputComponent, ModalComponent]
 })
