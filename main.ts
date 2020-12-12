@@ -31,9 +31,11 @@ function createTray(): Tray {
     win.show();
   });
 
-  tray.on('right-click', e => {
-    trayMenu.popup();
-  });
+  tray.setContextMenu(trayMenu);
+
+  // tray.on('right-click', e => {
+  //   trayMenu.popup();
+  // });
 
   return tray;
 }
