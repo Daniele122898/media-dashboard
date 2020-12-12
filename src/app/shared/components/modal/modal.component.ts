@@ -3,6 +3,7 @@ import {ModalService} from "../../services/modal.service";
 import {Subject} from "rxjs";
 import {takeUntil} from "rxjs/operators";
 import {ModalInjectorDirective} from "../../directives/modal-injector.directive";
+import {ModalConfig} from "../../models/ModalConfig";
 
 @Component({
   selector: 'app-modal',
@@ -35,6 +36,8 @@ export class ModalComponent implements OnInit, AfterViewInit ,OnDestroy {
         return;
     }
   }
+
+  public modalConfig: ModalConfig;
 
   private lastShow = Date.now();
 

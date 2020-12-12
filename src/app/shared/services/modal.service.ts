@@ -1,4 +1,4 @@
-import {ComponentFactoryResolver, ComponentRef, Injectable, Injector, Type} from '@angular/core';
+import {ComponentFactoryResolver, Injectable, Injector, Type} from '@angular/core';
 import {BehaviorSubject} from "rxjs";
 import {ModalConfig} from "../models/ModalConfig";
 import {DynamicInjector} from "../injectors/dynamic.injector";
@@ -25,22 +25,21 @@ export class ModalService {
     this.displaySubj.next(show);
   }
 
-  public createModal(componentType: Type<any>, config: ModalConfig): ModalRef {
+  public createModal(componentType: Type<any>, config: Partial<ModalConfig> = {}): ModalRef {
     if (config.modalRef)
       config.modalRef.close();
 
-    config = new ModalConfig(Object.assign({}, config));
-
     // Create extended dependency injection for our created modal
     const map = new WeakMap();
-    map.set(ModalConfig, config);
     const modalRef = new ModalRef();
     map.set(ModalRef, modalRef);
+    const modalConfig = new ModalConfig(Object.assign(config, {modalRef}))
+    map.set(ModalConfig, modalConfig);
 
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(componentType);
     const componentRef = componentFactory.create(new DynamicInjector(this.injector, map))
 
-    this.contentSubj.next({componentRef, modalConfig: config, modalRef});
+    this.contentSubj.next({componentRef, modalConfig, modalRef});
 
     return modalRef;
   }
