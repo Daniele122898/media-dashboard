@@ -8,6 +8,11 @@
   font-weight: bold;
   color: $disc-medium-text;
 
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
   &:hover {
     background-color: lighten($disc-grey-dark, 1%);
     cursor: pointer;
