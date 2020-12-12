@@ -33,10 +33,6 @@ function createTray(): Tray {
 
   tray.setContextMenu(trayMenu);
 
-  // tray.on('right-click', e => {
-  //   trayMenu.popup();
-  // });
-
   return tray;
 }
 
