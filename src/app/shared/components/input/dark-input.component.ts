@@ -8,7 +8,8 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 export class DarkInputComponent implements OnInit {
   @Input() enableSmall = false;
   @Input() customPlaceholder = "";
-  @Input() showSearchIcon = true;
+  @Input() showPlaceholder = true;
+  @Input() showSearchIcon = false;
 
   @Input() input: string;
   @Output() inputChange = new EventEmitter<string>();

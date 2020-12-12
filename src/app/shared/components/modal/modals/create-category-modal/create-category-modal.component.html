@@ -1,10 +1,25 @@
 <div>
   <div>
-    <div>
-      <app-input [showSearchIcon]="false" [customPlaceholder]="'INPUTS.PLACEHOLDERS.DIR_PATH'"></app-input>
+    <div class="form-group">
+      <span class="input-label">Directory Path</span>
+      <div class="input-row">
+        <app-input class="input-padding" [showPlaceholder]="false" [customPlaceholder]="'INPUTS.PLACEHOLDERS.DIR_PATH'"></app-input>
+        <div class="button input-button">
+          Select Path
+        </div>
+      </div>
     </div>
-    <div>
-      <app-input [showSearchIcon]="false" [customPlaceholder]="'INPUTS.PLACEHOLDERS.CATEGORY_NAME'"></app-input>
+    <div class="form-group">
+      <span class="input-label">Category Name</span>
+      <app-input [showPlaceholder]="false" [customPlaceholder]="'INPUTS.PLACEHOLDERS.CATEGORY_NAME'"></app-input>
+    </div>
+    <div class="form-buttons">
+      <div class="button">
+        Cancel
+      </div>
+      <div class="button button-bright">
+        Create
+      </div>
     </div>
 
   </div>

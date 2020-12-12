@@ -2,7 +2,7 @@
   <div class="side-bar">
     <div class="side-bar-header">
       <div class="search-container">
-        <app-input (inputChangedEvent)="sidebarSearchChanged($event)"></app-input>
+        <app-input [(input)]="sidebarSearchString" [showSearchIcon]="true"></app-input>
       </div>
       <div class="button" (click)="onCreateCategory()">
         Add new Category
@@ -27,7 +27,7 @@
         <div class="button">
           Open in Explorer
         </div>
-        <app-input [(input)]="contentSearchString" [enableSmall]="true">
+        <app-input [(input)]="contentSearchString" [showSearchIcon]="true" [enableSmall]="true">
         </app-input>
       </div>
     </div>

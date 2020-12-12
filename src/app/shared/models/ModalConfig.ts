@@ -3,6 +3,7 @@ import {ModalRef} from "./ModalRef";
 export class ModalConfig {
   data?: any;
   header?: string;
+  subheader?: string;
   footer?: string;
   width?: string;
   height?: string;

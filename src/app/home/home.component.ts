@@ -16,7 +16,7 @@ import {CreateCategoryModalComponent} from "../shared/components/modal/modals/cr
 })
 export class HomeComponent implements OnInit {
 
-  public sidebarSearchString: string;
+  public sidebarSearchString = "";
   public contentSearchString = "";
 
   public faFolder = faFolder;
@@ -53,15 +53,14 @@ export class HomeComponent implements OnInit {
     this.electronService.openFileLocation('F:\\Coding\\media-dashboard\\_config.yml');
   }
 
-  public sidebarSearchChanged(e: string): void {
-    this.sidebarSearchString = e;
-  }
-
   public onCreateCategory():void {
     // this.modalService.modalContent(this.createCategoryModalNative.innerHTML);
     this.modalService.createModal(CreateCategoryModalComponent, {
-      header: 'Test header',
-      showHeader: true
+      header: 'Create New Category',
+      subheader: 'Categories represent Folders on your PC to easily organize your ' +
+        'most important media folders.',
+      showHeader: true,
+      width: '400px'
     });
     this.modalService.showModal(true);
   }

@@ -29,11 +29,19 @@
 
       .modal-header {
         display: flex;
-        flex-direction: row;
-        margin-bottom: 15px;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+        text-align: center;
 
-        h3 {
-          margin: 0;
+        .modal-title {
+          margin: 0 0 10px;
+        }
+
+        .modal-subheader {
+          font-size: 14px;
+          color: $disc-medium-text;
         }
       }
 

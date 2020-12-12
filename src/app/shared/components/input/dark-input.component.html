@@ -2,7 +2,7 @@
   <div class="search-bar__padder">
     <input
       type="text"
-      placeholder="{{((!this.customPlaceholder ? 'INPUTS.SEARCH.SEARCH_BAR_PLACEHOLDER' : this.customPlaceholder) | translate)}}"
+      placeholder="{{showPlaceholder ? ((!this.customPlaceholder ? 'INPUTS.SEARCH.SEARCH_BAR_PLACEHOLDER' : this.customPlaceholder) | translate) : ''}}"
       [ngModel]="input"
        (ngModelChange)="searchChanged($event)">
     <div class="search-bar__icon" *ngIf="showSearchIcon">
