@@ -6,7 +6,7 @@ export class ModalConfig {
   footer?: string;
   width?: string;
   height?: string;
-  closeOnEscape?: boolean;
+  closeOnEscape?: boolean = true;
   baseZIndex?: number = 9000;
   autoZIndex?: boolean;
   modalRef: ModalRef;
@@ -15,7 +15,7 @@ export class ModalConfig {
   styleClass?: string;
   transitionOptions?: string;
   closable?: boolean = true;
-  showHeader?: boolean = true;
+  showHeader?: boolean = false;
 
   constructor(config?: Partial<ModalConfig>) {
     return Object.assign(this, config);

@@ -2,7 +2,7 @@
   <div class="side-bar">
     <div class="side-bar-header">
       <div class="search-container">
-        <app-input (searchChangedEvent)="sidebarSearchChanged($event)"></app-input>
+        <app-input (inputChangedEvent)="sidebarSearchChanged($event)"></app-input>
       </div>
       <div class="button" (click)="onCreateCategory()">
         Add new Category
@@ -27,7 +27,7 @@
         <div class="button">
           Open in Explorer
         </div>
-        <app-input (searchChangedEvent)="contentSearchChanged($event)" [enableSmall]="true">
+        <app-input (inputChangedEvent)="contentSearchChanged($event)" [enableSmall]="true">
         </app-input>
       </div>
     </div>

@@ -6,11 +6,12 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
   styleUrls: ['./dark-input.component.scss']
 })
 export class DarkInputComponent implements OnInit {
-  searchString: string = "";
-  @Output() searchChangedEvent: EventEmitter<string> = new EventEmitter<string>();
   @Input() enableSmall = false;
   @Input() customPlaceholder = "";
   @Input() showSearchIcon = true;
+
+  @Input() input: string;
+  @Output() inputChange = new EventEmitter<string>();
 
   constructor() { }
 
@@ -18,6 +19,6 @@ export class DarkInputComponent implements OnInit {
   }
 
   searchChanged(e: string) {
-    this.searchChangedEvent.emit(e);
+    this.inputChange.emit(e);
   }
 }

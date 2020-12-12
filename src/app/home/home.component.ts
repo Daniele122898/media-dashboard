@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 import {ElectronService} from "../core/services";
 import {faFolder, faFolderOpen, faArrowUp} from '@fortawesome/free-solid-svg-icons';
@@ -63,7 +63,10 @@ export class HomeComponent implements OnInit {
 
   public onCreateCategory():void {
     // this.modalService.modalContent(this.createCategoryModalNative.innerHTML);
-    this.modalService.createModal(CreateCategoryModalComponent, {})
+    this.modalService.createModal(CreateCategoryModalComponent, {
+      header: 'Test header',
+      showHeader: true
+    })
     this.modalService.showModal(true);
   }
 }

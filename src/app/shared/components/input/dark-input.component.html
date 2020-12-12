@@ -3,7 +3,7 @@
     <input
       type="text"
       placeholder="{{((!this.customPlaceholder ? 'INPUTS.SEARCH.SEARCH_BAR_PLACEHOLDER' : this.customPlaceholder) | translate)}}"
-      [ngModel]="searchString"
+      [ngModel]="input"
        (ngModelChange)="searchChanged($event)">
     <div class="search-bar__icon" *ngIf="showSearchIcon">
       <img src="assets/images/search-icon.svg">

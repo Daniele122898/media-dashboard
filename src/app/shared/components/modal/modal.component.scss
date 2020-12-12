@@ -21,9 +21,21 @@
     flex-wrap: wrap;
 
     .modal-container {
-      padding: $m-size;
+      padding: $s-size;
       background-color: $disc-grey-medium;
       border-radius: 5px;
+
+      color: $disc-light-text;
+
+      .modal-header {
+        display: flex;
+        flex-direction: row;
+        margin-bottom: 15px;
+
+        h3 {
+          margin: 0;
+        }
+      }
 
       .modal-content {
 

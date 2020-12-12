@@ -1,4 +1,5 @@
 import {AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {faTimes} from '@fortawesome/free-solid-svg-icons';
 import {ModalService} from "../../services/modal.service";
 import {Subject} from "rxjs";
 import {takeUntil} from "rxjs/operators";
@@ -15,17 +16,19 @@ export class ModalComponent implements OnInit, AfterViewInit ,OnDestroy {
   @ViewChild(ModalInjectorDirective, {static: true}) modalContent: ModalInjectorDirective;
   @ViewChild('modalContent', {static: false}) modalContentContainer: ElementRef;
 
+  public faTimes = faTimes;
+
   private static readonly CLOSE_COOLDOWN_MS = 200;
   private modalContentNative: any;
 
   @HostListener('document:click', ['$event']) onDomClick(e: any): void {
-    if (!this.modalContentNative.contains(e.target) && (Date.now() - this.lastShow > ModalComponent.CLOSE_COOLDOWN_MS)) {
+    if (!this.modalContentNative.contains(e.target) && (Date.now() - this.lastShow > ModalComponent.CLOSE_COOLDOWN_MS) && this.modalConfig.closable) {
       this.modalService.showModal(false);
     }
   }
 
   @HostListener('document:keydown', ['$event']) onKeyDown(e: KeyboardEvent): void {
-    if (Math.abs(Date.now() - this.lastShow) < ModalComponent.CLOSE_COOLDOWN_MS)
+    if (Math.abs(Date.now() - this.lastShow) < ModalComponent.CLOSE_COOLDOWN_MS || !this.modalConfig.closable || !this.modalConfig.closeOnEscape)
       return;
 
     switch (e.code) {
@@ -73,11 +76,12 @@ export class ModalComponent implements OnInit, AfterViewInit ,OnDestroy {
     this.modalService.Content$
       .pipe(takeUntil(this.destroy$))
       .subscribe(
-        (content) => {
+        (modalData) => {
           // Bind component ref
           const viewRef = this.modalContent.viewContainerRef;
+          this.modalConfig = modalData.modalConfig;
           viewRef.clear();
-          viewRef.insert(content.componentRef.hostView);
+          viewRef.insert(modalData.componentRef.hostView);
         }, err => {
           console.error(err);
         }
@@ -89,4 +93,7 @@ export class ModalComponent implements OnInit, AfterViewInit ,OnDestroy {
     this.destroy$.unsubscribe();
   }
 
+  public onCloseClick(): void {
+    this.modalService.showModal(false);
+  }
 }
