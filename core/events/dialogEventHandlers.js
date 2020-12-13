@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -56,8 +67,9 @@ var handleWindowEvents = function (e, dialogData) { return __awaiter(void 0, voi
                     case dialogEventData_1.DialogType.Open: return [3 /*break*/, 1];
                     case dialogEventData_1.DialogType.Save: return [3 /*break*/, 3];
                     case dialogEventData_1.DialogType.Error: return [3 /*break*/, 5];
+                    case dialogEventData_1.DialogType.Messagebox: return [3 /*break*/, 6];
                 }
-                return [3 /*break*/, 6];
+                return [3 /*break*/, 8];
             case 1: return [4 /*yield*/, dialogOpen(dialogData)];
             case 2:
                 openResp = _b.sent();
@@ -68,11 +80,21 @@ var handleWindowEvents = function (e, dialogData) { return __awaiter(void 0, voi
                 return [2 /*return*/, { canceled: saveResp.canceled, filePath: saveResp.filePath }];
             case 5:
                 dialogError(dialogData);
-                return [3 /*break*/, 7];
-            case 6:
+                return [3 /*break*/, 9];
+            case 6: return [4 /*yield*/, createMessageBox(dialogData)];
+            case 7: return [2 /*return*/, _b.sent()];
+            case 8:
                 console.error('Dialog type not supported');
                 return [2 /*return*/, null];
-            case 7: return [2 /*return*/];
+            case 9: return [2 /*return*/];
+        }
+    });
+}); };
+var createMessageBox = function (messageBoxData) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, electron_1.dialog.showMessageBox(win, __assign({}, messageBoxData))];
+            case 1: return [2 /*return*/, _a.sent()];
         }
     });
 }); };

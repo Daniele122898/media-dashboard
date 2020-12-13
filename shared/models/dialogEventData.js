@@ -6,6 +6,7 @@ var DialogType;
     DialogType[DialogType["Open"] = 0] = "Open";
     DialogType[DialogType["Save"] = 1] = "Save";
     DialogType[DialogType["Error"] = 2] = "Error";
+    DialogType[DialogType["Messagebox"] = 3] = "Messagebox";
 })(DialogType = exports.DialogType || (exports.DialogType = {}));
 var SelectionType;
 (function (SelectionType) {

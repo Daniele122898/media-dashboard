@@ -3,7 +3,7 @@ import {
   DialogEventData,
   DialogEventOpenReply,
   DialogEventSaveReply,
-  DialogType,
+  DialogType, MessageBoxData, MessageBoxReply,
   SelectionType
 } from "../../shared/models/dialogEventData";
 import {DIALOG_EVENT_CHANNEL} from "../../shared/models/EventChannels";
@@ -15,22 +15,30 @@ const registerDialogEventHandlers = (ipcMain: IpcMain, window: BrowserWindow) =>
   win = window;
 };
 
-const handleWindowEvents = async (e: IpcMainInvokeEvent, dialogData: DialogEventData): Promise<(DialogEventOpenReply | DialogEventSaveReply)> => {
+const handleWindowEvents = async (e: IpcMainInvokeEvent, dialogData: (DialogEventData | MessageBoxData)): Promise<(DialogEventOpenReply | DialogEventSaveReply | MessageBoxReply)> => {
   switch (dialogData.dialogType) {
     case DialogType.Open:
-      const openResp = await dialogOpen(dialogData);
+      const openResp = await dialogOpen(<DialogEventData>dialogData);
       return {canceled: openResp.canceled, filePaths: openResp.filePaths};
     case DialogType.Save:
-      const saveResp = await dialogSave(dialogData);
+      const saveResp = await dialogSave(<DialogEventData>dialogData);
       return {canceled: saveResp.canceled, filePath: saveResp.filePath};
     case DialogType.Error:
-      dialogError(dialogData);
+      dialogError(<DialogEventData>dialogData);
       break;
+    case DialogType.Messagebox:
+      return await createMessageBox(<MessageBoxData>dialogData);
     default:
       console.error('Dialog type not supported');
       return null;
   }
 };
+
+const createMessageBox = async (messageBoxData: MessageBoxData): Promise<MessageBoxReply> => {
+  return await dialog.showMessageBox(win, {
+    ...messageBoxData
+  });
+}
 
 const dialogError = (dialogData: DialogEventData) => {
   dialog.showErrorBox(
