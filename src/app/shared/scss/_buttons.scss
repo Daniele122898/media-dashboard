@@ -34,3 +34,13 @@
     cursor: not-allowed;
   }
 }
+
+.button-red {
+  color: $pastel-red;
+
+  &:hover {
+    background-color: $pastel-red;
+    color: $disc-grey-dark;
+    cursor: pointer;
+  }
+}

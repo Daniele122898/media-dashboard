@@ -1,14 +1,14 @@
 import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {ElectronService} from "../core/services";
-import {faFolder, faFolderOpen, faArrowUp} from '@fortawesome/free-solid-svg-icons';
+import {faFolder, faFolderOpen, faArrowUp, faTrash} from '@fortawesome/free-solid-svg-icons';
 import {DatabaseService} from "../shared/services/database.service";
 import {Category} from "../shared/models/Category";
 import {first} from "rxjs/operators";
 import {ModalService} from "../shared/services/modal.service";
 import {CreateCategoryModalComponent} from "../shared/components/modal/modals/create-category-modal/create-category-modal.component";
-import {pipe, Subscription} from "rxjs";
-import {DialogEventData, DialogEventOpenReply, DialogType, SelectionType} from "../../../shared/models/dialogEventData";
+import {Subscription} from "rxjs";
+import {DialogEventData, DialogType} from "../../../shared/models/dialogEventData";
 import {DIALOG_EVENT_CHANNEL} from "../../../shared/models/EventChannels";
 
 
@@ -25,6 +25,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   public faFolder = faFolder;
   public faFolderOpen = faFolderOpen;
   public faArrowUp = faArrowUp;
+  public faTrash = faTrash;
 
   public categories: Category[] = [];
   private modalValueSub: Subscription;
@@ -89,6 +90,26 @@ export class HomeComponent implements OnInit, OnDestroy {
         }, err => console.error(err)
       );
 
+  }
+
+  public removeCategory(category: Category): void {
+    this.db.removeCategory(category.Id)
+      .pipe(first())
+      .subscribe(
+        res => {
+          if (res.rowsAffected > 0) {
+            this.getAllCategories();
+          } else {
+            this.electronService.invokeHandler(
+              DIALOG_EVENT_CHANNEL,
+              <DialogEventData>{
+                dialogType: DialogType.Error,
+                title: 'Something went wrong',
+                content: "Couldn't remove Category :("
+              })
+          }
+        }, err => console.error(err)
+      )
   }
 
   private getAllCategories(): void {

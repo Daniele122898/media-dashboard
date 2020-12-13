@@ -12,6 +12,7 @@
       <div class="side-bar-item" *ngFor="let category of categories">
         <fa-icon [icon]="faFolder"></fa-icon>
         <p>{{category.Name}}</p>
+        <div class="button button-red" (click)="removeCategory(category)"><fa-icon [icon]="faTrash"></fa-icon></div>
       </div>
     </div>
   </div>

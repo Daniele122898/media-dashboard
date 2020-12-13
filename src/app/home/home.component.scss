@@ -43,6 +43,7 @@
           display: flex;
           flex-direction: row;
           align-items: center;
+          position: relative;
 
           text-overflow: ellipsis;
           white-space: nowrap;
@@ -50,13 +51,17 @@
           color: $disc-medium-text;
           font-weight: bold;
           font-size: 30px;
-          padding: 8px 20px;
+          padding: 8px 12px;
           border-bottom: 2px solid $disc-grey-light;
 
           &:hover {
             background-color: $disc-grey-medium-highlight;
             color: $disc-light-text;
             cursor: pointer;
+
+            .button {
+              display: block;
+            }
           }
 
           p {
@@ -65,6 +70,14 @@
             overflow: hidden;
             white-space: nowrap;
             margin: 0 0 0 7px;
+          }
+
+          .button {
+            display: none;
+            position: absolute;
+            font-size: 12px;
+            font-weight: normal;
+            right: 12px;
           }
         }
       }
