@@ -26,7 +26,7 @@ export class DatabaseService {
   }
 
   public removeCategory(id: number): Observable<SqlResultSet> {
-    return this.executeTransaction(`DELETE FROM Categories WHERE Id = ${id.toString()}`)
+    return this.executeTransaction(`DELETE FROM Categories WHERE Id = ${id.toString()} OR ParentId = ${id.toString()}`)
   }
 
   // Row is not actually an array but an object that fakes being an array. It has objects 0,1,2... and the last member is
