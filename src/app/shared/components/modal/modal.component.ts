@@ -21,8 +21,19 @@ export class ModalComponent implements OnInit, AfterViewInit ,OnDestroy {
   private static readonly CLOSE_COOLDOWN_MS = 200;
   private modalContentNative: any;
 
-  @HostListener('document:click', ['$event']) onDomClick(e: any): void {
-    if (!this.modalContentNative.contains(e.target) && (Date.now() - this.lastShow > ModalComponent.CLOSE_COOLDOWN_MS) && this.modalConfig.closable) {
+  private mouseDownOutside = false;
+
+  @HostListener('document:mousedown', ['$event']) onMouseDown(e: any): void {
+    console.log('Mouse down', e);
+    this.mouseDownOutside = !this.modalContentNative.contains(e.target) && (Date.now() - this.lastShow > ModalComponent.CLOSE_COOLDOWN_MS) && this.modalConfig.closable;
+  }
+
+  @HostListener('document:mouseup', ['$event']) onMouseUp(e: any): void {
+    console.log('Mouse up', e);
+    if (!this.mouseDownOutside)
+      return;
+
+    if (!this.modalContentNative.contains(e.target)) {
       this.modalService.showModal(false);
     }
   }
