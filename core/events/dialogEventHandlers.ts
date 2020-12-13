@@ -1,4 +1,4 @@
-import {BrowserWindow, IpcMain, IpcMainInvokeEvent, dialog, app} from 'electron';
+import {app, BrowserWindow, dialog, IpcMain, IpcMainInvokeEvent} from 'electron';
 import {
   DialogEventData,
   DialogEventOpenReply,
@@ -23,11 +23,21 @@ const handleWindowEvents = async (e: IpcMainInvokeEvent, dialogData: DialogEvent
     case DialogType.Save:
       const saveResp = await dialogSave(dialogData);
       return {canceled: saveResp.canceled, filePath: saveResp.filePath};
+    case DialogType.Error:
+      dialogError(dialogData);
+      break;
     default:
       console.error('Dialog type not supported');
       return null;
   }
 };
+
+const dialogError = (dialogData: DialogEventData) => {
+  dialog.showErrorBox(
+    (dialogData.title ? dialogData.title : 'An Error Occurred'),
+    (dialogData.content ? dialogData.content : 'Unknown')
+  );
+}
 
 const dialogOpen = async (dialogData: DialogEventData) => {
   return await dialog.showOpenDialog(win, {
@@ -69,7 +79,6 @@ const createProperties = (dialogData: DialogEventData) => {
 
   return properties;
 }
-
 
 
 export {registerDialogEventHandlers};

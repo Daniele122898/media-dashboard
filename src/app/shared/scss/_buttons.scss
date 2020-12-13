@@ -23,3 +23,14 @@
 .button-bright {
   color: $disc-light-text;
 }
+
+.disabled {
+  background-color: lighten($disc-grey-dark, 2%);
+  color: lighten($disc-medium-text, 2%);
+
+  &:hover {
+    background-color: lighten($disc-grey-dark, 2%);
+    color: lighten($disc-medium-text, 2%);
+    cursor: not-allowed;
+  }
+}

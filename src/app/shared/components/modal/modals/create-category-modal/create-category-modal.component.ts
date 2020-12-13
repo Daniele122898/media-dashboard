@@ -21,6 +21,8 @@ export class CreateCategoryModalComponent implements OnInit {
 
   public faFolderOpen = faFolderOpen;
 
+  public filePathInvalid = false;
+
   public filePath: string;
   public categoryName: string;
 
@@ -70,6 +72,19 @@ export class CreateCategoryModalComponent implements OnInit {
   }
 
   public onSubmit(): void {
-    this.modalRef.submit(this.filePath);
+    // Validate
+    if (!this.filePath || !this.categoryName)
+      return;
+
+    const fs = this.electronService.fs;
+
+    if (!fs.existsSync(this.filePath)) {
+      this.filePathInvalid = true;
+      return;
+    }
+    this.filePathInvalid = false;
+
+    this.modalRef.submit({filePath: this.filePath, categoryName: this.categoryName});
+    this.modalService.showModal(false);
   }
 }

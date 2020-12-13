@@ -3,7 +3,6 @@ import { ElectronService } from './core/services';
 import { TranslateService } from '@ngx-translate/core';
 import { AppConfig } from '../environments/environment';
 import {ModalService} from "./shared/services/modal.service";
-import {takeUntil} from "rxjs/operators";
 
 @Component({
   selector: 'app-root',
@@ -40,7 +39,6 @@ export class AppComponent implements OnInit{
       .subscribe(
         (show) => {
           this.showModal = show;
-          console.log('Show modal: ', this.showModal)
         }, err => {
           console.error(err);
         }

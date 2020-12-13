@@ -3,9 +3,10 @@ import {FileFilter} from 'electron';
 
 export interface DialogEventData {
   dialogType: DialogType;
-  selectionType: SelectionType;
+  selectionType?: SelectionType;
   allowMultiSelection?: boolean;
   title?: string;
+  content?: string;
   buttonLabel?: string;
   filters?: FileFilter[];
 }
@@ -22,7 +23,8 @@ export interface DialogEventSaveReply {
 
 export enum DialogType {
   Open,
-  Save
+  Save,
+  Error,
 }
 
 export enum SelectionType {

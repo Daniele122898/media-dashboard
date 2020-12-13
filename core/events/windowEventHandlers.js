@@ -2,9 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.registerWindowHandlers = void 0;
 var windowEvents_1 = require("../../shared/models/windowEvents");
+var EventChannels_1 = require("../../shared/models/EventChannels");
 var win = null;
 var registerWindowHandlers = function (ipcMain, window) {
-    ipcMain.handle('window-events', handleWindowEvents);
+    ipcMain.handle(EventChannels_1.WINDOW_EVENT_CHANNEL, handleWindowEvents);
     win = window;
 };
 exports.registerWindowHandlers = registerWindowHandlers;

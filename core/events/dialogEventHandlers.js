@@ -39,14 +39,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.registerDialogEventHandlers = void 0;
 var electron_1 = require("electron");
 var dialogEventData_1 = require("../../shared/models/dialogEventData");
+var EventChannels_1 = require("../../shared/models/EventChannels");
 var win = null;
 var registerDialogEventHandlers = function (ipcMain, window) {
-    ipcMain.handle('dialog-events', handleWindowEvents);
+    ipcMain.handle(EventChannels_1.DIALOG_EVENT_CHANNEL, handleWindowEvents);
     win = window;
 };
 exports.registerDialogEventHandlers = registerDialogEventHandlers;
 var handleWindowEvents = function (e, dialogData) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a;
+    var _a, openResp, saveResp;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -54,18 +55,30 @@ var handleWindowEvents = function (e, dialogData) { return __awaiter(void 0, voi
                 switch (_a) {
                     case dialogEventData_1.DialogType.Open: return [3 /*break*/, 1];
                     case dialogEventData_1.DialogType.Save: return [3 /*break*/, 3];
+                    case dialogEventData_1.DialogType.Error: return [3 /*break*/, 5];
                 }
-                return [3 /*break*/, 5];
+                return [3 /*break*/, 6];
             case 1: return [4 /*yield*/, dialogOpen(dialogData)];
-            case 2: return [2 /*return*/, _b.sent()];
+            case 2:
+                openResp = _b.sent();
+                return [2 /*return*/, { canceled: openResp.canceled, filePaths: openResp.filePaths }];
             case 3: return [4 /*yield*/, dialogSave(dialogData)];
-            case 4: return [2 /*return*/, _b.sent()];
+            case 4:
+                saveResp = _b.sent();
+                return [2 /*return*/, { canceled: saveResp.canceled, filePath: saveResp.filePath }];
             case 5:
+                dialogError(dialogData);
+                return [3 /*break*/, 7];
+            case 6:
                 console.error('Dialog type not supported');
                 return [2 /*return*/, null];
+            case 7: return [2 /*return*/];
         }
     });
 }); };
+var dialogError = function (dialogData) {
+    electron_1.dialog.showErrorBox((dialogData.title ? dialogData.title : 'An Error Occurred'), (dialogData.content ? dialogData.content : 'Unknown'));
+};
 var dialogOpen = function (dialogData) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
