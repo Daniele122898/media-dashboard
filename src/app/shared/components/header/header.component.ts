@@ -3,6 +3,7 @@ import {faTimes, faMinus} from '@fortawesome/free-solid-svg-icons';
 import {faSquare} from '@fortawesome/free-regular-svg-icons';
 import {ElectronService} from "../../../core/services";
 import {WindowEvents} from "../../../../../shared/models/windowEvents";
+import {WINDOW_EVENT_CHANNEL} from "../../../../../shared/models/EventChannels";
 
 @Component({
   selector: 'app-header',
@@ -24,17 +25,17 @@ export class HeaderComponent implements OnInit {
   }
 
   public minimizeWindow(): void {
-    this.electronService.invokeHandler('window-events', WindowEvents.minimize);
+    this.electronService.invokeHandler(WINDOW_EVENT_CHANNEL, WindowEvents.minimize);
   }
 
   public fullScreenWindow(): void {
-    this.electronService.invokeHandler('window-events', WindowEvents.isMaximized)
+    this.electronService.invokeHandler(WINDOW_EVENT_CHANNEL, WindowEvents.isMaximized)
       .subscribe(
         (isMaximized) => {
           if (isMaximized) {
-            this.electronService.invokeHandler('window-events', WindowEvents.unmaximize);
+            this.electronService.invokeHandler(WINDOW_EVENT_CHANNEL, WindowEvents.unmaximize);
           } else {
-            this.electronService.invokeHandler('window-events', WindowEvents.maximize);
+            this.electronService.invokeHandler(WINDOW_EVENT_CHANNEL, WindowEvents.maximize);
           }
         }, err => {
           console.error(err);
@@ -43,6 +44,6 @@ export class HeaderComponent implements OnInit {
   }
 
   public closeWindow(): void {
-    this.electronService.invokeHandler('window-events', WindowEvents.close);
+    this.electronService.invokeHandler(WINDOW_EVENT_CHANNEL, WindowEvents.close);
   }
 }

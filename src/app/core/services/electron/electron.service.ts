@@ -42,7 +42,7 @@ export class ElectronService {
     this.shell.showItemInFolder(path);
   }
 
-  public invokeHandler(handler: string, payload: any): Observable<any> {
+  public invokeHandler<T>(handler: string, payload: any): Observable<T> {
     return from(this.ipcRenderer.invoke(handler, payload));
   }
 

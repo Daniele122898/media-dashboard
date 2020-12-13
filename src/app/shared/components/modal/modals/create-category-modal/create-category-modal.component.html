@@ -3,15 +3,15 @@
     <div class="form-group">
       <span class="input-label">Directory Path</span>
       <div class="input-row">
-        <app-input class="input-padding" [showPlaceholder]="false" [customPlaceholder]="'INPUTS.PLACEHOLDERS.DIR_PATH'"></app-input>
-        <div class="button input-button">
-          Select Path
+        <app-input class="input-padding" [(input)]="filePath" [showPlaceholder]="false" [customPlaceholder]="'INPUTS.PLACEHOLDERS.DIR_PATH'"></app-input>
+        <div class="button input-button" (click)="onSelectPath()">
+          <fa-icon [icon]="faFolderOpen"></fa-icon>
         </div>
       </div>
     </div>
     <div class="form-group">
       <span class="input-label">Category Name</span>
-      <app-input [showPlaceholder]="false" [customPlaceholder]="'INPUTS.PLACEHOLDERS.CATEGORY_NAME'"></app-input>
+      <app-input [(input)]="categoryName" [showPlaceholder]="false" [customPlaceholder]="'INPUTS.PLACEHOLDERS.CATEGORY_NAME'"></app-input>
     </div>
     <div class="form-buttons">
       <div class="button" (click)="onClose()">

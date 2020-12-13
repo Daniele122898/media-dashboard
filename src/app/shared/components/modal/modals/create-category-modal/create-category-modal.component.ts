@@ -1,5 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ModalService} from "../../../../services/modal.service";
+import {ElectronService} from "../../../../../core/services";
+import {DIALOG_EVENT_CHANNEL} from "../../../../../../../shared/models/EventChannels";
+import {
+  DialogEventData,
+  DialogEventOpenReply,
+  DialogType,
+  SelectionType
+} from "../../../../../../../shared/models/dialogEventData";
+import {faFolderOpen} from '@fortawesome/free-solid-svg-icons';
+import {first} from "rxjs/operators";
 
 @Component({
   selector: 'app-create-category-modal',
@@ -8,8 +18,14 @@ import {ModalService} from "../../../../services/modal.service";
 })
 export class CreateCategoryModalComponent implements OnInit {
 
+  public faFolderOpen = faFolderOpen;
+
+  public filePath: string;
+  public categoryName: string;
+
   constructor(
     private modalService: ModalService,
+    private electronService: ElectronService,
   ) { }
 
   ngOnInit(): void {
@@ -17,5 +33,32 @@ export class CreateCategoryModalComponent implements OnInit {
 
   public onClose(): void {
     this.modalService.showModal(false);
+  }
+
+  public onSelectPath(): void {
+    this.electronService.invokeHandler<DialogEventOpenReply>(
+      DIALOG_EVENT_CHANNEL,
+      <DialogEventData>{
+        selectionType: SelectionType.Directory,
+        dialogType: DialogType.Open,
+        allowMultiSelection: false,
+        title: 'Choose Folder for Category',
+        buttonLabel: 'Choose Folder'
+      })
+      .pipe(first())
+      .subscribe(
+        (res) => {
+          if (res.canceled)
+            return;
+
+          const path = res.filePaths[0];
+          if (!path)
+            return;
+
+          this.filePath = path;
+        }, err => {
+          console.error(err);
+        }
+      )
   }
 }
