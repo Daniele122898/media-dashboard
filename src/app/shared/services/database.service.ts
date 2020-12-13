@@ -63,7 +63,7 @@ export class DatabaseService {
         'Name VARCHAR(255) NOT NULL,' +
         'DirPath nvarchar(260) NOT NULL,' +
         'ParentId int DEFAULT NULL,' +
-        'FOREIGN KEY (ParentId) REFERENCES Categories(Id)' +
+        'FOREIGN KEY (ParentId) REFERENCES Categories (Id) ON UPDATE CASCADE ON DELETE CASCADE' +
         ')');
 
       tx.executeSql('CREATE TABLE IF NOT EXISTS Files(' +

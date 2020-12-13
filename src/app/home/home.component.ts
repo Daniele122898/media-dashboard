@@ -1,14 +1,14 @@
 import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {ElectronService} from "../core/services";
-import {faFolder, faFolderOpen, faArrowUp, faTrash} from '@fortawesome/free-solid-svg-icons';
+import {faArrowUp, faFolder, faFolderOpen, faTrash} from '@fortawesome/free-solid-svg-icons';
 import {DatabaseService} from "../shared/services/database.service";
 import {Category} from "../shared/models/Category";
 import {first} from "rxjs/operators";
 import {ModalService} from "../shared/services/modal.service";
 import {CreateCategoryModalComponent} from "../shared/components/modal/modals/create-category-modal/create-category-modal.component";
 import {Subscription} from "rxjs";
-import {DialogEventData, DialogType} from "../../../shared/models/dialogEventData";
+import {DialogEventData, DialogType, MessageBoxData, MessageBoxReply} from "../../../shared/models/dialogEventData";
 import {DIALOG_EVENT_CHANNEL} from "../../../shared/models/EventChannels";
 
 
@@ -93,21 +93,39 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   public removeCategory(category: Category): void {
-    this.db.removeCategory(category.Id)
-      .pipe(first())
+    this.electronService.invokeHandler<MessageBoxReply>(
+      DIALOG_EVENT_CHANNEL,
+      <MessageBoxData>{
+        type: "question",
+        dialogType: DialogType.Messagebox,
+        title: 'Are you sure?',
+        message: 'Do you really want to remove this category? This will remove all children as well.',
+        buttons: ['Yes', 'No'],
+        defaultId: 0
+      }).pipe(first())
       .subscribe(
         res => {
-          if (res.rowsAffected > 0) {
-            this.getAllCategories();
-          } else {
-            this.electronService.invokeHandler(
-              DIALOG_EVENT_CHANNEL,
-              <DialogEventData>{
-                dialogType: DialogType.Error,
-                title: 'Something went wrong',
-                content: "Couldn't remove Category :("
-              })
-          }
+          if (res.response !== 0)
+            return;
+
+          this.db.removeCategory(category.Id)
+            .pipe(first())
+            .subscribe(
+              res => {
+                if (res.rowsAffected > 0) {
+                  this.getAllCategories();
+                } else {
+                  this.electronService.invokeHandler(
+                    DIALOG_EVENT_CHANNEL,
+                    <DialogEventData>{
+                      dialogType: DialogType.Error,
+                      title: 'Something went wrong',
+                      content: "Couldn't remove Category :("
+                    })
+                }
+              }, err => console.error(err)
+            )
+
         }, err => console.error(err)
       )
   }
