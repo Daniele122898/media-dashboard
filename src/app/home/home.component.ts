@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 import {ElectronService} from "../core/services";
 import {faFolder, faFolderOpen, faArrowUp} from '@fortawesome/free-solid-svg-icons';
@@ -7,6 +7,7 @@ import {Category} from "../shared/models/Category";
 import {first} from "rxjs/operators";
 import {ModalService} from "../shared/services/modal.service";
 import {CreateCategoryModalComponent} from "../shared/components/modal/modals/create-category-modal/create-category-modal.component";
+import {Subscription} from "rxjs";
 
 
 @Component({
@@ -14,7 +15,7 @@ import {CreateCategoryModalComponent} from "../shared/components/modal/modals/cr
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
 
   public sidebarSearchString = "";
   public contentSearchString = "";
@@ -24,6 +25,7 @@ export class HomeComponent implements OnInit {
   public faArrowUp = faArrowUp;
 
   public categories: Category[] = [];
+  private modalValueSub: Subscription;
 
   constructor(
     private router: Router,
@@ -54,7 +56,10 @@ export class HomeComponent implements OnInit {
   }
 
   public onCreateCategory():void {
-    this.modalService.createModal(CreateCategoryModalComponent, {
+    if (this.modalValueSub)
+      this.modalValueSub.unsubscribe();
+
+    const modalRef = this.modalService.createModal(CreateCategoryModalComponent, {
       header: 'Create New Category',
       subheader: 'Categories represent Folders on your PC to easily organize your ' +
         'most important media folders.',
@@ -62,5 +67,16 @@ export class HomeComponent implements OnInit {
       width: '400px'
     });
     this.modalService.showModal(true);
+
+    this.modalValueSub = modalRef.Value$.subscribe(
+      res => {
+        console.log('Got Modal value', res);
+      }, err => console.error(err)
+    );
+
+  }
+
+  ngOnDestroy(): void {
+    this.modalValueSub.unsubscribe();
   }
 }

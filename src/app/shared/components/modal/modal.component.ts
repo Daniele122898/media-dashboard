@@ -24,12 +24,10 @@ export class ModalComponent implements OnInit, AfterViewInit ,OnDestroy {
   private mouseDownOutside = false;
 
   @HostListener('document:mousedown', ['$event']) onMouseDown(e: any): void {
-    console.log('Mouse down', e);
     this.mouseDownOutside = !this.modalContentNative.contains(e.target) && (Date.now() - this.lastShow > ModalComponent.CLOSE_COOLDOWN_MS) && this.modalConfig.closable;
   }
 
   @HostListener('document:mouseup', ['$event']) onMouseUp(e: any): void {
-    console.log('Mouse up', e);
     if (!this.mouseDownOutside)
       return;
 

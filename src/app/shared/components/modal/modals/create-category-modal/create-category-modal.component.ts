@@ -10,6 +10,7 @@ import {
 } from "../../../../../../../shared/models/dialogEventData";
 import {faFolderOpen} from '@fortawesome/free-solid-svg-icons';
 import {first} from "rxjs/operators";
+import {ModalRef} from "../../../../models/ModalRef";
 
 @Component({
   selector: 'app-create-category-modal',
@@ -26,6 +27,7 @@ export class CreateCategoryModalComponent implements OnInit {
   constructor(
     private modalService: ModalService,
     private electronService: ElectronService,
+    private modalRef: ModalRef,
   ) { }
 
   ngOnInit(): void {
@@ -56,9 +58,18 @@ export class CreateCategoryModalComponent implements OnInit {
             return;
 
           this.filePath = path;
+
+          if (!this.categoryName && this.filePath) {
+            const lastIndex = Math.max(this.filePath.lastIndexOf('/'), this.filePath.lastIndexOf('\\'));
+            this.categoryName = this.filePath.substring(lastIndex + 1);
+          }
         }, err => {
           console.error(err);
         }
       )
+  }
+
+  public onSubmit(): void {
+    this.modalRef.submit(this.filePath);
   }
 }
