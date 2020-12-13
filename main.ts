@@ -4,6 +4,7 @@ import * as url from 'url';
 import * as windowStateKeeper from 'electron-window-state';
 import autoUpdater from "./core/helpers/autoUpdater";
 import {registerWindowHandlers} from "./core/events/windowEventHandlers";
+import {registerDialogEventHandlers} from "./core/events/dialogEventHandlers";
 
 let win: BrowserWindow = null;
 let tray: Tray = null;
@@ -82,14 +83,16 @@ function createWindow(): BrowserWindow {
     require('electron-reload')(__dirname, {
       electron: require(`${__dirname}/node_modules/electron`)
     });
-    win.loadURL('http://localhost:4200');
+    win.loadURL('http://localhost:4200')
+      .catch(e => console.error("Failed to load localhost", e));
 
   } else {
     win.loadURL(url.format({
       pathname: path.join(__dirname, 'dist/index.html'),
       protocol: 'file:',
       slashes: true
-    }));
+    }))
+      .catch(e => console.error("Failed to load angular index file", e));
   }
 
   ipcMain.on('channel1', (e, args)=> {
@@ -97,7 +100,9 @@ function createWindow(): BrowserWindow {
     // e.sender.send('channel1', response)
   });
 
+  // Register event handlers
   registerWindowHandlers(ipcMain, win);
+  registerDialogEventHandlers(ipcMain, win);
 
   // Emitted when the window is closed.
   win.on('closed', () => {

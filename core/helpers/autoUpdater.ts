@@ -11,7 +11,8 @@ autoUpdater.autoDownload = false;
 
 const updateApp = (mainWindow: BrowserWindow) => {
   // Check for update
-  autoUpdater.checkForUpdates();
+  autoUpdater.checkForUpdates()
+    .catch(e => logger.error('Check for updates failed', e));
 
   autoUpdater.on('update-available', () => {
     // prompt user to start download
@@ -24,7 +25,8 @@ const updateApp = (mainWindow: BrowserWindow) => {
       const buttonIndex = res.response;
 
       if (buttonIndex === 0) {
-        autoUpdater.downloadUpdate();
+        autoUpdater.downloadUpdate()
+          .catch(e => logger.error('Update download failed', e));
       }
     });
 

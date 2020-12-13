@@ -10,7 +10,8 @@ electron_updater_1.autoUpdater.logger = electron_log_1.default;
 electron_updater_1.autoUpdater.autoDownload = false;
 var updateApp = function (mainWindow) {
     // Check for update
-    electron_updater_1.autoUpdater.checkForUpdates();
+    electron_updater_1.autoUpdater.checkForUpdates()
+        .catch(function (e) { return electron_log_1.default.error('Check for updates failed', e); });
     electron_updater_1.autoUpdater.on('update-available', function () {
         // prompt user to start download
         electron_1.dialog.showMessageBox({
@@ -21,7 +22,8 @@ var updateApp = function (mainWindow) {
         }).then(function (res) {
             var buttonIndex = res.response;
             if (buttonIndex === 0) {
-                electron_updater_1.autoUpdater.downloadUpdate();
+                electron_updater_1.autoUpdater.downloadUpdate()
+                    .catch(function (e) { return electron_log_1.default.error('Update download failed', e); });
             }
         });
     });
