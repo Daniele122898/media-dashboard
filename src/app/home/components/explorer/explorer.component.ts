@@ -39,9 +39,8 @@ export class ExplorerComponent implements OnInit {
     }
 
     const pathContents = this.currentPath.split('/');
-
-    // TODO Just TAKE LAST OF CATEGORY PATH AND ALL THE NEW ONES
     const categoryPath = this.categoryDirPath.split('/');
+
     let dispPath = categoryPath[categoryPath.length - 1];
     if (pathContents.length === categoryPath.length) {
       this.displayPath = `${dispPath} / `;
@@ -51,7 +50,6 @@ export class ExplorerComponent implements OnInit {
     for (let i = categoryPath.length; i<pathContents.length; ++i) {
       dispPath += `${pathContents[i]} / `;
     }
-
     this.displayPath = dispPath;
   }
 
