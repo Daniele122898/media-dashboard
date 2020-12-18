@@ -54,6 +54,8 @@
           padding: 8px 12px;
           border-bottom: 2px solid $disc-grey-light;
 
+
+
           &:hover {
             background-color: $disc-grey-medium-highlight;
             color: $disc-light-text;
@@ -82,47 +84,10 @@
         }
       }
     }
-
-    .content {
-      height: 100%;
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-
-      .content-header {
-        border-bottom: 2px solid $disc-grey-medium;
-        height: 50px;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-
-        .header-container {
-          display: flex;
-          flex-direction: row;
-          padding: 10px 10px;
-          align-items: center;
-
-          .button {
-            font-size: 14px;
-            color: $disc-light-text;
-            margin-right: 15px;
-          }
-
-          span {
-            font-weight: bold;
-            color: $disc-light-text;
-          }
-
-          .search-bar {
-            height: 25px;
-          }
-        }
-      }
-
-      .content-container {
-        height: calc(100% - 50px);
-      }
-    }
   }
 
+  .highlighted-item {
+    background-color: $disc-grey-medium-highlight;
+    color: $disc-light-text;
+  }
 }

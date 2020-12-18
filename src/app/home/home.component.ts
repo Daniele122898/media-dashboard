@@ -1,7 +1,7 @@
 import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {ElectronService} from "../core/services";
-import {faArrowUp, faFolder, faFolderOpen, faTrash} from '@fortawesome/free-solid-svg-icons';
+import {faFolder, faFolderOpen, faTrash} from '@fortawesome/free-solid-svg-icons';
 import {DatabaseService} from "../shared/services/database.service";
 import {Category} from "../shared/models/Category";
 import {first} from "rxjs/operators";
@@ -24,11 +24,13 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   public faFolder = faFolder;
   public faFolderOpen = faFolderOpen;
-  public faArrowUp = faArrowUp;
+
   public faTrash = faTrash;
 
   public categories: Category[] = [];
   private modalValueSub: Subscription;
+
+  public selectedCategory: Category;
 
   constructor(
     private router: Router,
@@ -90,6 +92,17 @@ export class HomeComponent implements OnInit, OnDestroy {
         }, err => console.error(err)
       );
 
+  }
+
+
+  public onCategoryClick(category: Category): void {
+    console.log('Selected Category: ', category);
+    this.selectedCategory = category;
+    this.changeDetection.detectChanges();
+  }
+
+  public isSelectedCategory(currCategory: Category): boolean {
+    return this.selectedCategory && currCategory.Id == this.selectedCategory.Id;
   }
 
   public removeCategory(category: Category): void {

@@ -1,0 +1,20 @@
+<div class="content">
+  <div class="content-header">
+    <div class="header-container">
+      <div class="button">
+        <fa-icon [icon]="faArrowUp"></fa-icon>
+      </div>
+      <span>{{displayPath ? displayPath : 'No Category Selected'}}</span>
+    </div>
+    <div class="header-container">
+      <div class="button">
+        Open in Explorer
+      </div>
+      <app-input [(input)]="contentSearchString" [showSearchIcon]="true" [enableSmall]="true">
+      </app-input>
+    </div>
+  </div>
+  <div class="content-container">
+
+  </div>
+</div>

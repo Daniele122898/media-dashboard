@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Observable} from "rxjs";
-import {first, map} from "rxjs/operators";
+import {map} from "rxjs/operators";
 import {SqlResultSet} from "../models/SqlTypes";
 import {Category} from "../models/Category";
 
