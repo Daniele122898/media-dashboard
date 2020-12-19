@@ -6,6 +6,7 @@ import {from} from 'rxjs';
 import { ipcRenderer, webFrame, remote, shell } from 'electron';
 import * as childProcess from 'child_process';
 import * as fs from 'fs';
+import * as path from 'path';
 import {Observable} from "rxjs";
 
 @Injectable({
@@ -17,6 +18,7 @@ export class ElectronService {
   public remote: typeof remote;
   public childProcess: typeof childProcess;
   public fs: typeof fs;
+  public path: typeof path;
   public shell: typeof shell;
 
   get isElectron(): boolean {
@@ -35,11 +37,13 @@ export class ElectronService {
 
       this.childProcess = window.require('child_process');
       this.fs = window.require('fs');
+      this.path = window.require('path');
     }
   }
 
   public openFileLocation(path: string): void {
-    this.shell.showItemInFolder(path);
+    this.shell.openPath(path)
+      .catch(err => console.error(err));
   }
 
   public invokeHandler<T>(handler: string, payload: any): Observable<T> {

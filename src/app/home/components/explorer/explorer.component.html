@@ -1,20 +1,30 @@
 <div class="content">
   <div class="content-header">
     <div class="header-container">
-      <div class="button">
+      <div class="button" (click)="onGoDirUp()">
         <fa-icon [icon]="faArrowUp"></fa-icon>
       </div>
-      <span>{{displayPath ? displayPath : 'No Category Selected'}}</span>
+      <span *ngIf="!displayPath || displayPath.length === 0">No Category Selected</span>
+      <span *ngFor="let p of displayPath" class="path-segment">
+          {{this.shortDisplayPath(p) + " /"}}
+      </span>
     </div>
     <div class="header-container">
-      <div class="button">
-        Open in Explorer
+      <div class="button" (click)="onOpenFileLocation()">
+        {{ 'COMPONENTS.EXPLORER.OPEN_FILE_LOCATION' | translate }}
       </div>
       <app-input [(input)]="contentSearchString" [showSearchIcon]="true" [enableSmall]="true">
       </app-input>
     </div>
   </div>
-  <div class="content-container">
-
+  <div class="content-container explorer-content custom-scrollbar">
+    <div *ngFor="let dir of directories" class="explorer-item" (click)="onOpenDir(dir)">
+      <div class="explorer-item-header">
+        <fa-icon [icon]="faFolder"></fa-icon>
+      </div>
+      <div class="explorer-item-desc">
+        <p>{{dir.name}}</p>
+      </div>
+    </div>
   </div>
 </div>

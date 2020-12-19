@@ -13,6 +13,14 @@
       display: flex;
       flex-direction: column;
 
+      .explorer-content {
+        flex-wrap: wrap !important;
+        height: auto !important;
+        padding: 10px;
+        max-height: 100% !important;
+        overflow-y: auto !important;
+      }
+
       .content-header {
         border-bottom: 2px solid $disc-grey-medium;
         height: 50px;
@@ -26,10 +34,15 @@
           padding: 10px 10px;
           align-items: center;
 
+          .path-segment {
+            margin-left: 5px;
+          }
+
           .button {
             font-size: 14px;
             color: $disc-light-text;
             margin-right: 15px;
+            width: max-content;
           }
 
           span {
@@ -45,6 +58,48 @@
 
       .content-container {
         height: calc(100% - 50px);
+
+
+        .explorer-item {
+          width: 150px;
+          height: 100px;
+          display: flex;
+          flex-direction: column;
+          text-align: center;
+          align-items: center;
+          padding: 10px;
+          color: $disc-medium-text;
+          border-radius: 5px;
+
+          &:hover {
+            background-color: lighten($disc-grey-light, 2%);
+            color: $disc-light-text;
+            cursor: pointer;
+          }
+
+          .explorer-item-header {
+            height: 50px;
+            width: 100%;
+            font-size: 40px;
+          }
+
+          .explorer-item-desc {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            max-height: 50px;
+            width: 100%;
+            p {
+              margin: 0;
+              text-overflow: ellipsis;
+              overflow: hidden;
+              max-height: 50px;
+              width: 100%;
+              display: -webkit-box;
+              -webkit-line-clamp: 3;
+              -webkit-box-orient: vertical;
+            }
+          }
+        }
       }
     }
 
