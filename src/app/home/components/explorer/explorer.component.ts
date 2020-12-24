@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, NgZone, OnInit} from '@angular/core';
 import {faArrowUp, faFolder, faFilm} from '@fortawesome/free-solid-svg-icons';
 import {ElectronService} from "../../../core/services";
 import {Dirent} from "fs";
@@ -75,6 +75,7 @@ export class ExplorerComponent implements OnInit {
     private changeDetector: ChangeDetectorRef,
     private electronService: ElectronService,
     private router: Router,
+    private ngZone: NgZone,
   ) { }
 
   ngOnInit(): void {
@@ -113,10 +114,13 @@ export class ExplorerComponent implements OnInit {
   public onVideo(vid: Dirent): void {
     const path = this.electronService.path;
     const filePath = path.join(this.currentPath, vid.name);
-    this.router.navigate(['/video'], {
-      queryParams: {
-        filePath: btoa(filePath)
-      }
+    console.log('File path for video component', filePath);
+    this.ngZone.run(() => {
+      this.router.navigate(['/video'], {
+        queryParams: {
+          filePath: btoa(filePath)
+        }
+      })
     })
   }
 
