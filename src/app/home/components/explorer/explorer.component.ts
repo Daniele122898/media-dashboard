@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
-import {faArrowUp, faFolder} from '@fortawesome/free-solid-svg-icons';
+import {faArrowUp, faFolder, faFilm} from '@fortawesome/free-solid-svg-icons';
 import {ElectronService} from "../../../core/services";
 import {Dirent} from "fs";
 
@@ -12,10 +12,12 @@ export class ExplorerComponent implements OnInit {
 
   public faArrowUp = faArrowUp;
   public faFolder = faFolder;
+  public faFilm = faFilm;
   public contentSearchString = "";
 
   public directories: Dirent[];
   public files: Dirent[];
+  public videos: Dirent[];
 
   @Input('categoryDirPath')
   get categoryDirPath(): string {
@@ -115,6 +117,7 @@ export class ExplorerComponent implements OnInit {
 
       this.directories = contents.filter(x=> x.isDirectory());
       const files = contents.filter(x => x.isFile());
+      this.videos = files.filter(x => this.isVideo(x.name));
 
       this.changeDetector.detectChanges();
     });
@@ -122,5 +125,10 @@ export class ExplorerComponent implements OnInit {
 
   private replaceBackslash(path: string): string {
     return path.replace(new RegExp("\\\\", "g"), '/')
+  }
+
+  private isVideo(path: string): boolean {
+    const parsed = this.electronService.path.parse(path);
+    return parsed.ext === '.mp4' || parsed.ext === '.mkv' || parsed.ext === '.webm';
   }
 }

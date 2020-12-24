@@ -26,5 +26,14 @@
         <p>{{dir.name}}</p>
       </div>
     </div>
+
+    <div *ngFor="let vid of videos" class="explorer-item">
+      <div class="explorer-item-header">
+        <fa-icon [icon]="faFilm"></fa-icon>
+      </div>
+      <div class="explorer-item-desc">
+        <p>{{vid.name}}</p>
+      </div>
+    </div>
   </div>
 </div>
