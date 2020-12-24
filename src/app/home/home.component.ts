@@ -155,6 +155,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.modalValueSub.unsubscribe();
+    if (this.modalValueSub) {
+      this.modalValueSub.unsubscribe();
+    }
   }
 }

@@ -27,7 +27,7 @@
       </div>
     </div>
 
-    <div *ngFor="let vid of videos" class="explorer-item">
+    <div *ngFor="let vid of videos" class="explorer-item" (click)="onVideo(vid)">
       <div class="explorer-item-header">
         <fa-icon [icon]="faFilm"></fa-icon>
       </div>
