@@ -7,6 +7,7 @@ import { ipcRenderer, webFrame, remote, shell } from 'electron';
 import * as childProcess from 'child_process';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as fileType from 'file-type';
 import {Observable} from "rxjs";
 
 @Injectable({
@@ -15,10 +16,10 @@ import {Observable} from "rxjs";
 export class ElectronService {
   public ipcRenderer: typeof ipcRenderer;
   public webFrame: typeof webFrame;
-  public remote: typeof remote;
   public childProcess: typeof childProcess;
   public fs: typeof fs;
   public path: typeof path;
+  public fileType: typeof fileType;
   public shell: typeof shell;
 
   get isElectron(): boolean {
@@ -38,6 +39,7 @@ export class ElectronService {
       this.childProcess = window.require('child_process');
       this.fs = window.require('fs');
       this.path = window.require('path');
+      this.fileType = window.require('file-type');
     }
   }
 

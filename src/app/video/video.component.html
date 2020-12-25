@@ -4,4 +4,7 @@
   </h1>
   <button (click)="onBack()">Back</button>
   <p>Path: {{filePath}}</p>
+  <app-video-player *ngIf="fileType"
+    [options]="getOptions()"
+  ></app-video-player>
 </div>

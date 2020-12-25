@@ -2,12 +2,19 @@ import {app, BrowserWindow, screen, Menu, Tray, ipcMain} from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 import * as windowStateKeeper from 'electron-window-state';
+import * as express from 'express';
 import autoUpdater from "./core/helpers/autoUpdater";
 import {registerWindowHandlers} from "./core/events/windowEventHandlers";
 import {registerDialogEventHandlers} from "./core/events/dialogEventHandlers";
+import {registerEndpoints} from "./core/endpoints/serverEndpoints";
 
 let win: BrowserWindow = null;
 let tray: Tray = null;
+
+const router = express.Router();
+const server = express();
+
+
 const args = process.argv.slice(1),
   serve = args.some(val => val === '--serve');
 
@@ -67,7 +74,8 @@ function createWindow(): BrowserWindow {
       nodeIntegration: true,
       allowRunningInsecureContent: false,
       contextIsolation: false,  // false if you want to run 2e2 test with Spectron
-      enableRemoteModule: false // true if you want to run 2e2 test  with Spectron or use remote module in renderer context (ie. Angular)
+      enableRemoteModule: false, // true if you want to run 2e2 test  with Spectron or use remote module in renderer context (ie. Angular)
+      webSecurity: false,
     },
   });
 
@@ -104,6 +112,15 @@ function createWindow(): BrowserWindow {
   registerWindowHandlers(ipcMain, win);
   registerDialogEventHandlers(ipcMain, win);
 
+  // Register API Endpoints
+  registerEndpoints(router);
+
+  console.log('\n------------- Starting express server -------------\n');
+  server.use(router);
+  server.listen(8484, () => {
+    console.log("Server listening on: ", 8484);
+  });
+
   // Emitted when the window is closed.
   win.on('closed', () => {
     // Dereference the window object, usually you would store window
@@ -134,6 +151,8 @@ try {
   // Added 400 ms to fix the black background issue while using transparent window. More detais at https://github.com/electron/electron/issues/15947
   app.on('ready', () => {
     setTimeout(createWindow, 400);
+
+    console.log('CURRENT DIR', app.getPath('exe'));
 
     // Use this path to store any data associated with app
     // setTimeout(() => {
