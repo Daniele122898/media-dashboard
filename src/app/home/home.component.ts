@@ -45,14 +45,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.getAllCategories();
   }
 
-  public sendExampleIpc(): void {
-    this.electronService.sendIpcMessage('channel1', {message: 'hello'});
-  }
-
-  public openFileLocation(): void {
-    this.electronService.openFileLocation('F:\\Coding\\media-dashboard\\_config.yml');
-  }
-
   public onCreateCategory(): void {
     if (this.modalValueSub)
       this.modalValueSub.unsubscribe();

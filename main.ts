@@ -103,11 +103,6 @@ function createWindow(): BrowserWindow {
       .catch(e => console.error("Failed to load angular index file", e));
   }
 
-  ipcMain.on('channel1', (e, args)=> {
-    console.log(args);
-    // e.sender.send('channel1', response)
-  });
-
   // Register event handlers
   registerWindowHandlers(ipcMain, win);
   registerDialogEventHandlers(ipcMain, win);
