@@ -45,7 +45,7 @@ export class DatabaseService {
 
   public tryGetFileWithHash(hash: string): Observable<FileDbo> {
     return this.executeTransaction(
-      `SELECT TOP 1 * FROM Files WHERE Md5Hash = '${hash}'`
+      `SELECT * FROM Files WHERE Md5Hash = '${hash}'`
     ).pipe(
       map(values => {
         const arr = DatabaseService.mapRowsToArray<FileDbo>(values.rows);
