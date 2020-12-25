@@ -1,10 +1,8 @@
-<div class="container">
-  <h1 class="title">
-    HALU
-  </h1>
-  <button (click)="onBack()">Back</button>
-  <p>Path: {{filePath}}</p>
+<div class="video-container custom-scrollbar custom-scrollbar-padding">
   <app-video-player *ngIf="fileType"
     [options]="getOptions()"
+    class="video-player"
   ></app-video-player>
+  <button (click)="onBack()">Back</button>
+  <p>Path: {{filePath}}</p>
 </div>

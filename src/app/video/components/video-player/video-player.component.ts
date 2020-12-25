@@ -21,6 +21,7 @@ export class VideoPlayerComponent implements OnInit, OnDestroy {
     aspectRatio: string,
     autoplay: boolean,
     controls: boolean,
+    height?: string | number;
     sources: {
       src: string,
       type: string,

@@ -51,8 +51,9 @@ export class VideoComponent implements OnInit {
 
   getOptions() {
     return {
-      fluid: true,
+      fluid: false,
       aspectRatio: '16:9',
+      height: 200,
       autoplay: true,
       controls: true,
       sources: [

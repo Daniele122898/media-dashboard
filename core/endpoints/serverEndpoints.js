@@ -6,7 +6,6 @@ var fileType = require("file-type");
 var registerEndpoints = function (router) {
     router.get('/video', function (req, res) {
         var filePath = req.query.filePath;
-        console.log('Got file path: ', filePath);
         fs.stat(filePath, function (err, stat) {
             // Handle file not found
             if (err !== null && err.code === 'ENOENT') {

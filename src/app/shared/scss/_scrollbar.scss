@@ -15,3 +15,15 @@
   border-radius: 5px;
   outline: none;
 }
+
+.custom-scrollbar-padding::-webkit-scrollbar{
+  margin: 5px 0 5px 0;
+}
+
+.custom-scrollbar-padding::-webkit-scrollbar-track {
+  margin: 5px 0 5px 0;
+}
+
+.custom-scrollbar-padding::-webkit-scrollbar-thumb {
+  margin: 5px 0 5px 0;
+}
