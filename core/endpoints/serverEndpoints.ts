@@ -5,7 +5,6 @@ import * as fileType from 'file-type';
 const registerEndpoints = (router: Router) => {
   router.get('/video', (req, res) => {
     const filePath= <string>req.query.filePath;
-    console.log('Got file path: ', filePath);
 
     fs.stat(filePath, (err, stat) => {
       // Handle file not found
