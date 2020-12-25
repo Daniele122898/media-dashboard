@@ -24,3 +24,49 @@
 
 
 }
+
+:host ::ng-deep .video-player {
+  position: relative;
+  max-height: calc(100vh - 100px);
+  height: calc(100vh - 100px);
+}
+
+:host ::ng-deep .video-player .video-js {
+  position: relative;
+  max-height: calc(100vh - 100px);
+  height: calc(100vh - 100px);
+  padding-top: 0;
+}
+
+:host ::ng-deep .video-player .video-js video {
+  position: relative;
+}
+
+:host ::ng-deep .video-player .video-js .vjs-poster {
+  position: relative;
+}
+
+:host ::ng-deep .video-player .video-js .vjs-text-track-display {
+  position: relative;
+}
+
+:host ::ng-deep .video-player .video-js .vjs-loading-spinner {
+  position: relative;
+}
+
+:host ::ng-deep .video-player .video-js .vjs-big-play-button {
+  position: relative;
+}
+
+:host ::ng-deep .video-player .video-js .vjs-control-bar {
+  position: relative;
+  bottom: 3em;
+}
+
+:host ::ng-deep .video-player .video-js .vjs-error-display {
+  position: relative;
+}
+
+:host ::ng-deep .video-player .video-js .vjs-modal-dialog {
+  position: relative;
+}
