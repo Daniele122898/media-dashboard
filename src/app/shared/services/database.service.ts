@@ -3,6 +3,7 @@ import {Observable} from "rxjs";
 import {map} from "rxjs/operators";
 import {SqlResultSet} from "../models/SqlTypes";
 import {Category} from "../models/Category";
+import {FileDbo} from "../models/FileDbo";
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +28,33 @@ export class DatabaseService {
 
   public removeCategory(id: number): Observable<SqlResultSet> {
     return this.executeTransaction(`DELETE FROM Categories WHERE Id = ${id.toString()} OR ParentId = ${id.toString()}`)
+  }
+
+  public insertNewFile(file: FileDbo): Observable<SqlResultSet> {
+    return this.executeTransaction(
+      `INSERT INTO Files (Md5Hash, LKPath, Finished, LastTimestamp)
+      VALUES ('${file.Md5Hash}', '${file.LKPath}', ${file.Finished}, ${file.LastTimestamp})`
+    );
+  }
+
+  public updateFile(file: FileDbo): Observable<SqlResultSet> {
+    return this.executeTransaction(
+      `UPDATE Files SET LKPath = '${file.LKPath}', Finished = ${file.Finished}, LastTimestamp = ${file.LastTimestamp} WHERE Id = ${file.Id}`
+    );
+  }
+
+  public tryGetFileWithHash(hash: string): Observable<FileDbo> {
+    return this.executeTransaction(
+      `SELECT TOP 1 * FROM Files WHERE Md5Hash = '${hash}'`
+    ).pipe(
+      map(values => {
+        const arr = DatabaseService.mapRowsToArray<FileDbo>(values.rows);
+        if (arr.length === 0) {
+          return null;
+        }
+        return arr[0];
+      })
+    );
   }
 
   // Row is not actually an array but an object that fakes being an array. It has objects 0,1,2... and the last member is
