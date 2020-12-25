@@ -2,6 +2,12 @@ import {Component, OnInit} from '@angular/core';
 import {Location} from '@angular/common';
 import {ActivatedRoute} from "@angular/router";
 import {ElectronService} from "../core/services";
+import {faBookmark, faEye, faEyeSlash, faChevronLeft} from '@fortawesome/free-solid-svg-icons';
+import {faBookmark as faBookmarkLight} from '@fortawesome/free-regular-svg-icons';
+import videojs from 'video.js';
+import {HASH_FILE_EVENT} from "../../../shared/models/EventChannels";
+import {first} from "rxjs/operators";
+
 
 @Component({
   selector: 'app-detail',
@@ -9,6 +15,12 @@ import {ElectronService} from "../core/services";
   styleUrls: ['./video.component.scss']
 })
 export class VideoComponent implements OnInit {
+  public faBookmark = faBookmark;
+  public faBookmarkLight = faBookmarkLight;
+  public faChevronLeft = faChevronLeft;
+  public faEye = faEye;
+  public faEyeSlash = faEyeSlash;
+
   public filePath: string;
   public fileType: string;
 
@@ -54,7 +66,7 @@ export class VideoComponent implements OnInit {
       fluid: false,
       aspectRatio: '16:9',
       height: 200,
-      autoplay: true,
+      autoplay: false,
       controls: true,
       sources: [
         {
@@ -63,5 +75,21 @@ export class VideoComponent implements OnInit {
         }
       ]
     };
+  }
+
+  onVideoInitialLoad(player: videojs.Player) {
+    this.electronService.invokeHandler<string>(HASH_FILE_EVENT, {path: this.filePath})
+      .pipe(first())
+      .subscribe(
+        (hash) => {
+          if (!hash) {
+            console.error('Failed getting hash for file');
+            return;
+          }
+
+          console.log('GOT FILE HASH', hash);
+        },
+        err => console.error(err)
+      );
   }
 }

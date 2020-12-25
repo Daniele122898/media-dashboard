@@ -2,7 +2,21 @@
   <app-video-player *ngIf="fileType"
     [options]="getOptions()"
     class="video-player"
+    (onInitialLoad)="onVideoInitialLoad($event)"
   ></app-video-player>
-  <button (click)="onBack()">Back</button>
-  <p>Path: {{filePath}}</p>
+  <div class="bar-container">
+    <div class="bar">
+      <div class="button button-icon-left" (click)="onBack()">
+        <fa-icon [icon]="faChevronLeft"></fa-icon> {{'COMPONENTS.BUTTON_DEFAULTS.GO_BACK' | translate}}
+      </div>
+      <div class="bar-right">
+        <div class="button button-icon-left" (click)="onBack()">
+          <fa-icon [icon]="faEye"></fa-icon> Mark as watched
+        </div>
+        <div class="button button-icon-left" (click)="onBack()">
+          <fa-icon [icon]="faBookmark"></fa-icon> Create Bookmark
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

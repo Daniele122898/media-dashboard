@@ -1,5 +1,6 @@
-import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, Input, OnDestroy, OnInit, Output, ViewChild, EventEmitter} from '@angular/core';
 import videojs, {VideoJsPlayer, VideoJsPlayerOptions} from 'video.js';
+import * as hasha from "hasha";
 
 interface extendedOptions extends VideoJsPlayerOptions {
   userActions: {
@@ -14,6 +15,8 @@ interface extendedOptions extends VideoJsPlayerOptions {
   styleUrls: ['./video-player.component.scss']
 })
 export class VideoPlayerComponent implements OnInit, OnDestroy {
+
+  @Output() onInitialLoad = new EventEmitter<videojs.Player>()
 
   @ViewChild('target', {static: true}) target: ElementRef;
   @Input() options: {
@@ -39,6 +42,7 @@ export class VideoPlayerComponent implements OnInit, OnDestroy {
       <extendedOptions>{
         ...this.options,
         playbackRates: [0.5, 0.75, 1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 2],
+        preload: 'auto',
         userActions: {
           doubleClick: true,
           hotkeys: function(event) {
@@ -71,6 +75,13 @@ export class VideoPlayerComponent implements OnInit, OnDestroy {
         console.log('onPlayerReady', this);
       }
     );
+
+    this.player.one('loadedmetadata', this.playerOnInitialLoad.bind(this))
+  }
+
+  private playerOnInitialLoad(e) {
+    this.onInitialLoad.emit(this.player);
+    this.onInitialLoad.complete();
   }
 
   ngOnDestroy() {

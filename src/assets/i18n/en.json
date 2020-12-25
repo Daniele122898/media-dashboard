@@ -21,6 +21,9 @@
   "COMPONENTS": {
     "EXPLORER": {
       "OPEN_FILE_LOCATION": "Open in Explorer"
+    },
+    "BUTTON_DEFAULTS": {
+      "GO_BACK": "Back"
     }
   }
 }

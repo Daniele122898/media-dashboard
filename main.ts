@@ -7,6 +7,7 @@ import autoUpdater from "./core/helpers/autoUpdater";
 import {registerWindowHandlers} from "./core/events/windowEventHandlers";
 import {registerDialogEventHandlers} from "./core/events/dialogEventHandlers";
 import {registerEndpoints} from "./core/endpoints/serverEndpoints";
+import {registerFileEventHandlers} from "./core/events/fileEventHandlers";
 
 let win: BrowserWindow = null;
 let tray: Tray = null;
@@ -106,6 +107,7 @@ function createWindow(): BrowserWindow {
   // Register event handlers
   registerWindowHandlers(ipcMain, win);
   registerDialogEventHandlers(ipcMain, win);
+  registerFileEventHandlers(ipcMain, win);
 
   // Register API Endpoints
   registerEndpoints(router);
