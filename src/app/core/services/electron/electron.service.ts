@@ -48,7 +48,7 @@ export class ElectronService {
       .catch(err => console.error(err));
   }
 
-  public invokeHandler<T>(handler: string, payload: any): Observable<T> {
+  public invokeHandler<T, R = any>(handler: string, payload: R): Observable<T> {
     return from(this.ipcRenderer.invoke(handler, payload));
   }
 

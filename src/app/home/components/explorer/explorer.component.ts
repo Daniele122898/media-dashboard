@@ -3,6 +3,15 @@ import {faArrowUp, faFolder, faFilm} from '@fortawesome/free-solid-svg-icons';
 import {ElectronService} from "../../../core/services";
 import {Dirent} from "fs";
 import {Router} from "@angular/router";
+import {MultiHashEventData, MultiHashResponse} from "../../../../../shared/models/fileEventData";
+import {HASH_FILES_EVENT} from "../../../../../shared/models/EventChannels";
+import {first} from "rxjs/operators";
+
+interface VideoDirent extends Dirent {
+  Finished?: boolean;
+  LastTimeStamp?: number;
+  Duration?: number;
+}
 
 @Component({
   selector: 'app-explorer',
@@ -18,7 +27,7 @@ export class ExplorerComponent implements OnInit {
 
   public directories: Dirent[];
   public files: Dirent[];
-  public videos: Dirent[];
+  public videos: VideoDirent[];
 
   @Input('categoryDirPath')
   get categoryDirPath(): string {
@@ -61,7 +70,7 @@ export class ExplorerComponent implements OnInit {
       return;
     }
 
-    for (let i = categoryPath.length; i<pathContents.length; ++i) {
+    for (let i = categoryPath.length; i < pathContents.length; ++i) {
       dispPath.push(pathContents[i]);
     }
     this.displayPath = dispPath;
@@ -76,7 +85,8 @@ export class ExplorerComponent implements OnInit {
     private electronService: ElectronService,
     private router: Router,
     private ngZone: NgZone,
-  ) { }
+  ) {
+  }
 
   ngOnInit(): void {
   }
@@ -114,7 +124,6 @@ export class ExplorerComponent implements OnInit {
   public onVideo(vid: Dirent): void {
     const path = this.electronService.path;
     const filePath = path.join(this.currentPath, vid.name);
-    console.log('File path for video component', filePath);
     this.ngZone.run(() => {
       this.router.navigate(['/video'], {
         queryParams: {
@@ -131,11 +140,34 @@ export class ExplorerComponent implements OnInit {
       console.log('readDir Error', err);
       console.log('readDir contents', contents);
 
-      this.directories = contents.filter(x=> x.isDirectory());
+      this.directories = contents.filter(x => x.isDirectory());
       const files = contents.filter(x => x.isFile());
       this.videos = files.filter(x => this.isVideo(x.name));
 
-      this.changeDetector.detectChanges();
+      const path = this.electronService.path;
+
+      // Check all the hashes and DB :)
+      this.electronService.invokeHandler<MultiHashResponse[], MultiHashEventData>(
+        HASH_FILES_EVENT,
+        {
+          paths: this.videos.map(v => path.join(this.currentPath, v.name))
+        }
+      ).pipe(first())
+        .subscribe(
+          hashes => {
+            console.log('VIDEO ARRAY BEFORE', this.videos);
+            this.videos.map(v => {
+              const h = hashes.find(h => h.path === path.join(this.currentPath, v.name));
+              v.Duration = 999;
+            });
+            console.log('VIDEO ARRAY AFTER', this.videos);
+            this.changeDetector.detectChanges();
+          }, err => {
+            console.error(err);
+            this.changeDetector.detectChanges();
+          }
+        )
+
     });
   }
 

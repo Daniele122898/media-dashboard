@@ -10,6 +10,7 @@ import {first, takeUntil} from "rxjs/operators";
 import {DatabaseService} from "../shared/services/database.service";
 import {FileDbo} from "../shared/models/FileDbo";
 import {interval, Subject} from "rxjs";
+import {HashEventData} from "../../../shared/models/fileEventData";
 
 
 @Component({
@@ -86,7 +87,7 @@ export class VideoComponent implements OnInit, OnDestroy {
   }
 
   onVideoInitialLoad(player: videojs.Player) {
-    this.electronService.invokeHandler<string>(HASH_FILE_EVENT, {path: this.filePath})
+    this.electronService.invokeHandler<string, HashEventData>(HASH_FILE_EVENT, {path: this.filePath})
       .pipe(first())
       .subscribe(
         (hash) => {

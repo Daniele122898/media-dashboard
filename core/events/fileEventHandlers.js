@@ -43,10 +43,11 @@ var fs = require("fs");
 var win = null;
 var registerFileEventHandlers = function (ipcMain, window) {
     win = window;
-    ipcMain.handle(EventChannels_1.HASH_FILE_EVENT, handleHashFileEvents);
+    ipcMain.handle(EventChannels_1.HASH_FILE_EVENT, handleHashFileEvent);
+    ipcMain.handle(EventChannels_1.HASH_FILES_EVENT, handleHashFilesEvent);
 };
 exports.registerFileEventHandlers = registerFileEventHandlers;
-var handleHashFileEvents = function (e, data) { return __awaiter(void 0, void 0, void 0, function () {
+var handleHashFileEvent = function (e, data) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -57,6 +58,41 @@ var handleHashFileEvents = function (e, data) { return __awaiter(void 0, void 0,
                         algorithm: 'md5'
                     })];
             case 1: return [2 /*return*/, _a.sent()];
+        }
+    });
+}); };
+var handleHashFilesEvent = function (e, data) { return __awaiter(void 0, void 0, void 0, function () {
+    var promises, results, i, r;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                console.log('RECEIVED ALL HASHES');
+                promises = [];
+                data.paths.forEach(function (path) {
+                    console.log('RECEIVED PATH:', path);
+                    promises.push(hasha.fromFile(path, {
+                        algorithm: 'md5'
+                    }));
+                });
+                console.log('FINISHED LOOP');
+                results = [];
+                i = 0;
+                _a.label = 1;
+            case 1:
+                if (!(i < promises.length)) return [3 /*break*/, 4];
+                return [4 /*yield*/, promises[i]];
+            case 2:
+                r = _a.sent();
+                console.log(data.paths[i], ' got HASH: ', r);
+                results.push(r);
+                _a.label = 3;
+            case 3:
+                ++i;
+                return [3 /*break*/, 1];
+            case 4:
+                // const results = await Promise.all(promises);
+                console.log('FINISHED PROMISES');
+                return [2 /*return*/, results.map(function (r, i) { return ({ path: data.paths[i], hash: r }); })];
         }
     });
 }); };

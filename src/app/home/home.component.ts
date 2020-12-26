@@ -62,7 +62,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe(
         res => {
-          console.log('Got Modal value', res);
           this.db.insertNewCategory(res.categoryName, res.filePath)
             .pipe(first())
             .subscribe(
@@ -88,7 +87,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 
   public onCategoryClick(category: Category): void {
-    console.log('Selected Category: ', category);
     this.selectedCategory = category;
     this.changeDetection.detectChanges();
   }
