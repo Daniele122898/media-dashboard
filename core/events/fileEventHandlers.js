@@ -38,9 +38,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.registerFileEventHandlers = void 0;
 var EventChannels_1 = require("../../shared/models/EventChannels");
-var hasha = require("hasha");
 var fs = require("fs");
+var md5File = require("md5-file");
+var NodeCache = require("node-cache");
 var win = null;
+var cache = new NodeCache();
 var registerFileEventHandlers = function (ipcMain, window) {
     win = window;
     ipcMain.handle(EventChannels_1.HASH_FILE_EVENT, handleHashFileEvent);
@@ -48,51 +50,73 @@ var registerFileEventHandlers = function (ipcMain, window) {
 };
 exports.registerFileEventHandlers = registerFileEventHandlers;
 var handleHashFileEvent = function (e, data) { return __awaiter(void 0, void 0, void 0, function () {
+    var hash;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 if (!fs.existsSync(data.path)) {
                     return [2 /*return*/, null];
                 }
-                return [4 /*yield*/, hasha.fromFile(data.path, {
-                        algorithm: 'md5'
-                    })];
-            case 1: return [2 /*return*/, _a.sent()];
+                hash = cache.get(data.path);
+                if (!!hash) return [3 /*break*/, 2];
+                return [4 /*yield*/, md5File(data.path)];
+            case 1:
+                hash = _a.sent();
+                cache.set(data.path, hash, 3600);
+                _a.label = 2;
+            case 2: return [2 /*return*/, hash];
         }
     });
 }); };
 var handleHashFilesEvent = function (e, data) { return __awaiter(void 0, void 0, void 0, function () {
-    var promises, results, i, r;
+    var res, i, p, hash, promises, _loop_1, i, results;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                console.log('RECEIVED ALL HASHES');
-                promises = [];
-                data.paths.forEach(function (path) {
-                    console.log('RECEIVED PATH:', path);
-                    promises.push(hasha.fromFile(path, {
-                        algorithm: 'md5'
-                    }));
-                });
-                console.log('FINISHED LOOP');
-                results = [];
+                res = [];
+                for (i = 0; i < data.paths.length; ++i) {
+                    p = data.paths[i];
+                    hash = cache.get(p);
+                    if (!hash) {
+                        hash = md5File(p);
+                    }
+                    res.push({ path: p, hash: hash });
+                }
+                promises = res.filter(function (p) { return p.hash instanceof Promise; });
+                _loop_1 = function (i) {
+                    var p, r, _a;
+                    return __generator(this, function (_b) {
+                        switch (_b.label) {
+                            case 0:
+                                p = promises[i];
+                                r = res.find(function (x) { return x.path === p.path; });
+                                _a = r;
+                                return [4 /*yield*/, p.hash];
+                            case 1:
+                                _a.hash = _b.sent();
+                                cache.set(r.path, r.hash);
+                                return [2 /*return*/];
+                        }
+                    });
+                };
                 i = 0;
                 _a.label = 1;
             case 1:
                 if (!(i < promises.length)) return [3 /*break*/, 4];
-                return [4 /*yield*/, promises[i]];
+                return [5 /*yield**/, _loop_1(i)];
             case 2:
-                r = _a.sent();
-                console.log(data.paths[i], ' got HASH: ', r);
-                results.push(r);
+                _a.sent();
                 _a.label = 3;
             case 3:
                 ++i;
                 return [3 /*break*/, 1];
-            case 4:
-                // const results = await Promise.all(promises);
-                console.log('FINISHED PROMISES');
-                return [2 /*return*/, results.map(function (r, i) { return ({ path: data.paths[i], hash: r }); })];
+            case 4: return [4 /*yield*/, Promise.all(data.paths.map(function (p) { return md5File(p); }))];
+            case 5:
+                results = _a.sent();
+                console.log(results);
+                console.log('---------');
+                console.log(res);
+                return [2 /*return*/, res.map(function (r, i) { return ({ path: data.paths[i], hash: r }); })];
         }
     });
 }); };

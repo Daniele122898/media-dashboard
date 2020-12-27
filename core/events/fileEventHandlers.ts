@@ -1,10 +1,13 @@
 import {BrowserWindow, IpcMain, IpcMainInvokeEvent} from 'electron';
 import {HASH_FILE_EVENT, HASH_FILES_EVENT} from "../../shared/models/EventChannels";
-import * as hasha from 'hasha';
 import * as fs from 'fs';
+import * as md5File from 'md5-file';
 import {HashEventData, MultiHashEventData, MultiHashResponse} from "../../shared/models/fileEventData";
+import * as NodeCache from "node-cache";
 
 let win: BrowserWindow = null;
+
+const cache = new NodeCache();
 
 const registerFileEventHandlers = (ipcMain: IpcMain, window: BrowserWindow) => {
   win = window;
@@ -17,34 +20,35 @@ const handleHashFileEvent = async (e: IpcMainInvokeEvent, data: HashEventData): 
     return null;
   }
 
-  return await hasha.fromFile(data.path, {
-    algorithm: 'md5'
-  });
+  let hash: string = cache.get(data.path);
+  if (!hash){
+    hash = await md5File(data.path);
+    cache.set(data.path, hash, 3600);
+  }
+
+  return hash;
 }
 
 const handleHashFilesEvent = async (e: IpcMainInvokeEvent, data: MultiHashEventData): Promise<MultiHashResponse[]> => {
-  console.log('RECEIVED ALL HASHES');
-  const promises = [];
+  const res = [];
+  for (let i = 0; i<data.paths.length; ++i) {
+    const p = data.paths[i];
+    let hash = cache.get(p);
+    if (!hash) {
+      hash = md5File(p);
+    }
+    res.push({path: p, hash});
+  }
 
+  const promises = res.filter(p => p.hash instanceof Promise);
+  for (let i = 0; i<promises.length; ++i) {
+    const p = promises[i];
+    let r = res.find(x => x.path === p.path);
+    r.hash = await p.hash;
+    cache.set(r.path, r.hash);
+  }
 
-  data.paths.forEach(path => {
-    console.log('RECEIVED PATH:', path)
-    promises.push(hasha.fromFile(path, {
-      algorithm: 'md5'
-    }));
-  });
-  console.log('FINISHED LOOP');
-
-  // const results = [];
-  // for (let i = 0; i<promises.length; ++i) {
-  //   const r = await promises[i];
-  //   console.log(data.paths[i], ' got HASH: ', r);
-  //   results.push(r);
-  // }
-
-  const results = await Promise.all(promises);
-  console.log('FINISHED PROMISES');
-  return results.map((r, i) => ({path: data.paths[i], hash: r}))
+  return res;
 }
 
 export {registerFileEventHandlers};

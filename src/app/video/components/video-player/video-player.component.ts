@@ -1,6 +1,5 @@
 import {Component, ElementRef, Input, OnDestroy, OnInit, Output, ViewChild, EventEmitter} from '@angular/core';
 import videojs, {VideoJsPlayer, VideoJsPlayerOptions} from 'video.js';
-import * as hasha from "hasha";
 
 interface extendedOptions extends VideoJsPlayerOptions {
   userActions: {

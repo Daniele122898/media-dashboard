@@ -134,17 +134,23 @@ export class ExplorerComponent implements OnInit {
   }
 
   private getAllFilesInDir(): void {
+    console.time('settingUp');
     const fs = this.electronService.fs;
 
     fs.readdir(this.currentPath, {withFileTypes: true, encoding: "utf8"}, (err, contents: Dirent[]) => {
       console.log('readDir Error', err);
       console.log('readDir contents', contents);
 
+      if (!contents || contents.length === 0)
+        return;
+
       this.directories = contents.filter(x => x.isDirectory());
       const files = contents.filter(x => x.isFile());
       this.videos = files.filter(x => this.isVideo(x.name));
 
       const path = this.electronService.path;
+      console.timeEnd('settingUp');
+      console.time('fetchingHashes');
 
       // Check all the hashes and DB :)
       this.electronService.invokeHandler<MultiHashResponse[], MultiHashEventData>(
@@ -155,12 +161,17 @@ export class ExplorerComponent implements OnInit {
       ).pipe(first())
         .subscribe(
           hashes => {
+            console.timeEnd('fetchingHashes');
+            console.time('setupAfter');
+
+            console.log('Received hashes', hashes);
             console.log('VIDEO ARRAY BEFORE', this.videos);
             this.videos.map(v => {
               const h = hashes.find(h => h.path === path.join(this.currentPath, v.name));
               v.Duration = 999;
             });
             console.log('VIDEO ARRAY AFTER', this.videos);
+            console.timeEnd('setupAfter');
             this.changeDetector.detectChanges();
           }, err => {
             console.error(err);
