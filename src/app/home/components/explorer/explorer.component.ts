@@ -1,11 +1,12 @@
 import {ChangeDetectorRef, Component, Input, NgZone, OnDestroy, OnInit} from '@angular/core';
-import {faArrowUp, faFolder, faFilm, faSpinner} from '@fortawesome/free-solid-svg-icons';
+import {faArrowUp, faFolder, faFilm, faSpinner, faEye} from '@fortawesome/free-solid-svg-icons';
 import {ElectronService} from "../../../core/services";
 import {Dirent} from "fs";
 import {Router} from "@angular/router";
 import {MultiHashEventData, MultiHashResponse} from "../../../../../shared/models/fileEventData";
 import {HASH_FILES_EVENT} from "../../../../../shared/models/EventChannels";
 import {Subscription} from "rxjs";
+import {DatabaseService} from "../../../shared/services/database.service";
 
 interface VideoDirent extends Dirent {
   Finished?: boolean;
@@ -24,6 +25,7 @@ export class ExplorerComponent implements OnInit, OnDestroy {
   public faFolder = faFolder;
   public faSpinner = faSpinner;
   public faFilm = faFilm;
+  public faEye = faEye;
   public contentSearchString = "";
 
   public directories: Dirent[];
@@ -89,6 +91,7 @@ export class ExplorerComponent implements OnInit, OnDestroy {
     private electronService: ElectronService,
     private router: Router,
     private ngZone: NgZone,
+    private db: DatabaseService,
   ) {
   }
 
@@ -165,10 +168,27 @@ export class ExplorerComponent implements OnInit, OnDestroy {
       ).subscribe(
         hashes => {
           console.log('Received hashes', hashes);
-          this.videos.map(v => {
-            const h = hashes.find(h => h.path === path.join(this.currentPath, v.name));
-            v.Duration = 999;
-          });
+
+          for (let i = 0; i<this.videos.length; ++i) {
+            let v = this.videos[i];
+            const hash = hashes.find(h => h.path === path.join(this.currentPath, v.name));
+
+            this.db.tryGetFileWithHash(hash.hash)
+              .subscribe(
+                file => {
+                  if (!file)
+                    return;
+
+                  v.Finished = file.Finished;
+                  v.LastTimeStamp = file.LastTimestamp;
+                  v.Duration = file.Duration;
+                  this.videos[i] = v;
+                  console.log('Added duration for file', file);
+                  this.changeDetector.detectChanges();
+                }, err => console.error(err)
+              )
+          }
+
           this.loadingText = null;
           this.changeDetector.detectChanges();
         }, err => {

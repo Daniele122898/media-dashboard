@@ -103,11 +103,35 @@
           padding: 10px;
           color: $disc-medium-text;
           border-radius: 5px;
+          position: relative;
 
           &:hover {
             background-color: lighten($disc-grey-light, 2%);
             color: $disc-light-text;
             cursor: pointer;
+          }
+
+          .explorer-item-icons {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: $disc-grey-dark;
+            padding: 3px;
+            border-radius: 3px;
+          }
+
+          .explorer-item-progress {
+            margin-top: 10px;
+            height: 2px;
+            width: 100%;
+            background-color: $disc-grey-medium;
+            border-radius: 3px;
+
+            .explorer-item-progress-bar {
+              height: 100%;
+              background-color: $disc-light-text;
+              border-radius: 3px;
+            }
           }
 
           .explorer-item-header {

@@ -32,8 +32,8 @@ export class DatabaseService {
 
   public insertNewFile(file: FileDbo): Observable<SqlResultSet> {
     return this.executeTransaction(
-      `INSERT INTO Files (Md5Hash, LKPath, Finished, LastTimestamp)
-      VALUES ('${file.Md5Hash}', '${file.LKPath}', ${file.Finished}, ${file.LastTimestamp})`
+      `INSERT INTO Files (Md5Hash, LKPath, Finished, LastTimestamp, Duration)
+      VALUES ('${file.Md5Hash}', '${file.LKPath}', ${file.Finished}, ${file.LastTimestamp}, ${file.Duration})`
     );
   }
 
@@ -99,7 +99,8 @@ export class DatabaseService {
         '        Md5Hash BLOB NOT NULL,' +
         '        LKPath nvarchar(260) NOT NULL,' +
         '        Finished boolean DEFAULT 0, ' +
-        '        LastTimestamp int' +
+        '        LastTimestamp int,' +
+        '        Duration int' +
         ')');
     });
   }

@@ -7,6 +7,9 @@
     "DETAIL": {
       "TITLE": "Detail page !",
       "BACK_TO_HOME": "Back to Home"
+    },
+    "VIDEO": {
+      "CREATE_BOOKMARK": "Create Bookmark"
     }
   },
   "INPUTS": {
@@ -24,6 +27,10 @@
     },
     "BUTTON_DEFAULTS": {
       "GO_BACK": "Back"
+    },
+    "VIDEO":{
+      "MARK_AS_WATCHED": "Mark as watched",
+      "UNMARK_AS_WATCHED": "Unmark as watched"
     }
   }
 }

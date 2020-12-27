@@ -4,4 +4,5 @@ export interface FileDbo {
   LKPath: string;
   Finished: boolean;
   LastTimestamp: number;
+  Duration: number;
 }

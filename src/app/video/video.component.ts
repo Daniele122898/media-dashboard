@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {Location} from '@angular/common';
 import {ActivatedRoute} from "@angular/router";
 import {ElectronService} from "../core/services";
@@ -37,6 +37,7 @@ export class VideoComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private electronService: ElectronService,
     private db: DatabaseService,
+    private changeDetection: ChangeDetectorRef,
   ) {
   }
 
@@ -86,6 +87,29 @@ export class VideoComponent implements OnInit, OnDestroy {
     };
   }
 
+  public onMarkWatchedToggle(): void {
+    this.fileDbo.Finished = !this.fileDbo.Finished;
+    this.db.updateFile(this.fileDbo)
+      .subscribe(
+        res => {
+          if (res.rowsAffected < 0) {
+            console.error('Failed to update watched state');
+            this.fileDbo.Finished = !this.fileDbo;
+            return;
+          }
+
+          this.changeDetection.detectChanges();
+        }, error => {
+          console.error(error);
+          this.fileDbo.Finished = !this.fileDbo;
+        }
+      )
+  }
+
+  public onCreateBookmark(): void {
+
+  }
+
   onVideoInitialLoad(player: videojs.Player) {
     this.electronService.invokeHandler<string, HashEventData>(HASH_FILE_EVENT, {path: this.filePath})
       .pipe(first())
@@ -97,9 +121,7 @@ export class VideoComponent implements OnInit, OnDestroy {
           }
 
           this.db.tryGetFileWithHash(hash)
-            .pipe(
-              first(),
-            ).subscribe(
+            .subscribe(
             fileDbo => {
               if (!fileDbo) {
                 // No hash in file so create one
@@ -108,7 +130,8 @@ export class VideoComponent implements OnInit, OnDestroy {
                   LastTimestamp: 0,
                   Finished: false,
                   LKPath: this.filePath,
-                  Md5Hash: hash
+                  Md5Hash: hash,
+                  Duration: Math.floor(player.duration())
                 }).subscribe(
                   res => {
                     if (res.rowsAffected === 0) {
@@ -121,7 +144,8 @@ export class VideoComponent implements OnInit, OnDestroy {
                       Md5Hash: hash,
                       LKPath: this.filePath,
                       Finished: false,
-                      LastTimestamp: 0
+                      LastTimestamp: 0,
+                      Duration: Math.floor(player.duration())
                     }
                     this.setupIntervals(player);
                   },
@@ -154,13 +178,23 @@ export class VideoComponent implements OnInit, OnDestroy {
           finished = true;
         }
 
-        this.fileDbo = {
-          ...this.fileDbo,
+        const file: FileDbo = {
+          Id: this.fileDbo.Id,
+          Md5Hash: this.fileDbo.Md5Hash,
+          LKPath: this.filePath,
+          Duration: this.fileDbo.Duration,
           LastTimestamp: Math.floor(currentTimestamp),
           Finished: finished
         }
 
-        this.db.updateFile(this.fileDbo);
+        this.fileDbo = file;
+
+        this.db.updateFile(file).subscribe(
+          val => {
+            if (val.rowsAffected < 0)
+              console.error('Failed updating file db with no error :/');
+          }, error => console.error('Failed updating file in db', error)
+        );
       });
   }
 

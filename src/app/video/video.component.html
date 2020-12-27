@@ -9,12 +9,14 @@
       <div class="button button-icon-left" (click)="onBack()">
         <fa-icon [icon]="faChevronLeft"></fa-icon> {{'COMPONENTS.BUTTON_DEFAULTS.GO_BACK' | translate}}
       </div>
-      <div class="bar-right">
-        <div class="button button-icon-left" (click)="onBack()">
-          <fa-icon [icon]="faEye"></fa-icon> Mark as watched
+      <div class="bar-right" *ngIf="this.fileDbo">
+        <div class="button button-icon-left" (click)="onMarkWatchedToggle()">
+          <fa-icon [icon]="this.fileDbo.Finished ? faEyeSlash : faEye"></fa-icon>
+          {{(this.fileDbo.Finished ? ('COMPONENTS.VIDEO.UNMARK_AS_WATCHED' | translate) :
+          ('COMPONENTS.VIDEO.MARK_AS_WATCHED' | translate))}}
         </div>
-        <div class="button button-icon-left" (click)="onBack()">
-          <fa-icon [icon]="faBookmark"></fa-icon> Create Bookmark
+        <div class="button button-icon-left" (click)="onCreateBookmark()">
+          <fa-icon [icon]="faBookmark"></fa-icon> {{'PAGES.VIDEO.CREATE_BOOKMARK' | translate}}
         </div>
       </div>
     </div>
