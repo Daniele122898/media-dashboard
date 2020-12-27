@@ -1,0 +1,163 @@
+@import "src/app/shared/scss/settings";
+
+:host {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+
+    .content {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+
+      .loading-container {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 25px;
+        background-color: $disc-grey-dark;
+        color: $disc-medium-text;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding-left: 10px;
+        box-sizing: border-box;
+
+        .spinner {
+          animation-name: spin;
+          animation-duration: 2000ms;
+          animation-iteration-count: infinite;
+          animation-timing-function: linear;
+          transform-origin: center center;
+          margin-right: 10px;
+        }
+
+        @keyframes spin {
+          from {
+            transform:rotate(0deg);
+          }
+          to {
+            transform:rotate(360deg);
+          }
+        }
+      }
+
+      .explorer-content {
+        flex-wrap: wrap !important;
+        height: auto !important;
+        padding: 10px;
+        max-height: 100% !important;
+        overflow-y: auto !important;
+      }
+
+      .content-header {
+        border-bottom: 2px solid $disc-grey-medium;
+        height: 50px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        .header-container {
+          display: flex;
+          flex-direction: row;
+          padding: 10px 10px;
+          align-items: center;
+
+          .path-segment {
+            margin-left: 5px;
+          }
+
+          .button {
+            font-size: 14px;
+            color: $disc-light-text;
+            margin-right: 15px;
+            width: max-content;
+          }
+
+          span {
+            font-weight: bold;
+            color: $disc-light-text;
+          }
+
+          .search-bar {
+            height: 25px;
+          }
+        }
+      }
+
+      .content-container {
+        height: calc(100% - 50px);
+
+
+        .explorer-item {
+          width: 150px;
+          height: 100px;
+          display: flex;
+          flex-direction: column;
+          text-align: center;
+          align-items: center;
+          padding: 10px;
+          color: $disc-medium-text;
+          border-radius: 5px;
+          position: relative;
+
+          &:hover {
+            background-color: lighten($disc-grey-light, 2%);
+            color: $disc-light-text;
+            cursor: pointer;
+          }
+
+          .explorer-item-icons {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: $disc-grey-dark;
+            padding: 3px;
+            border-radius: 3px;
+          }
+
+          .explorer-item-progress {
+            margin-top: 10px;
+            height: 2px;
+            width: 100%;
+            background-color: $disc-grey-medium;
+            border-radius: 3px;
+
+            .explorer-item-progress-bar {
+              height: 100%;
+              background-color: $disc-light-text;
+              border-radius: 3px;
+            }
+          }
+
+          .explorer-item-header {
+            height: 50px;
+            width: 100%;
+            font-size: 40px;
+          }
+
+          .explorer-item-desc {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            max-height: 50px;
+            width: 100%;
+            p {
+              margin: 0;
+              text-overflow: ellipsis;
+              overflow: hidden;
+              max-height: 50px;
+              width: 100%;
+              display: -webkit-box;
+              -webkit-line-clamp: 3;
+              -webkit-box-orient: vertical;
+            }
+          }
+        }
+      }
+    }
+
+}

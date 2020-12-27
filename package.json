@@ -1,25 +1,12 @@
 {
-  "name": "angular-electron",
-  "version": "9.0.2",
-  "description": "Angular 11 with Electron (Typescript + SASS + Hot Reload)",
-  "homepage": "https://github.com/maximegris/angular-electron",
+  "name": "media-dashboard",
+  "version": "1.0.0",
+  "description": "Media Dashbaord",
+  "homepage": "https://github.com/Daniele122898/media-dashboard",
+  "repository": "https://github.com/Daniele122898/media-dashboard",
   "author": {
-    "name": "Maxime GRIS",
-    "email": "maxime.gris@gmail.com"
+    "name": "Serenity"
   },
-  "keywords": [
-    "angular",
-    "angular 11",
-    "electron",
-    "nodejs",
-    "typescript",
-    "spectron",
-    "eslint",
-    "sass",
-    "windows",
-    "mac",
-    "linux"
-  ],
   "main": "main.js",
   "private": true,
   "scripts": {
@@ -38,14 +25,24 @@
     "test:watch": "ng test",
     "e2e": "npm run build:prod && cross-env TS_NODE_PROJECT='e2e/tsconfig.e2e.json' mocha --timeout 300000 --require ts-node/register e2e/**/*.e2e.ts",
     "version": "conventional-changelog -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "win-cert": "electron-builder create-self-signed-cert -p ArgonautDevelopments",
+    "release": "npm run build:prod && electron-builder -w -p 'onTagOrDraft'"
   },
   "dependencies": {
     "@fortawesome/angular-fontawesome": "0.8.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.32",
     "@fortawesome/free-brands-svg-icons": "^5.15.1",
     "@fortawesome/free-regular-svg-icons": "^5.15.1",
-    "@fortawesome/free-solid-svg-icons": "^5.15.1"
+    "@fortawesome/free-solid-svg-icons": "^5.15.1",
+    "electron-log": "4.3.0",
+    "electron-updater": "4.3.5",
+    "electron-window-state": "5.0.3",
+    "express": "4.17.1",
+    "file-type": "16.1.0",
+    "md5-file": "5.0.0",
+    "node-cache": "5.1.2",
+    "video.js": "7.10.2"
   },
   "devDependencies": {
     "@angular-builders/custom-webpack": "10.0.1",
@@ -67,10 +64,13 @@
     "@angular/router": "11.0.2",
     "@ngx-translate/core": "13.0.0",
     "@ngx-translate/http-loader": "6.0.0",
+    "@types/express": "4.17.9",
+    "@types/file-type": "10.9.1",
     "@types/jasmine": "3.6.1",
     "@types/jasminewd2": "2.0.8",
     "@types/mocha": "8.0.4",
     "@types/node": "12.12.6",
+    "@types/video.js": "7.3.11",
     "@typescript-eslint/eslint-plugin": "4.7.0",
     "@typescript-eslint/eslint-plugin-tslint": "4.7.0",
     "@typescript-eslint/parser": "4.7.0",
@@ -78,7 +78,7 @@
     "conventional-changelog-cli": "2.1.1",
     "core-js": "3.6.5",
     "cross-env": "7.0.2",
-    "electron": "10.1.5",
+    "electron": "11.1.1",
     "electron-builder": "22.9.1",
     "electron-reload": "1.5.0",
     "eslint": "7.13.0",

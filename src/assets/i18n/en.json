@@ -1,12 +1,36 @@
 {
   "PAGES": {
-      "HOME": {
-          "TITLE": "App works !",
-          "GO_TO_DETAIL": "Go to Detail"
-      },
-      "DETAIL": {
-        "TITLE": "Detail page !",
-        "BACK_TO_HOME": "Back to Home"
+    "HOME": {
+      "TITLE": "App works !",
+      "GO_TO_DETAIL": "Go to Detail"
+    },
+    "DETAIL": {
+      "TITLE": "Detail page !",
+      "BACK_TO_HOME": "Back to Home"
+    },
+    "VIDEO": {
+      "CREATE_BOOKMARK": "Create Bookmark"
+    }
+  },
+  "INPUTS": {
+    "SEARCH": {
+      "SEARCH_BAR_PLACEHOLDER": "Search"
+    },
+    "PLACEHOLDERS": {
+      "DIR_PATH": "Path to Directory",
+      "CATEGORY_NAME": "Category Name"
+    }
+  },
+  "COMPONENTS": {
+    "EXPLORER": {
+      "OPEN_FILE_LOCATION": "Open in Explorer"
+    },
+    "BUTTON_DEFAULTS": {
+      "GO_BACK": "Back"
+    },
+    "VIDEO":{
+      "MARK_AS_WATCHED": "Mark as watched",
+      "UNMARK_AS_WATCHED": "Unmark as watched"
     }
   }
 }

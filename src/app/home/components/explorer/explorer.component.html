@@ -1,0 +1,54 @@
+<div class="content">
+  <div class="content-header">
+    <div class="header-container">
+      <div class="button" (click)="onGoDirUp()">
+        <fa-icon [icon]="faArrowUp"></fa-icon>
+      </div>
+      <span *ngIf="!displayPath || displayPath.length === 0">No Category Selected</span>
+      <span *ngFor="let p of displayPath" class="path-segment">
+          {{this.shortDisplayPath(p) + " /"}}
+      </span>
+    </div>
+    <div class="header-container">
+      <div class="button" (click)="onOpenFileLocation()">
+        {{ 'COMPONENTS.EXPLORER.OPEN_FILE_LOCATION' | translate }}
+      </div>
+      <app-input [(input)]="contentSearchString" [showSearchIcon]="true" [enableSmall]="true">
+      </app-input>
+    </div>
+  </div>
+  <div class="content-container explorer-content custom-scrollbar">
+    <div *ngFor="let dir of directories" class="explorer-item" (click)="onOpenDir(dir)">
+      <div class="explorer-item-header">
+        <fa-icon [icon]="faFolder"></fa-icon>
+      </div>
+      <div class="explorer-item-desc">
+        <p>{{dir.name}}</p>
+      </div>
+    </div>
+
+    <div *ngFor="let vid of videos" class="explorer-item" (click)="onVideo(vid)">
+      <div class="explorer-item-icons" *ngIf="vid.Finished">
+        <fa-icon [icon]="faEye" *ngIf="vid.Finished"></fa-icon>
+      </div>
+      <div class="explorer-item-header">
+        <fa-icon [icon]="faFilm"></fa-icon>
+      </div>
+      <div class="explorer-item-desc">
+        <p>{{vid.name}}</p>
+      </div>
+      <div
+        class="explorer-item-progress"
+        *ngIf="vid.Duration && vid.LastTimeStamp"
+      >
+        <div class="explorer-item-progress-bar"
+          [ngStyle]="{width: (100/vid.Duration*vid.LastTimeStamp)+'%'}"
+        ></div>
+      </div>
+    </div>
+  </div>
+  <div class="loading-container" *ngIf="this.loadingText">
+    <fa-icon class="spinner" [icon]="faSpinner"></fa-icon>
+    <span>{{this.loadingText}}</span>
+  </div>
+</div>

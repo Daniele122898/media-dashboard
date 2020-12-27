@@ -12,7 +12,7 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { HomeModule } from './home/home.module';
-import { DetailModule } from './detail/detail.module';
+import { VideoModule } from './video/video.module';
 
 import { AppComponent } from './app.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -23,26 +23,29 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
 }
 
 @NgModule({
-  declarations: [AppComponent],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    HttpClientModule,
-    CoreModule,
-    SharedModule,
-    HomeModule,
-    DetailModule,
-    AppRoutingModule,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
-        deps: [HttpClient]
-      }
-    }),
-    FontAwesomeModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+    declarations: [AppComponent],
+    imports: [
+        BrowserModule,
+        FormsModule,
+        HttpClientModule,
+        CoreModule,
+        SharedModule,
+        HomeModule,
+        VideoModule,
+        AppRoutingModule,
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClient]
+            }
+        }),
+        FontAwesomeModule
+    ],
+    providers: [],
+    exports: [
+        AppComponent
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule {}

@@ -1,5 +1,5 @@
 {
-  "productName": "angular-electron",
+  "productName": "Media Dashboard",
   "directories": {
     "output": "release/"
   },
@@ -19,11 +19,21 @@
         "!tsconfig.json",
         "!tslint.json"
     ],
+  "extraFiles": [
+    "trayTemplate@2x.png"
+  ],
+  "publish": {
+    "provider": "github",
+    "token": ""
+  },
   "win": {
     "icon": "dist/assets/icons",
     "target": [
-      "portable"
-    ]
+      "nsis"
+    ],
+    "publisherName": "ArgonautDevelopments",
+    "certificateFile": "private/ArgonautDevelopments.pfx",
+    "certificatePassword": ""
   },
   "mac": {
     "icon": "dist/assets/icons",

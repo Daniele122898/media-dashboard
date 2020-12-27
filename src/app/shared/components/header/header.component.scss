@@ -4,15 +4,13 @@ header {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
   -webkit-app-region: drag;
 
-  padding: 3px 5px;
-  background-color: $dark-grey;
-  color: $grey;
-
-  strong span {
-    color: $vibrant-blue;
-  }
+  padding: 0 10px;
+  background-color: $disc-grey-dark;
+  color: #A8A8A8;
+  height: 28px;
 
   .icon-container {
     -webkit-app-region: no-drag;

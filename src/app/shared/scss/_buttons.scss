@@ -1,0 +1,52 @@
+@import "src/app/shared/scss/settings";
+
+.button {
+  background-color: $disc-grey-dark;
+  padding: 7px 12px;
+  text-align: center;
+  border-radius: 5px;
+  font-weight: bold;
+  color: $disc-medium-text;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    background-color: lighten($disc-grey-dark, 1%);
+    cursor: pointer;
+    color: $disc-light-text;
+  }
+}
+
+.button-bright {
+  color: $disc-light-text;
+}
+
+.disabled {
+  background-color: lighten($disc-grey-dark, 2%);
+  color: lighten($disc-medium-text, 2%);
+
+  &:hover {
+    background-color: lighten($disc-grey-dark, 2%);
+    color: lighten($disc-medium-text, 2%);
+    cursor: not-allowed;
+  }
+}
+
+.button-red {
+  color: $pastel-red;
+
+  &:hover {
+    background-color: $pastel-red;
+    color: $disc-grey-dark;
+    cursor: pointer;
+  }
+}
+
+.button-icon-left {
+  fa-icon {
+    margin-right: 10px;
+  }
+}

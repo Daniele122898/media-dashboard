@@ -1,7 +1,26 @@
 <div class="container">
-  <h1 class="title">
-    {{ 'PAGES.HOME.TITLE' | translate }}
-  </h1>
+  <div class="side-bar">
+    <div class="side-bar-header">
+      <div class="search-container">
+        <app-input [(input)]="sidebarSearchString" [showSearchIcon]="true"></app-input>
+      </div>
+      <div class="button" (click)="onCreateCategory()">
+        Add new Category
+      </div>
+    </div>
+    <div class="side-bar-content custom-scrollbar">
+      <div class="side-bar-item" *ngFor="let category of categories" (click)="onCategoryClick(category)" [ngClass]="{'highlighted-item': this.isSelectedCategory(category)}">
+        <fa-icon [icon]="faFolder" *ngIf="!this.isSelectedCategory(category)"></fa-icon>
+        <fa-icon [icon]="faFolderOpen" *ngIf="this.isSelectedCategory(category)"></fa-icon>
+        <p>{{category.Name}}</p>
+        <div class="button button-red" (click)="removeCategory(category)"><fa-icon [icon]="faTrash"></fa-icon></div>
+      </div>
+    </div>
+  </div>
 
-  <a routerLink="/detail">{{ 'PAGES.HOME.GO_TO_DETAIL' | translate }}</a>
+  <app-explorer
+    class="container"
+    [categoryDirPath]="this.selectedCategory?.DirPath"
+  ></app-explorer>
+
 </div>

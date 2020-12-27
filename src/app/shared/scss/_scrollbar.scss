@@ -1,14 +1,29 @@
+@import "settings";
+
 .custom-scrollbar::-webkit-scrollbar{
-  width: 0.4rem;
+  width: 0.32rem;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-  box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  //-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  //box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  background-color: $disc-grey-medium;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #36363b;
+  background-color: $disc-grey-dark;
   border-radius: 5px;
   outline: none;
+}
+
+.custom-scrollbar-padding::-webkit-scrollbar{
+  margin: 5px 0 5px 0;
+}
+
+.custom-scrollbar-padding::-webkit-scrollbar-track {
+  margin: 5px 0 5px 0;
+}
+
+.custom-scrollbar-padding::-webkit-scrollbar-thumb {
+  margin: 5px 0 5px 0;
 }

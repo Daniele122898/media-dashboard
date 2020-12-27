@@ -1,0 +1,48 @@
+@import "settings";
+
+.input-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  width: 100%;
+
+  .input-padding {
+    padding-right: 10px;
+    flex-grow: 2;
+  }
+
+  .input-button {
+    flex-grow: 0;
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.input-error {
+  padding-top: 5px;
+  font-size: 14px;
+  color: $pastel-red;
+}
+
+.input-label {
+  color: $disc-light-text;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.form-buttons {
+  margin-top: 15px;
+  padding-top: 15px;
+  width: 100%;
+
+  border-top: 1px solid $disc-grey-light;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

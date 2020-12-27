@@ -1,0 +1,17 @@
+<div class="modal-page">
+  <div class="modal-container"
+       #modalContent
+       [ngStyle]="modalConfig.style"
+       [ngClass]="modalConfig.styleClass"
+       [style.width]="modalConfig.width"
+       [style.height]="modalConfig.height"
+  >
+    <div class="modal-header" *ngIf="modalConfig.showHeader">
+      <h2 class="modal-title">{{modalConfig.header}}</h2>
+      <span class="modal-subheader" *ngIf="modalConfig.subheader">{{modalConfig.subheader}}</span>
+    </div>
+    <div class="modal-content">
+      <ng-template appModalInjector></ng-template>
+    </div>
+  </div>
+</div>
