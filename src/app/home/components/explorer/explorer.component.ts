@@ -7,6 +7,7 @@ import {MultiHashEventData, MultiHashResponse} from "../../../../../shared/model
 import {HASH_FILES_EVENT} from "../../../../../shared/models/EventChannels";
 import {Subscription} from "rxjs";
 import {DatabaseService} from "../../../shared/services/database.service";
+import {LastExplorerStateService} from "../../services/last-explorer-state.service";
 
 interface VideoDirent extends Dirent {
   Finished?: boolean;
@@ -41,11 +42,17 @@ export class ExplorerComponent implements OnInit, OnDestroy {
   }
 
   set categoryDirPath(val: string) {
+    let replaced = val;
     if (val) {
-      val = this.replaceBackslash(val);
+      replaced = this.replaceBackslash(val);
     }
-    this._categoryDirPath = val;
-    this.currentPath = val;
+    this._categoryDirPath = replaced;
+
+    if (this.explorerStateService.lastSelectedCategory?.DirPath === val) {
+      this.currentPath = this.explorerStateService.lastCurrentPath ?
+        this.explorerStateService.lastCurrentPath : replaced;
+    }
+
     this.changeDetector.detectChanges();
   }
 
@@ -60,6 +67,8 @@ export class ExplorerComponent implements OnInit, OnDestroy {
     this.files = null
 
     this._currentPath = val;
+    this.explorerStateService.lastCurrentPath = val;
+
     if (!val) {
       this.displayPath = [];
       return;
@@ -92,6 +101,7 @@ export class ExplorerComponent implements OnInit, OnDestroy {
     private router: Router,
     private ngZone: NgZone,
     private db: DatabaseService,
+    private explorerStateService: LastExplorerStateService,
   ) {
   }
 

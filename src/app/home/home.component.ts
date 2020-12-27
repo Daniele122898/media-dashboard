@@ -10,6 +10,7 @@ import {CreateCategoryModalComponent} from "../shared/components/modal/modals/cr
 import {Subscription} from "rxjs";
 import {DialogEventData, DialogType, MessageBoxData, MessageBoxReply} from "../../../shared/models/dialogEventData";
 import {DIALOG_EVENT_CHANNEL} from "../../../shared/models/EventChannels";
+import {LastExplorerStateService} from "./services/last-explorer-state.service";
 
 
 @Component({
@@ -38,6 +39,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private changeDetection: ChangeDetectorRef,
     private db: DatabaseService,
     private modalService: ModalService,
+    private explorerStateService: LastExplorerStateService,
   ) {
   }
 
@@ -88,6 +90,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   public onCategoryClick(category: Category): void {
     this.selectedCategory = category;
+    this.explorerStateService.lastSelectedCategory = category;
+    this.explorerStateService.lastCurrentPath = null;
     this.changeDetection.detectChanges();
   }
 
@@ -138,6 +142,15 @@ export class HomeComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe((res) => {
         this.categories = res;
+
+        // Check last selected category!
+        if (this.explorerStateService.lastSelectedCategory) {
+          const cat = this.categories.find(x => x.DirPath === this.explorerStateService.lastSelectedCategory.DirPath)
+          if (cat) {
+            this.selectedCategory = cat;
+          }
+        }
+
         this.changeDetection.detectChanges();
       }, err => {
         console.error(err);
