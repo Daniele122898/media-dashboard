@@ -1,11 +1,11 @@
-import {ChangeDetectorRef, Component, Input, NgZone, OnInit} from '@angular/core';
-import {faArrowUp, faFolder, faFilm} from '@fortawesome/free-solid-svg-icons';
+import {ChangeDetectorRef, Component, Input, NgZone, OnDestroy, OnInit} from '@angular/core';
+import {faArrowUp, faFolder, faFilm, faSpinner} from '@fortawesome/free-solid-svg-icons';
 import {ElectronService} from "../../../core/services";
 import {Dirent} from "fs";
 import {Router} from "@angular/router";
 import {MultiHashEventData, MultiHashResponse} from "../../../../../shared/models/fileEventData";
 import {HASH_FILES_EVENT} from "../../../../../shared/models/EventChannels";
-import {first} from "rxjs/operators";
+import {Subscription} from "rxjs";
 
 interface VideoDirent extends Dirent {
   Finished?: boolean;
@@ -18,16 +18,20 @@ interface VideoDirent extends Dirent {
   templateUrl: './explorer.component.html',
   styleUrls: ['./explorer.component.scss']
 })
-export class ExplorerComponent implements OnInit {
+export class ExplorerComponent implements OnInit, OnDestroy {
 
   public faArrowUp = faArrowUp;
   public faFolder = faFolder;
+  public faSpinner = faSpinner;
   public faFilm = faFilm;
   public contentSearchString = "";
 
   public directories: Dirent[];
   public files: Dirent[];
   public videos: VideoDirent[];
+
+  public loadingText: string;
+  private lastHashSubscription: Subscription;
 
   @Input('categoryDirPath')
   get categoryDirPath(): string {
@@ -134,12 +138,9 @@ export class ExplorerComponent implements OnInit {
   }
 
   private getAllFilesInDir(): void {
-    console.time('settingUp');
     const fs = this.electronService.fs;
 
     fs.readdir(this.currentPath, {withFileTypes: true, encoding: "utf8"}, (err, contents: Dirent[]) => {
-      console.log('readDir Error', err);
-      console.log('readDir contents', contents);
 
       if (!contents || contents.length === 0)
         return;
@@ -147,37 +148,35 @@ export class ExplorerComponent implements OnInit {
       this.directories = contents.filter(x => x.isDirectory());
       const files = contents.filter(x => x.isFile());
       this.videos = files.filter(x => this.isVideo(x.name));
+      console.log('VIDEOS: ', this.videos);
 
       const path = this.electronService.path;
-      console.timeEnd('settingUp');
-      console.time('fetchingHashes');
-
+      this.loadingText = 'Indexing Files...'
+      this.changeDetector.detectChanges();
       // Check all the hashes and DB :)
-      this.electronService.invokeHandler<MultiHashResponse[], MultiHashEventData>(
+      if (this.lastHashSubscription)
+        this.lastHashSubscription.unsubscribe();
+
+      this.lastHashSubscription = this.electronService.invokeHandler<MultiHashResponse[], MultiHashEventData>(
         HASH_FILES_EVENT,
         {
           paths: this.videos.map(v => path.join(this.currentPath, v.name))
         }
-      ).pipe(first())
-        .subscribe(
-          hashes => {
-            console.timeEnd('fetchingHashes');
-            console.time('setupAfter');
-
-            console.log('Received hashes', hashes);
-            console.log('VIDEO ARRAY BEFORE', this.videos);
-            this.videos.map(v => {
-              const h = hashes.find(h => h.path === path.join(this.currentPath, v.name));
-              v.Duration = 999;
-            });
-            console.log('VIDEO ARRAY AFTER', this.videos);
-            console.timeEnd('setupAfter');
-            this.changeDetector.detectChanges();
-          }, err => {
-            console.error(err);
-            this.changeDetector.detectChanges();
-          }
-        )
+      ).subscribe(
+        hashes => {
+          console.log('Received hashes', hashes);
+          this.videos.map(v => {
+            const h = hashes.find(h => h.path === path.join(this.currentPath, v.name));
+            v.Duration = 999;
+          });
+          this.loadingText = null;
+          this.changeDetector.detectChanges();
+        }, err => {
+          this.loadingText = null;
+          this.changeDetector.detectChanges();
+          console.error(err);
+        }
+      )
 
     });
   }
@@ -189,5 +188,9 @@ export class ExplorerComponent implements OnInit {
   private isVideo(path: string): boolean {
     const parsed = this.electronService.path.parse(path);
     return parsed.ext === '.mp4' || parsed.ext === '.mkv' || parsed.ext === '.webm';
+  }
+
+  ngOnDestroy(): void {
+    this.lastHashSubscription.unsubscribe();
   }
 }

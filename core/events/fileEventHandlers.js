@@ -69,7 +69,7 @@ var handleHashFileEvent = function (e, data) { return __awaiter(void 0, void 0, 
     });
 }); };
 var handleHashFilesEvent = function (e, data) { return __awaiter(void 0, void 0, void 0, function () {
-    var res, i, p, hash, promises, _loop_1, i, results;
+    var res, i, p, hash, promises, _loop_1, i;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -110,13 +110,7 @@ var handleHashFilesEvent = function (e, data) { return __awaiter(void 0, void 0,
             case 3:
                 ++i;
                 return [3 /*break*/, 1];
-            case 4: return [4 /*yield*/, Promise.all(data.paths.map(function (p) { return md5File(p); }))];
-            case 5:
-                results = _a.sent();
-                console.log(results);
-                console.log('---------');
-                console.log(res);
-                return [2 /*return*/, res.map(function (r, i) { return ({ path: data.paths[i], hash: r }); })];
+            case 4: return [2 /*return*/, res];
         }
     });
 }); };

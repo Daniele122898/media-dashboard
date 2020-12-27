@@ -36,4 +36,8 @@
       </div>
     </div>
   </div>
+  <div class="loading-container" *ngIf="this.loadingText">
+    <fa-icon class="spinner" [icon]="faSpinner"></fa-icon>
+    <span>{{this.loadingText}}</span>
+  </div>
 </div>
