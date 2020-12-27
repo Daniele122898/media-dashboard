@@ -135,6 +135,8 @@ export class ExplorerComponent implements OnInit, OnDestroy {
   }
 
   public onOpenFileLocation(): void {
+    if (!this.currentPath)
+      return;
     this.electronService.openFileLocation(this.currentPath);
   }
 
