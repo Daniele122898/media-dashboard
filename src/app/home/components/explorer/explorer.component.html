@@ -4,7 +4,7 @@
       <div class="button" (click)="onGoDirUp()">
         <fa-icon [icon]="faArrowUp"></fa-icon>
       </div>
-      <span *ngIf="!displayPath || displayPath.length === 0">No Category Selected</span>
+      <span *ngIf="!displayPath || displayPath.length === 0">{{'PAGES.HOME.NO_CATEGORY_SELECTED' | translate}}</span>
       <span *ngFor="let p of displayPath" class="path-segment">
           {{this.shortDisplayPath(p) + " /"}}
       </span>
