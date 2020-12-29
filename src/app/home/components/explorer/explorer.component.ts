@@ -27,10 +27,10 @@ export class ExplorerComponent implements OnInit, OnDestroy {
   public faSpinner = faSpinner;
   public faFilm = faFilm;
   public faEye = faEye;
+
   public contentSearchString = "";
 
   public directories: Dirent[];
-  public files: Dirent[];
   public videos: VideoDirent[];
 
   public loadingText: string;
@@ -64,7 +64,6 @@ export class ExplorerComponent implements OnInit, OnDestroy {
 
   set currentPath(val: string) {
     this.directories = null;
-    this.files = null
 
     this._currentPath = val;
     this.explorerStateService.lastCurrentPath = val;
@@ -150,6 +149,26 @@ export class ExplorerComponent implements OnInit, OnDestroy {
         }
       })
     })
+  }
+
+  // TODO Rework search - This is very slow and just overall a very bad implementation
+  // It's not as pressing because the search is quick enough and in memory but it's still a very bad way of doing things
+  // Since this method is called VERY OFTEN by angular. Actually each time anything calls for a detectChanges.
+  public getFilteredDirectoryList(): Dirent[] {
+    if (!this.contentSearchString)
+      return this.directories;
+
+    return this.directories.filter(x => x.name.toLowerCase().includes(this.contentSearchString.toLowerCase()));
+  }
+
+  // TODO Rework search - This is very slow and just overall a very bad implementation
+  // It's not as pressing because the search is quick enough and in memory but it's still a very bad way of doing things
+  // Since this method is called VERY OFTEN by angular. Actually each time anything calls for a detectChanges.
+  public getFilteredVideoList(): VideoDirent[] {
+    if (!this.contentSearchString)
+      return this.videos;
+
+    return this.videos.filter(x => x.name.toLowerCase().includes(this.contentSearchString.toLowerCase()));
   }
 
   private getAllFilesInDir(): void {

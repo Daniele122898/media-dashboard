@@ -21,7 +21,6 @@ import {LastExplorerStateService} from "./services/last-explorer-state.service";
 export class HomeComponent implements OnInit, OnDestroy {
 
   public sidebarSearchString = "";
-  public contentSearchString = "";
 
   public faFolder = faFolder;
   public faFolderOpen = faFolderOpen;
@@ -135,6 +134,16 @@ export class HomeComponent implements OnInit, OnDestroy {
 
         }, err => console.error(err)
       )
+  }
+
+  // TODO Rework search - This is very slow and just overall a very bad implementation
+  // It's not as pressing because the search is quick enough and in memory but it's still a very bad way of doing things
+  // Since this method is called VERY OFTEN by angular. Actually each time anything calls for a detectChanges.
+  public getFilteredCategoryList(): Category[] {
+    if (!this.sidebarSearchString)
+      return this.categories;
+
+    return this.categories.filter(x => x.Name.toLowerCase().includes(this.sidebarSearchString.toLowerCase()));
   }
 
   private getAllCategories(): void {

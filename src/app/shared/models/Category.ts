@@ -1,6 +1,6 @@
 export interface Category {
   Id: number;
-  Name: number;
+  Name: string;
   DirPath: string;
   ParentId?: number;
 }

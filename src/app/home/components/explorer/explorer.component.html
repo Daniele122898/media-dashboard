@@ -18,7 +18,7 @@
     </div>
   </div>
   <div class="content-container explorer-content custom-scrollbar">
-    <div *ngFor="let dir of directories" class="explorer-item" (click)="onOpenDir(dir)">
+    <div *ngFor="let dir of this.getFilteredDirectoryList()" class="explorer-item" (click)="onOpenDir(dir)">
       <div class="explorer-item-header">
         <fa-icon [icon]="faFolder"></fa-icon>
       </div>
@@ -27,7 +27,7 @@
       </div>
     </div>
 
-    <div *ngFor="let vid of videos" class="explorer-item" (click)="onVideo(vid)">
+    <div *ngFor="let vid of this.getFilteredVideoList()" class="explorer-item" (click)="onVideo(vid)">
       <div class="explorer-item-icons" *ngIf="vid.Finished">
         <fa-icon [icon]="faEye" *ngIf="vid.Finished"></fa-icon>
       </div>
