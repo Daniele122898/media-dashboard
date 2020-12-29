@@ -158,7 +158,8 @@ export class ExplorerComponent implements OnInit, OnDestroy {
     if (!this.contentSearchString)
       return this.directories;
 
-    return this.directories.filter(x => x.name.toLowerCase().includes(this.contentSearchString.toLowerCase()));
+    const search = this.contentSearchString.toLowerCase();
+    return this.directories.filter(x => x.name.toLowerCase().includes(search));
   }
 
   // TODO Rework search - This is very slow and just overall a very bad implementation
@@ -168,7 +169,8 @@ export class ExplorerComponent implements OnInit, OnDestroy {
     if (!this.contentSearchString)
       return this.videos;
 
-    return this.videos.filter(x => x.name.toLowerCase().includes(this.contentSearchString.toLowerCase()));
+    const search = this.contentSearchString.toLowerCase();
+    return this.videos.filter(x => x.name.toLowerCase().includes(search));
   }
 
   private getAllFilesInDir(): void {

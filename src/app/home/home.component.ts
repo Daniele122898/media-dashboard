@@ -143,7 +143,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (!this.sidebarSearchString)
       return this.categories;
 
-    return this.categories.filter(x => x.Name.toLowerCase().includes(this.sidebarSearchString.toLowerCase()));
+    const search = this.sidebarSearchString.toLowerCase();
+    return this.categories.filter(x => x.Name.toLowerCase().includes(search));
   }
 
   private getAllCategories(): void {
