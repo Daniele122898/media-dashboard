@@ -174,7 +174,7 @@ export class VideoComponent implements OnInit, OnDestroy {
         const currentTimestamp = player.currentTime();
         const duration = player.duration();
         let finished = this.fileDbo.Finished;
-        if (duration - currentTimestamp < 15 && !finished) {
+        if (duration - currentTimestamp < 30 && !finished) {
           finished = true;
         }
 
