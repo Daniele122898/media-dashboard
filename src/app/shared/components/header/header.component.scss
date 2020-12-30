@@ -7,15 +7,39 @@ header {
   align-items: center;
   -webkit-app-region: drag;
 
-  padding: 0 10px;
+  padding-left: 10px;
   background-color: $disc-grey-dark;
   color: #A8A8A8;
   height: 28px;
 
   .icon-container {
     -webkit-app-region: no-drag;
+
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
     fa-icon {
-      margin-left: 10px;
+      height: 100%;
+      padding: 0 10px 0 10px;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      &:hover {
+        cursor: pointer;
+        color: #c1c1c1;
+        background-color: $disc-grey-medium;
+      }
+    }
+
+    #close-window {
+      &:hover {
+        color: $pastel-red;
+      }
     }
   }
 }
