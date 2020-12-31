@@ -5,7 +5,7 @@ import {ElectronService} from "../core/services";
 import {faBookmark, faEye, faEyeSlash, faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import {faBookmark as faBookmarkLight} from '@fortawesome/free-regular-svg-icons';
 import videojs from 'video.js';
-import {HASH_FILE_EVENT} from "../../../shared/models/EventChannels";
+import {GET_FILEID_EVENT} from "../../../shared/models/EventChannels";
 import {first, takeUntil} from "rxjs/operators";
 import {DatabaseService} from "../shared/services/database.service";
 import {FileDbo} from "../shared/models/FileDbo";
@@ -111,16 +111,16 @@ export class VideoComponent implements OnInit, OnDestroy {
   }
 
   onVideoInitialLoad(player: videojs.Player) {
-    this.electronService.invokeHandler<string, HashEventData>(HASH_FILE_EVENT, {path: this.filePath})
+    this.electronService.invokeHandler<string, HashEventData>(GET_FILEID_EVENT, {path: this.filePath})
       .pipe(first())
       .subscribe(
-        (hash) => {
-          if (!hash) {
+        (fileId) => {
+          if (!fileId) {
             console.error('Failed getting hash for file');
             return;
           }
 
-          this.db.tryGetFileWithHash(hash)
+          this.db.tryGetFileWithFileId(fileId)
             .subscribe(
             fileDbo => {
               if (!fileDbo) {
@@ -130,7 +130,7 @@ export class VideoComponent implements OnInit, OnDestroy {
                   LastTimestamp: 0,
                   Finished: false,
                   LKPath: this.filePath,
-                  Md5Hash: hash,
+                  FileId: fileId,
                   Duration: Math.floor(player.duration())
                 }).subscribe(
                   res => {
@@ -141,7 +141,7 @@ export class VideoComponent implements OnInit, OnDestroy {
 
                     this.fileDbo = {
                       Id: res.insertId,
-                      Md5Hash: hash,
+                      FileId: fileId,
                       LKPath: this.filePath,
                       Finished: false,
                       LastTimestamp: 0,
@@ -180,7 +180,7 @@ export class VideoComponent implements OnInit, OnDestroy {
 
         const file: FileDbo = {
           Id: this.fileDbo.Id,
-          Md5Hash: this.fileDbo.Md5Hash,
+          FileId: this.fileDbo.FileId,
           LKPath: this.filePath,
           Duration: this.fileDbo.Duration,
           LastTimestamp: Math.floor(currentTimestamp),

@@ -8,5 +8,5 @@ export interface MultiHashEventData {
 
 export interface MultiHashResponse {
   path: string;
-  hash: string;
+  fileId: string;
 }

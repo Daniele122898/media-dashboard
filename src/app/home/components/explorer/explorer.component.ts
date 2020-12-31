@@ -4,7 +4,7 @@ import {ElectronService} from "../../../core/services";
 import {Dirent} from "fs";
 import {Router} from "@angular/router";
 import {MultiHashEventData, MultiHashResponse} from "../../../../../shared/models/fileEventData";
-import {HASH_FILES_EVENT} from "../../../../../shared/models/EventChannels";
+import {GET_FILEIDS_EVENT} from "../../../../../shared/models/EventChannels";
 import {Subscription} from "rxjs";
 import {DatabaseService} from "../../../shared/services/database.service";
 import {LastExplorerStateService} from "../../services/last-explorer-state.service";
@@ -189,24 +189,24 @@ export class ExplorerComponent implements OnInit, OnDestroy {
       const path = this.electronService.path;
       this.loadingText = 'Indexing Files...'
       this.changeDetector.detectChanges();
-      // Check all the hashes and DB :)
+      // Check all the fileIDs and DB :)
       if (this.lastHashSubscription)
         this.lastHashSubscription.unsubscribe();
 
       this.lastHashSubscription = this.electronService.invokeHandler<MultiHashResponse[], MultiHashEventData>(
-        HASH_FILES_EVENT,
+        GET_FILEIDS_EVENT,
         {
           paths: this.videos.map(v => path.join(this.currentPath, v.name))
         }
       ).subscribe(
-        hashes => {
-          console.log('Received hashes', hashes);
+        resp => {
+          console.log('Received file Ids', resp);
 
           for (let i = 0; i<this.videos.length; ++i) {
             let v = this.videos[i];
-            const hash = hashes.find(h => h.path === path.join(this.currentPath, v.name));
+            const fileResp = resp.find(h => h.path === path.join(this.currentPath, v.name));
 
-            this.db.tryGetFileWithHash(hash.hash)
+            this.db.tryGetFileWithFileId(fileResp.fileId)
               .subscribe(
                 file => {
                   if (!file)

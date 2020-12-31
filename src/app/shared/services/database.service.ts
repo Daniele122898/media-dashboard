@@ -32,8 +32,8 @@ export class DatabaseService {
 
   public insertNewFile(file: FileDbo): Observable<SqlResultSet> {
     return this.executeTransaction(
-      `INSERT INTO Files (Md5Hash, LKPath, Finished, LastTimestamp, Duration)
-      VALUES ('${file.Md5Hash}', '${file.LKPath}', ${file.Finished}, ${file.LastTimestamp}, ${file.Duration})`
+      `INSERT INTO Files (FileId, LKPath, Finished, LastTimestamp, Duration)
+      VALUES ('${file.FileId}', '${file.LKPath}', ${file.Finished}, ${file.LastTimestamp}, ${file.Duration})`
     );
   }
 
@@ -43,9 +43,9 @@ export class DatabaseService {
     );
   }
 
-  public tryGetFileWithHash(hash: string): Observable<FileDbo> {
+  public tryGetFileWithFileId(fileId: string): Observable<FileDbo> {
     return this.executeTransaction(
-      `SELECT * FROM Files WHERE Md5Hash = '${hash}'`
+      `SELECT * FROM Files WHERE FileId = '${fileId}'`
     ).pipe(
       map(values => {
         const arr = DatabaseService.mapRowsToArray<FileDbo>(values.rows);
@@ -96,7 +96,7 @@ export class DatabaseService {
 
       tx.executeSql('CREATE TABLE IF NOT EXISTS Files(' +
         '        Id INTEGER PRIMARY KEY AUTOINCREMENT,' +
-        '        Md5Hash BLOB NOT NULL,' +
+        '        FileId varchar(50) NOT NULL,' +
         '        LKPath nvarchar(260) NOT NULL,' +
         '        Finished boolean DEFAULT 0, ' +
         '        LastTimestamp int,' +

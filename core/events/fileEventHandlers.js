@@ -39,79 +39,57 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.registerFileEventHandlers = void 0;
 var EventChannels_1 = require("../../shared/models/EventChannels");
 var fs = require("fs");
-var md5File = require("md5-file");
 var NodeCache = require("node-cache");
 var win = null;
 var cache = new NodeCache();
 var registerFileEventHandlers = function (ipcMain, window) {
     win = window;
-    ipcMain.handle(EventChannels_1.HASH_FILE_EVENT, handleHashFileEvent);
-    ipcMain.handle(EventChannels_1.HASH_FILES_EVENT, handleHashFilesEvent);
+    ipcMain.handle(EventChannels_1.GET_FILEID_EVENT, handleHashFileEvent);
+    ipcMain.handle(EventChannels_1.GET_FILEIDS_EVENT, handleHashFilesEvent);
 };
 exports.registerFileEventHandlers = registerFileEventHandlers;
 var handleHashFileEvent = function (e, data) { return __awaiter(void 0, void 0, void 0, function () {
-    var hash;
+    var stats;
     return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                if (!fs.existsSync(data.path)) {
-                    return [2 /*return*/, null];
-                }
-                hash = cache.get(data.path);
-                if (!!hash) return [3 /*break*/, 2];
-                return [4 /*yield*/, md5File(data.path)];
-            case 1:
-                hash = _a.sent();
-                cache.set(data.path, hash, 3600);
-                _a.label = 2;
-            case 2: return [2 /*return*/, hash];
+        if (!fs.existsSync(data.path)) {
+            return [2 /*return*/, null];
         }
+        stats = fs.statSync(data.path, {
+            bigint: true
+        });
+        return [2 /*return*/, stats.ino.toString() + stats.dev.toString()];
     });
 }); };
 var handleHashFilesEvent = function (e, data) { return __awaiter(void 0, void 0, void 0, function () {
-    var res, i, p, hash, promises, _loop_1, i;
+    var res, i, p, stats, id;
     return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                res = [];
-                for (i = 0; i < data.paths.length; ++i) {
-                    p = data.paths[i];
-                    hash = cache.get(p);
-                    if (!hash) {
-                        hash = md5File(p);
-                    }
-                    res.push({ path: p, hash: hash });
-                }
-                promises = res.filter(function (p) { return p.hash instanceof Promise; });
-                _loop_1 = function (i) {
-                    var p, r, _a;
-                    return __generator(this, function (_b) {
-                        switch (_b.label) {
-                            case 0:
-                                p = promises[i];
-                                r = res.find(function (x) { return x.path === p.path; });
-                                _a = r;
-                                return [4 /*yield*/, p.hash];
-                            case 1:
-                                _a.hash = _b.sent();
-                                cache.set(r.path, r.hash);
-                                return [2 /*return*/];
-                        }
-                    });
-                };
-                i = 0;
-                _a.label = 1;
-            case 1:
-                if (!(i < promises.length)) return [3 /*break*/, 4];
-                return [5 /*yield**/, _loop_1(i)];
-            case 2:
-                _a.sent();
-                _a.label = 3;
-            case 3:
-                ++i;
-                return [3 /*break*/, 1];
-            case 4: return [2 /*return*/, res];
+        res = [];
+        // TODO add option to choose hash or fileId!
+        // for (let i = 0; i<data.paths.length; ++i) {
+        //   const p = data.paths[i];
+        //   let hash = cache.get(p);
+        //   if (!hash) {
+        //     hash = md5File(p);
+        //   }
+        //   res.push({path: p, hash});
+        // }
+        //
+        // const promises = res.filter(p => p.hash instanceof Promise);
+        // for (let i = 0; i<promises.length; ++i) {
+        //   const p = promises[i];
+        //   let r = res.find(x => x.path === p.path);
+        //   r.hash = await p.hash;
+        //   cache.set(r.path, r.hash);
+        // }
+        for (i = 0; i < data.paths.length; ++i) {
+            p = data.paths[i];
+            stats = fs.statSync(p, {
+                bigint: true
+            });
+            id = stats.ino.toString() + stats.dev.toString();
+            res.push({ path: p, fileId: id });
         }
+        return [2 /*return*/, res];
     });
 }); };
 //# sourceMappingURL=fileEventHandlers.js.map
