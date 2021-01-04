@@ -4,6 +4,7 @@ import {map} from "rxjs/operators";
 import {SqlResultSet} from "../models/SqlTypes";
 import {Category} from "../models/Category";
 import {FileDbo} from "../models/FileDbo";
+import {Bookmark} from "../models/Bookmark";
 
 @Injectable({
   providedIn: 'root'
@@ -26,8 +27,34 @@ export class DatabaseService {
       );
   }
 
+  // TODO Add: If we remove a category we should also remove the bookmarks associated with it :)
   public removeCategory(id: number): Observable<SqlResultSet> {
     return this.executeTransaction(`DELETE FROM Categories WHERE Id = ${id.toString()} OR ParentId = ${id.toString()}`)
+  }
+
+  public getBookmarksWithFileId(id: number): Observable<Bookmark[]> {
+    return this.executeTransaction(`SELECT * FROM Bookmarks WHERE FileId = ${id.toString()}`)
+      .pipe(
+        map(values => DatabaseService.mapRowsToArray<Bookmark>(values.rows))
+      )
+  }
+
+  public getBookmarksWithCategoryId(id: number): Observable<Bookmark[]> {
+    return this.executeTransaction(`SELECT * FROM Bookmarks WHERE CategoryId = ${id.toString()}`)
+      .pipe(
+        map(values => DatabaseService.mapRowsToArray<Bookmark>(values.rows))
+      )
+  }
+
+  public createBookmark(fileId: number, categoryId: number, dirPath: string, timestamp: number, desc: string): Observable<SqlResultSet> {
+    return this.executeTransaction(
+      `INSERT INTO Bookmarks (FileId, CategoryId, DirPath, Timestamp, Description)
+      VALUES (${fileId.toString()}, ${categoryId.toString()}, '${dirPath}', ${timestamp.toString()}, '${desc}')`
+    );
+  }
+
+  public removeBookmark(id: number): Observable<SqlResultSet> {
+    return this.executeTransaction(`DELETE FROM Bookmarks WHERE Id = ${id.toString()}`)
   }
 
   public insertNewFile(file: FileDbo): Observable<SqlResultSet> {
@@ -48,11 +75,7 @@ export class DatabaseService {
       `SELECT * FROM Files WHERE FileId = '${fileId}'`
     ).pipe(
       map(values => {
-        const arr = DatabaseService.mapRowsToArray<FileDbo>(values.rows);
-        if (arr.length === 0) {
-          return null;
-        }
-        return arr[0];
+        return DatabaseService.getSingularValue(values);
       })
     );
   }
@@ -68,6 +91,14 @@ export class DatabaseService {
       })
     }
     return array;
+  }
+
+  private static getSingularValue<T>(result: SqlResultSet): T {
+    const arr = DatabaseService.mapRowsToArray<T>(result.rows);
+    if (arr.length === 0)
+      return null;
+
+    return arr[0];
   }
 
   private executeTransaction(query: string): Observable<SqlResultSet> {
@@ -101,6 +132,15 @@ export class DatabaseService {
         '        Finished boolean DEFAULT 0, ' +
         '        LastTimestamp int,' +
         '        Duration int' +
+        ')');
+
+      tx.executeSql('CREATE TABLE IF NOT EXISTS Bookmarks(' +
+        '        Id INTEGER PRIMARY KEY AUTOINCREMENT,' +
+        '        FileId int NOT NULL,' +
+        '        CategoryId int NOT NULL,' +
+        '        DirPath nvarchar(260) NOT NULL,' +
+        '        LastTimestamp int,' +
+        '        Description varchar(255)' +
         ')');
     });
   }
