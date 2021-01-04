@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {Location} from '@angular/common';
 import {ActivatedRoute} from "@angular/router";
 import {ElectronService} from "../core/services";
@@ -38,6 +38,12 @@ export class VideoComponent implements OnInit, OnDestroy {
   private modalValueSub: Subscription;
   private destroy$ = new Subject();
   private player: videojs.Player;
+
+  @HostListener('document:keydown', ['$event']) onKeyDown(e: KeyboardEvent): void {
+    if (e.ctrlKey && e.code === 'KeyB') {
+      this.onCreateBookmark();
+    }
+  }
 
   constructor(
     private location: Location,
