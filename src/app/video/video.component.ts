@@ -5,15 +5,13 @@ import {ElectronService} from "../core/services";
 import {faBookmark, faEye, faEyeSlash, faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import {faBookmark as faBookmarkLight} from '@fortawesome/free-regular-svg-icons';
 import videojs from 'video.js';
-import {DIALOG_EVENT_CHANNEL, GET_FILEID_EVENT} from "../../../shared/models/EventChannels";
+import {GET_FILEID_EVENT} from "../../../shared/models/EventChannels";
 import {first, takeUntil} from "rxjs/operators";
 import {DatabaseService} from "../shared/services/database.service";
 import {FileDbo} from "../shared/models/FileDbo";
 import {interval, Subject, Subscription} from "rxjs";
 import {HashEventData} from "../../../shared/models/fileEventData";
 import {ModalService} from "../shared/services/modal.service";
-import {CreateCategoryModalComponent} from "../shared/components/modal/modals/create-category-modal/create-category-modal.component";
-import {DialogEventData, DialogType} from "../../../shared/models/dialogEventData";
 import {CreateBookmarkModalComponent} from "../shared/components/modal/modals/create-bookmark-modal/create-bookmark-modal.component";
 import {LastExplorerStateService} from "../shared/services/last-explorer-state.service";
 import {Bookmark} from "../shared/models/Bookmark";
@@ -121,6 +119,13 @@ export class VideoComponent implements OnInit, OnDestroy {
     if (this.modalValueSub)
       this.modalValueSub.unsubscribe();
 
+    // We get the timestamp the moment the user CLICKED the create bookmark function
+    const timestamp = Math.floor(this.player.currentTime());
+    const paused = this.player.paused();
+    // Pause playback
+    if (!paused)
+      this.player.pause();
+
     const modalRef = this.modalService.createModal(CreateBookmarkModalComponent, {
       header: 'Create New Bookmark',
       subheader: 'Bookmarks make it easy to find certain spots in your videos. ' +
@@ -142,7 +147,6 @@ export class VideoComponent implements OnInit, OnDestroy {
           const fileId = this.fileDbo.Id;
           const categoryId = this.lastExplorerState.lastSelectedCategory.Id;
           const dirPath = this.lastExplorerState.lastCurrentPath;
-          const timestamp = Math.floor(this.player.duration());
           this.db.insertBookmark(fileId, categoryId, dirPath, timestamp, desc.description)
             .subscribe(res => {
               if (res.rowsAffected === 0)
@@ -151,6 +155,8 @@ export class VideoComponent implements OnInit, OnDestroy {
               this.loadBookmarks();
             }, err => console.error(err));
 
+          if (!paused)
+            this.player.play();
         }, err => console.error(err)
       );
   }
@@ -220,6 +226,7 @@ export class VideoComponent implements OnInit, OnDestroy {
     this.db.getBookmarksWithFileId(this.fileDbo.Id)
       .subscribe(bookmarks => {
         this.bookmarks = bookmarks;
+        console.log('Got bookmarks', bookmarks);
       }, err => console.error(err));
   }
 

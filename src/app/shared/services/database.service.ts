@@ -139,7 +139,7 @@ export class DatabaseService {
         '        FileId int NOT NULL,' +
         '        CategoryId int NOT NULL,' +
         '        DirPath nvarchar(260) NOT NULL,' +
-        '        LastTimestamp int,' +
+        '        Timestamp int, ' +
         '        Description varchar(255)' +
         ')');
     });

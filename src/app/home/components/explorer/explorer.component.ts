@@ -216,7 +216,6 @@ export class ExplorerComponent implements OnInit, OnDestroy {
                   v.LastTimeStamp = file.LastTimestamp;
                   v.Duration = file.Duration;
                   this.videos[i] = v;
-                  console.log('Added duration for file', file);
                   this.changeDetector.detectChanges();
                 }, err => console.error(err)
               )

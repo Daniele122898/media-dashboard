@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 import {ModalService} from "../../../../services/modal.service";
 import {ElectronService} from "../../../../../core/services";
 import {DIALOG_EVENT_CHANNEL} from "../../../../../../../shared/models/EventChannels";
@@ -25,6 +25,12 @@ export class CreateCategoryModalComponent implements OnInit {
 
   public filePath: string;
   public categoryName: string;
+
+  @HostListener('document:keydown', ['$event']) onKeyDown(e: KeyboardEvent): void {
+    if (e.code === 'Enter') {
+      this.onSubmit();
+    }
+  }
 
   constructor(
     private modalService: ModalService,

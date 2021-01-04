@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 import {ModalService} from "../../../../services/modal.service";
 import {ElectronService} from "../../../../../core/services";
 import {ModalRef} from "../../../../models/ModalRef";
@@ -11,6 +11,12 @@ import {ModalRef} from "../../../../models/ModalRef";
 export class CreateBookmarkModalComponent implements OnInit {
 
   public description: string;
+
+  @HostListener('document:keydown', ['$event']) onKeyDown(e: KeyboardEvent): void {
+    if (e.code === 'Enter') {
+      this.onSubmit();
+    }
+  }
 
   constructor(
     private modalService: ModalService,
