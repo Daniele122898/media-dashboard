@@ -46,7 +46,7 @@ export class DatabaseService {
       )
   }
 
-  public createBookmark(fileId: number, categoryId: number, dirPath: string, timestamp: number, desc: string): Observable<SqlResultSet> {
+  public insertBookmark(fileId: number, categoryId: number, dirPath: string, timestamp: number, desc: string): Observable<SqlResultSet> {
     return this.executeTransaction(
       `INSERT INTO Bookmarks (FileId, CategoryId, DirPath, Timestamp, Description)
       VALUES (${fileId.toString()}, ${categoryId.toString()}, '${dirPath}', ${timestamp.toString()}, '${desc}')`

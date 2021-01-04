@@ -16,6 +16,7 @@ import {CreateCategoryModalComponent} from "../shared/components/modal/modals/cr
 import {DialogEventData, DialogType} from "../../../shared/models/dialogEventData";
 import {CreateBookmarkModalComponent} from "../shared/components/modal/modals/create-bookmark-modal/create-bookmark-modal.component";
 import {LastExplorerStateService} from "../shared/services/last-explorer-state.service";
+import {Bookmark} from "../shared/models/Bookmark";
 
 
 @Component({
@@ -34,9 +35,11 @@ export class VideoComponent implements OnInit, OnDestroy {
   public fileType: string;
 
   public fileDbo: FileDbo;
+  public bookmarks: Bookmark[];
 
   private modalValueSub: Subscription;
-  private destroy$  = new Subject();
+  private destroy$ = new Subject();
+  private player: videojs.Player;
 
   constructor(
     private location: Location,
@@ -132,12 +135,29 @@ export class VideoComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe(
         desc => {
-          console.log('GOT DESCRIPTION', desc);
+          if (!this.lastExplorerState.lastSelectedCategory || !this.lastExplorerState.lastCurrentPath) {
+            alert('State incorrect. Please go back and select a category to fix this issue.')
+            return;
+          }
+          const fileId = this.fileDbo.Id;
+          const categoryId = this.lastExplorerState.lastSelectedCategory.Id;
+          const dirPath = this.lastExplorerState.lastCurrentPath;
+          const timestamp = Math.floor(this.player.duration());
+          this.db.insertBookmark(fileId, categoryId, dirPath, timestamp, desc.description)
+            .subscribe(res => {
+              if (res.rowsAffected === 0)
+                return;
+
+              this.loadBookmarks();
+            }, err => console.error(err));
+
         }, err => console.error(err)
       );
   }
 
-  onVideoInitialLoad(player: videojs.Player) {
+  public onVideoInitialLoad(player: videojs.Player) {
+    this.player = player;
+
     this.electronService.invokeHandler<string, HashEventData>(GET_FILEID_EVENT, {path: this.filePath})
       .pipe(first())
       .subscribe(
@@ -149,49 +169,58 @@ export class VideoComponent implements OnInit, OnDestroy {
 
           this.db.tryGetFileWithFileId(fileId)
             .subscribe(
-            fileDbo => {
-              if (!fileDbo) {
-                // No hash in file so create one
-                this.db.insertNewFile({
-                  Id: 0,
-                  LastTimestamp: 0,
-                  Finished: false,
-                  LKPath: this.filePath,
-                  FileId: fileId,
-                  Duration: Math.floor(player.duration())
-                }).subscribe(
-                  res => {
-                    if (res.rowsAffected === 0) {
-                      console.error('Failed to insert file row')
-                      return;
-                    }
+              fileDbo => {
+                if (!fileDbo) {
+                  // No hash in file so create one
+                  this.db.insertNewFile({
+                    Id: 0,
+                    LastTimestamp: 0,
+                    Finished: false,
+                    LKPath: this.filePath,
+                    FileId: fileId,
+                    Duration: Math.floor(player.duration())
+                  }).subscribe(
+                    res => {
+                      if (res.rowsAffected === 0) {
+                        console.error('Failed to insert file row')
+                        return;
+                      }
 
-                    this.fileDbo = {
-                      Id: res.insertId,
-                      FileId: fileId,
-                      LKPath: this.filePath,
-                      Finished: false,
-                      LastTimestamp: 0,
-                      Duration: Math.floor(player.duration())
-                    }
-                    this.setupIntervals(player);
-                  },
-                  err => console.error(err)
-                );
-                return;
-              }
+                      this.fileDbo = {
+                        Id: res.insertId,
+                        FileId: fileId,
+                        LKPath: this.filePath,
+                        Finished: false,
+                        LastTimestamp: 0,
+                        Duration: Math.floor(player.duration())
+                      }
+                      this.loadBookmarks();
+                      this.setupIntervals(player);
+                    },
+                    err => console.error(err)
+                  );
+                  return;
+                }
 
-              // Got file so we can skip
-              player.currentTime(Math.floor(fileDbo.LastTimestamp));
-              this.fileDbo = fileDbo;
+                // Got file so we can skip
+                player.currentTime(Math.floor(fileDbo.LastTimestamp));
+                this.fileDbo = fileDbo;
 
-              this.setupIntervals(player);
+                this.loadBookmarks();
+                this.setupIntervals(player);
 
-            }, err => console.error(err)
-          )
+              }, err => console.error(err)
+            )
         },
         err => console.error(err)
       );
+  }
+
+  private loadBookmarks(): void {
+    this.db.getBookmarksWithFileId(this.fileDbo.Id)
+      .subscribe(bookmarks => {
+        this.bookmarks = bookmarks;
+      }, err => console.error(err));
   }
 
   private setupIntervals(player: videojs.Player) {
