@@ -1,0 +1,21 @@
+<div>
+  <div class="form-group">
+    <span class="input-label">Description</span>
+    <textarea id="desc-area"
+      [(ngModel)]="description"
+      maxlength="250"
+    ></textarea>
+  </div>
+
+  <div class="form-buttons">
+    <div class="button" (click)="onClose()">
+      Cancel
+    </div>
+    <div
+      class="button button-bright"
+      [ngClass]="{'disabled': (!this.description)}"
+      (click)="onSubmit()">
+      Create
+    </div>
+  </div>
+</div>

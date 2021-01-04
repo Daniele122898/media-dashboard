@@ -5,12 +5,16 @@ import {ElectronService} from "../core/services";
 import {faBookmark, faEye, faEyeSlash, faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import {faBookmark as faBookmarkLight} from '@fortawesome/free-regular-svg-icons';
 import videojs from 'video.js';
-import {GET_FILEID_EVENT} from "../../../shared/models/EventChannels";
+import {DIALOG_EVENT_CHANNEL, GET_FILEID_EVENT} from "../../../shared/models/EventChannels";
 import {first, takeUntil} from "rxjs/operators";
 import {DatabaseService} from "../shared/services/database.service";
 import {FileDbo} from "../shared/models/FileDbo";
-import {interval, Subject} from "rxjs";
+import {interval, Subject, Subscription} from "rxjs";
 import {HashEventData} from "../../../shared/models/fileEventData";
+import {ModalService} from "../shared/services/modal.service";
+import {CreateCategoryModalComponent} from "../shared/components/modal/modals/create-category-modal/create-category-modal.component";
+import {DialogEventData, DialogType} from "../../../shared/models/dialogEventData";
+import {CreateBookmarkModalComponent} from "../shared/components/modal/modals/create-bookmark-modal/create-bookmark-modal.component";
 
 
 @Component({
@@ -30,6 +34,7 @@ export class VideoComponent implements OnInit, OnDestroy {
 
   public fileDbo: FileDbo;
 
+  private modalValueSub: Subscription;
   private destroy$  = new Subject();
 
   constructor(
@@ -38,6 +43,7 @@ export class VideoComponent implements OnInit, OnDestroy {
     private electronService: ElectronService,
     private db: DatabaseService,
     private changeDetection: ChangeDetectorRef,
+    private modalService: ModalService,
   ) {
   }
 
@@ -107,7 +113,26 @@ export class VideoComponent implements OnInit, OnDestroy {
   }
 
   public onCreateBookmark(): void {
+    if (this.modalValueSub)
+      this.modalValueSub.unsubscribe();
 
+    const modalRef = this.modalService.createModal(CreateBookmarkModalComponent, {
+      header: 'Create New Bookmark',
+      subheader: 'Bookmarks make it easy to find certain spots in your videos. ' +
+        'They are timestamped and are bound to the category that you\'re currently and can ' +
+        'be searched with the description.',
+      showHeader: true,
+      width: '400px'
+    });
+    this.modalService.showModal(true);
+
+    this.modalValueSub = modalRef.Value$
+      .pipe(first())
+      .subscribe(
+        desc => {
+          console.log('GOT DESCRIPTION', desc);
+        }, err => console.error(err)
+      );
   }
 
   onVideoInitialLoad(player: videojs.Player) {

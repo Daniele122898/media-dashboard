@@ -10,7 +10,7 @@ import {CreateCategoryModalComponent} from "../shared/components/modal/modals/cr
 import {Subscription} from "rxjs";
 import {DialogEventData, DialogType, MessageBoxData, MessageBoxReply} from "../../../shared/models/dialogEventData";
 import {DIALOG_EVENT_CHANNEL} from "../../../shared/models/EventChannels";
-import {LastExplorerStateService} from "./services/last-explorer-state.service";
+import {LastExplorerStateService} from "../shared/services/last-explorer-state.service";
 
 
 @Component({

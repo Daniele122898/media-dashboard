@@ -7,7 +7,7 @@ import {MultiHashEventData, MultiHashResponse} from "../../../../../shared/model
 import {GET_FILEIDS_EVENT} from "../../../../../shared/models/EventChannels";
 import {Subscription} from "rxjs";
 import {DatabaseService} from "../../../shared/services/database.service";
-import {LastExplorerStateService} from "../../services/last-explorer-state.service";
+import {LastExplorerStateService} from "../../../shared/services/last-explorer-state.service";
 
 interface VideoDirent extends Dirent {
   Finished?: boolean;

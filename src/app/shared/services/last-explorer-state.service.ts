@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {Category} from "../../shared/models/Category";
+import {Category} from "../models/Category";
 
 @Injectable({
   providedIn: 'root'
