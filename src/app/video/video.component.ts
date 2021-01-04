@@ -15,6 +15,7 @@ import {ModalService} from "../shared/services/modal.service";
 import {CreateCategoryModalComponent} from "../shared/components/modal/modals/create-category-modal/create-category-modal.component";
 import {DialogEventData, DialogType} from "../../../shared/models/dialogEventData";
 import {CreateBookmarkModalComponent} from "../shared/components/modal/modals/create-bookmark-modal/create-bookmark-modal.component";
+import {LastExplorerStateService} from "../shared/services/last-explorer-state.service";
 
 
 @Component({
@@ -44,6 +45,7 @@ export class VideoComponent implements OnInit, OnDestroy {
     private db: DatabaseService,
     private changeDetection: ChangeDetectorRef,
     private modalService: ModalService,
+    private lastExplorerState: LastExplorerStateService,
   ) {
   }
 

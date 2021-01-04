@@ -13,7 +13,7 @@
     </div>
     <div
       class="button button-bright"
-      [ngClass]="{'disabled': (!this.description)}"
+      [ngClass]="{'disabled': (!this.description || this.description.trim().length < 3)}"
       (click)="onSubmit()">
       Create
     </div>

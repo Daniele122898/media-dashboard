@@ -27,7 +27,7 @@ export class CreateBookmarkModalComponent implements OnInit {
 
   public onSubmit(): void {
     // Validate
-    if (!this.description)
+    if (!this.description || this.description.trim().length < 3)
       return;
 
     this.modalRef.submit({description: this.description});
