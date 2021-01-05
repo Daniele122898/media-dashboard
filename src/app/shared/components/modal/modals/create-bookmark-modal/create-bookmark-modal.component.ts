@@ -8,7 +8,7 @@ import {ModalRef} from "../../../../models/ModalRef";
   templateUrl: './create-bookmark-modal.component.html',
   styleUrls: ['./create-bookmark-modal.component.scss']
 })
-export class CreateBookmarkModalComponent implements OnInit, AfterViewInit {
+export class CreateBookmarkModalComponent implements AfterViewInit {
 
   public description: string;
 
@@ -25,9 +25,6 @@ export class CreateBookmarkModalComponent implements OnInit, AfterViewInit {
     private electronService: ElectronService,
     private modalRef: ModalRef,
   ) { }
-
-  ngOnInit(): void {
-  }
 
   ngAfterViewInit(): void {
     this.textAreaElement.nativeElement.focus();
