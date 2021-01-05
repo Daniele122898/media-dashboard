@@ -1,4 +1,4 @@
-import {Component, HostListener, OnInit} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
 import {ModalService} from "../../../../services/modal.service";
 import {ElectronService} from "../../../../../core/services";
 import {ModalRef} from "../../../../models/ModalRef";
@@ -8,9 +8,11 @@ import {ModalRef} from "../../../../models/ModalRef";
   templateUrl: './create-bookmark-modal.component.html',
   styleUrls: ['./create-bookmark-modal.component.scss']
 })
-export class CreateBookmarkModalComponent implements OnInit {
+export class CreateBookmarkModalComponent implements OnInit, AfterViewInit {
 
   public description: string;
+
+  @ViewChild('textAreaElement') textAreaElement: ElementRef;
 
   @HostListener('document:keydown', ['$event']) onKeyDown(e: KeyboardEvent): void {
     if (e.code === 'Enter') {
@@ -27,6 +29,10 @@ export class CreateBookmarkModalComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  ngAfterViewInit(): void {
+    this.textAreaElement.nativeElement.focus();
+  }
+
   public onClose(): void {
     this.modalService.showModal(false);
   }
@@ -39,5 +45,4 @@ export class CreateBookmarkModalComponent implements OnInit {
     this.modalRef.submit({description: this.description});
     this.modalService.showModal(false);
   }
-
 }
