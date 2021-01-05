@@ -17,7 +17,7 @@ import {ModalRef} from "../../../../models/ModalRef";
   templateUrl: './create-category-modal.component.html',
   styleUrls: ['./create-category-modal.component.scss']
 })
-export class CreateCategoryModalComponent implements OnInit {
+export class CreateCategoryModalComponent {
 
   public faFolderOpen = faFolderOpen;
 
@@ -37,9 +37,6 @@ export class CreateCategoryModalComponent implements OnInit {
     private electronService: ElectronService,
     private modalRef: ModalRef,
   ) { }
-
-  ngOnInit(): void {
-  }
 
   public onClose(): void {
     this.modalService.showModal(false);

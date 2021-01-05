@@ -31,7 +31,8 @@
     },
     "VIDEO":{
       "MARK_AS_WATCHED": "Mark as watched",
-      "UNMARK_AS_WATCHED": "Unmark as watched"
+      "UNMARK_AS_WATCHED": "Unmark as watched",
+      "VIEW_BOOKMARKS": "Bookmarks"
     }
   }
 }

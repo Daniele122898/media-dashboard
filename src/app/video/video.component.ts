@@ -15,6 +15,7 @@ import {ModalService} from "../shared/services/modal.service";
 import {CreateBookmarkModalComponent} from "../shared/components/modal/modals/create-bookmark-modal/create-bookmark-modal.component";
 import {LastExplorerStateService} from "../shared/services/last-explorer-state.service";
 import {Bookmark} from "../shared/models/Bookmark";
+import {ViewBookmarksModalComponent} from "../shared/components/modal/modals/view-bookmarks-modal/view-bookmarks-modal.component";
 
 
 @Component({
@@ -40,7 +41,7 @@ export class VideoComponent implements OnInit, OnDestroy {
   private player: videojs.Player;
 
   @HostListener('document:keydown', ['$event']) onKeyDown(e: KeyboardEvent): void {
-    if (e.ctrlKey && e.code === 'KeyB') {
+    if (e.ctrlKey && e.code === 'KeyB' !&& this.modalService.isModalActive()) {
       this.onCreateBookmark();
     }
   }
@@ -100,6 +101,33 @@ export class VideoComponent implements OnInit, OnDestroy {
         }
       ]
     };
+  }
+
+  public onViewBookmarks(): void {
+    if (this.modalValueSub)
+      this.modalValueSub.unsubscribe();
+
+    // We get the timestamp the moment the user CLICKED the create bookmark function
+    const timestamp = Math.floor(this.player.currentTime());
+    const paused = this.player.paused();
+    // Pause playback
+    if (!paused)
+      this.player.pause();
+
+    const modalRef = this.modalService.createModal(ViewBookmarksModalComponent, {
+      showHeader: false,
+      style: {padding: 0}
+      // width: '400px'
+    });
+    this.modalService.showModal(true);
+
+    this.modalValueSub = modalRef.Value$
+      .pipe(first())
+      .subscribe(
+        val => {
+
+        }, err => console.error(err)
+      );
   }
 
   public onMarkWatchedToggle(): void {
