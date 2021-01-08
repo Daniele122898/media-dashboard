@@ -4,6 +4,7 @@ import {ModalRef} from "../../../../models/ModalRef";
 import {ModalConfig} from "../../../../models/ModalConfig";
 import {DatabaseService} from "../../../../services/database.service";
 import {Bookmark} from "../../../../models/Bookmark";
+import {faTrash, faCompressArrowsAlt} from '@fortawesome/free-solid-svg-icons';
 
 export interface BookmarkModalData {
   isFile: boolean;
@@ -28,6 +29,9 @@ export interface BookmarkModalCategoryData {
 })
 export class ViewBookmarksModalComponent implements OnInit {
   public bookmarkSearchString: string;
+
+  public faTrash = faTrash;
+  public faCompressArrowsAlt = faCompressArrowsAlt;
 
   public bookmarks: Bookmark[];
   public relevantBookmarks: Bookmark[];
