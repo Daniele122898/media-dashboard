@@ -15,7 +15,10 @@ import {ModalService} from "../shared/services/modal.service";
 import {CreateBookmarkModalComponent} from "../shared/components/modal/modals/create-bookmark-modal/create-bookmark-modal.component";
 import {LastExplorerStateService} from "../shared/services/last-explorer-state.service";
 import {Bookmark} from "../shared/models/Bookmark";
-import {ViewBookmarksModalComponent} from "../shared/components/modal/modals/view-bookmarks-modal/view-bookmarks-modal.component";
+import {
+  BookmarkModalData,
+  ViewBookmarksModalComponent
+} from "../shared/components/modal/modals/view-bookmarks-modal/view-bookmarks-modal.component";
 
 
 @Component({
@@ -114,10 +117,19 @@ export class VideoComponent implements OnInit, OnDestroy {
     if (!paused)
       this.player.pause();
 
+    const confData: BookmarkModalData = {
+      isFile: true,
+      fileData: {
+        currentTimestamp: timestamp,
+        fileId: this.fileDbo.Id
+      }
+    }
+
     const modalRef = this.modalService.createModal(ViewBookmarksModalComponent, {
       showHeader: false,
-      style: {padding: 0}
-      // width: '400px'
+      style: {padding: 0},
+      // width: '400px',
+      data: confData,
     });
     this.modalService.showModal(true);
 

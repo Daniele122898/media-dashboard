@@ -36,5 +36,26 @@
       margin: 0 0 10px 0;
       font-weight: bold;
     }
+
+    .bookmark-list {
+
+      .bookmark-item {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+
+        .bookmark-item-info {
+          display: flex;
+          flex-direction: column;
+        }
+
+        .bookmark-item-actions {
+          display: flex;
+          flex-direction: row;
+        }
+      }
+    }
   }
 }
