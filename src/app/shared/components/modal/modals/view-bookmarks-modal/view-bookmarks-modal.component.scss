@@ -19,18 +19,29 @@
     padding: 10px 15px;
     box-sizing: border-box;
     border-radius: 5px 5px 0 0;
+
+    h2 {
+      margin: 0;
+    }
   }
 
   .bookmark-content {
     padding: 15px;
     width: 100%;
     height: calc(100% - 60px);
+    max-height: calc(100% - 60px);
     box-sizing: border-box;
     background-color: $disc-grey-light;
     border-radius: 0 0 5px 5px;
 
+
     display: flex;
     flex-direction: column;
+
+    .bookmark-scroller {
+      overflow-y: auto;
+
+    }
 
     .list-header {
       margin: 0 0 10px 0;
@@ -40,46 +51,43 @@
       font-size: 20px;
     }
 
-    .bookmark-list {
-      height: auto;
-      overflow-y: auto;
 
-      .bookmark-item {
-        width: 100%;
+    .bookmark-item {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+
+      margin-bottom: 5px;
+      padding: 5px 20px;
+      box-sizing: border-box;
+      border-radius: 5px;
+      position: relative;
+
+      &:hover {
+        background-color: lighten($disc-grey-light, 2%);
+      }
+
+      .bookmark-item-info {
+        display: flex;
+        flex-direction: column;
+
+        .bookmark-desc {
+          font-weight: bold;
+        }
+
+        .bookmark-timestamp {
+          font-size: 12px;
+        }
+      }
+
+      .bookmark-item-actions {
         display: flex;
         flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
 
-        margin-bottom: 5px;
-        padding: 5px 20px;
-        box-sizing: border-box;
-        border-radius: 5px;
-
-        &:hover {
-          background-color: lighten($disc-grey-light, 2%);
-        }
-
-        .bookmark-item-info {
-          display: flex;
-          flex-direction: column;
-
-          .bookmark-desc {
-            font-weight: bold;
-          }
-
-          .bookmark-timestamp {
-            font-size: 12px;
-          }
-        }
-
-        .bookmark-item-actions {
-          display: flex;
-          flex-direction: row;
-
-          .button {
-            margin-left: 10px;
-          }
+        .button {
+          margin-left: 10px;
         }
       }
     }

@@ -36,7 +36,7 @@ export class CreateBookmarkModalComponent implements AfterViewInit {
 
   public onSubmit(): void {
     // Validate
-    if (!this.description || this.description.trim().length < 3)
+    if (!this.description || this.description.trim().length < 3 || this.description.trim().length > 75)
       return;
 
     this.modalRef.submit({description: this.description});
