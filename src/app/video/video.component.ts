@@ -44,7 +44,7 @@ export class VideoComponent implements OnInit, OnDestroy {
   private player: videojs.Player;
 
   @HostListener('document:keydown', ['$event']) onKeyDown(e: KeyboardEvent): void {
-    if (e.ctrlKey && e.code === 'KeyB' !&& this.modalService.isModalActive()) {
+    if (e.ctrlKey && e.code === 'KeyB' && !this.modalService.isModalActive()) {
       this.onCreateBookmark();
     }
   }
