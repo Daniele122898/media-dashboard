@@ -1,5 +1,6 @@
 import {ChangeDetectorRef, Component, Input, NgZone, OnDestroy, OnInit} from '@angular/core';
 import {faArrowUp, faFolder, faFilm, faSpinner, faEye} from '@fortawesome/free-solid-svg-icons';
+import {faBookmark} from '@fortawesome/free-regular-svg-icons';
 import {ElectronService} from "../../../core/services";
 import {Dirent} from "fs";
 import {Router} from "@angular/router";
@@ -8,6 +9,10 @@ import {GET_FILEIDS_EVENT} from "../../../../../shared/models/EventChannels";
 import {Subscription} from "rxjs";
 import {DatabaseService} from "../../../shared/services/database.service";
 import {LastExplorerStateService} from "../../../shared/services/last-explorer-state.service";
+import {BookmarkModalData, BookmarkModalResponse} from "../../../shared/models/BookmarkModal";
+import {ViewBookmarksModalComponent} from "../../../shared/components/modal/modals/view-bookmarks-modal/view-bookmarks-modal.component";
+import {first} from "rxjs/operators";
+import {ModalService} from "../../../shared/services/modal.service";
 
 interface VideoDirent extends Dirent {
   Finished?: boolean;
@@ -27,6 +32,7 @@ export class ExplorerComponent implements OnInit, OnDestroy {
   public faSpinner = faSpinner;
   public faFilm = faFilm;
   public faEye = faEye;
+  public faBookmark = faBookmark;
 
   public contentSearchString = "";
 
@@ -35,6 +41,8 @@ export class ExplorerComponent implements OnInit, OnDestroy {
 
   public loadingText: string;
   private lastHashSubscription: Subscription;
+
+  private modalValueSub: Subscription;
 
   @Input('categoryDirPath')
   get categoryDirPath(): string {
@@ -101,6 +109,7 @@ export class ExplorerComponent implements OnInit, OnDestroy {
     private ngZone: NgZone,
     private db: DatabaseService,
     private explorerStateService: LastExplorerStateService,
+    private modalService: ModalService,
   ) {
   }
 
@@ -171,6 +180,39 @@ export class ExplorerComponent implements OnInit, OnDestroy {
 
     const search = this.contentSearchString.toLowerCase();
     return this.videos.filter(x => x.name.toLowerCase().includes(search));
+  }
+
+  public onViewBookmarks(): void {
+    if (!this.categoryDirPath)
+      return;
+
+    if (this.modalValueSub)
+      this.modalValueSub.unsubscribe();
+
+    const confData: BookmarkModalData = {
+      isFile: false,
+      categoryData: {
+        categoryId: this.explorerStateService.lastSelectedCategory.Id,
+        dirPath: this.currentPath,
+      }
+    }
+
+    const modalRef = this.modalService.createModal(ViewBookmarksModalComponent, {
+      showHeader: false,
+      style: {padding: 0},
+      // width: '400px',
+      data: confData,
+    });
+    this.modalService.showModal(true);
+
+    this.modalValueSub = modalRef.Value$
+      .pipe(first())
+      .subscribe(
+        (val: BookmarkModalResponse) => {
+          const b = val.selectedBookmark;
+
+        }, err => console.error(err)
+      );
   }
 
   private getAllFilesInDir(): void {
@@ -244,5 +286,7 @@ export class ExplorerComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.lastHashSubscription.unsubscribe();
+    if (this.modalValueSub)
+      this.modalValueSub.unsubscribe();
   }
 }

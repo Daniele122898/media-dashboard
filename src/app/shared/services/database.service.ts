@@ -80,6 +80,16 @@ export class DatabaseService {
     );
   }
 
+  public getFileWithId(id: number): Observable<FileDbo> {
+    return this.executeTransaction(
+      `SELECT * FROM Files WHERE Id = '${id.toString()}'`
+    ).pipe(
+      map(values => {
+        return DatabaseService.getSingularValue(values);
+      })
+    );
+  }
+
   // Row is not actually an array but an object that fakes being an array. It has objects 0,1,2... and the last member is
   // length. This method makes it a proper array so we can use all our methods like .map and co on it
   private static mapRowsToArray<T>(rows: any): T[] {

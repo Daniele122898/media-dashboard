@@ -6,6 +6,11 @@ import {DatabaseService} from "../../../../services/database.service";
 import {Bookmark} from "../../../../models/Bookmark";
 import {faTrash, faCompressArrowsAlt} from '@fortawesome/free-solid-svg-icons';
 import {BookmarkModalData, BookmarkModalResponse} from "../../../../models/BookmarkModal";
+import {FileDbo} from "../../../../models/FileDbo";
+
+interface ExtendedBookmark extends Bookmark {
+  fileDbo?: FileDbo;
+}
 
 @Component({
   selector: 'app-view-bookmarks-modal',
@@ -18,10 +23,10 @@ export class ViewBookmarksModalComponent implements OnInit {
   public faTrash = faTrash;
   public faCompressArrowsAlt = faCompressArrowsAlt;
 
-  public bookmarks: Bookmark[];
-  public relevantBookmarks: Bookmark[];
+  public bookmarks: ExtendedBookmark[];
+  public relevantBookmarks: ExtendedBookmark[];
 
-  private config: BookmarkModalData;
+  public config: BookmarkModalData;
 
   constructor(
     private modalService: ModalService,
@@ -64,6 +69,10 @@ export class ViewBookmarksModalComponent implements OnInit {
           this.getBookmarks();
         }, (err) => console.error(err)
       );
+  }
+
+  public getFilename(b: ExtendedBookmark): string {
+    return b.fileDbo.LKPath.substring(b.fileDbo.LKPath.lastIndexOf('/')+1);
   }
 
   public getTimestamp(b: Bookmark): string {
@@ -125,6 +134,46 @@ export class ViewBookmarksModalComponent implements OnInit {
   }
 
   private getCategoryBookmarks(): void {
+    this.config.categoryData.dirPath = this.config.categoryData.dirPath
+      .replace(new RegExp("\\\\", "g"), '/')
+      .trim();
 
+    console.log('Config ', this.config);
+
+    this.db.getBookmarksWithCategoryId(this.config.categoryData.categoryId)
+      .subscribe(
+        (bookmarks) => {
+          this.bookmarks = bookmarks
+            .map(x => {
+              let b = x;
+              b.DirPath = b.DirPath.trim().replace(new RegExp("\\\\", "g"), '/');
+              return b;
+            })
+            .filter(x => x.DirPath.includes(this.config.categoryData.dirPath))
+            .sort((a, b) => (a.DirPath.localeCompare(b.DirPath)));
+
+          for (let i=0; i<this.bookmarks.length; ++i) {
+            let b = this.bookmarks[i];
+            this.db.getFileWithId(b.FileId)
+              .subscribe(
+                (file) => {
+                  file.LKPath = file.LKPath.replace(new RegExp("\\\\", "g"), '/');
+                  b.fileDbo = file;
+                  this.bookmarks[i] = b;
+
+                  if (i === this.bookmarks.length -1)
+                    this.createBookmarkSeparations();
+                }, (err) => console.error(err)
+              );
+
+          }
+        }, (err) => console.error(err)
+      );
+  }
+
+  private createBookmarkSeparations(): void {
+    this.relevantBookmarks = this.bookmarks
+      .filter(x => x.DirPath === this.config.categoryData.dirPath);
+    this.changeDetection.detectChanges();
   }
 }

@@ -33,7 +33,8 @@
       "RELEVANT_BOOKMARKS": "Relevant Bookmarks",
       "ALL_BOOKMARKS": "All Bookmarks",
       "BOOKMARK_TITLE_VIDEO": "Bookmarks for Video",
-      "BOOKMARK_TITLE_CATEGORY": "Bookmarks for Video"
+      "BOOKMARK_TITLE_CATEGORY": "Bookmarks for Category",
+      "NO_BOOKMARKS": "No Bookmarks found..."
     },
     "VIDEO":{
       "MARK_AS_WATCHED": "Mark as watched",

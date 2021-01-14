@@ -10,6 +10,9 @@
       </span>
     </div>
     <div class="header-container">
+      <div class="button" (click)="onViewBookmarks()">
+        <fa-icon [icon]="faBookmark"></fa-icon>
+      </div>
       <div class="button" (click)="onOpenFileLocation()">
         {{ 'COMPONENTS.EXPLORER.OPEN_FILE_LOCATION' | translate }}
       </div>
