@@ -35,11 +35,7 @@ export class ViewBookmarksModalComponent implements OnInit {
   ngOnInit(): void {
     this.config = <BookmarkModalData>this.modalConfig.data;
 
-    if (this.config.isFile) {
-      this.getFileBookmarks();
-    } else {
-      this.getCategoryBookmarks();
-    }
+    this.getBookmarks();
   }
 
   public onClose(): void {
@@ -52,6 +48,14 @@ export class ViewBookmarksModalComponent implements OnInit {
     });
 
     this.modalService.showModal(false);
+  }
+
+  private getBookmarks(): void {
+    if (this.config.isFile) {
+      this.getFileBookmarks();
+    } else {
+      this.getCategoryBookmarks();
+    }
   }
 
   private getFileBookmarks(): void {
@@ -70,9 +74,9 @@ export class ViewBookmarksModalComponent implements OnInit {
           this.relevantBookmarks = [];
           this.relevantBookmarks.push(this.bookmarks[closestTimestampIndex]);
           if (closestTimestampIndex !== 0)
-            this.relevantBookmarks.push(this.bookmarks[closestTimestampIndex-1]);
+            this.relevantBookmarks.push(this.bookmarks[closestTimestampIndex - 1]);
           if (closestTimestampIndex + 1 !== this.bookmarks.length)
-            this.relevantBookmarks.push(this.bookmarks[closestTimestampIndex+1]);
+            this.relevantBookmarks.push(this.bookmarks[closestTimestampIndex + 1]);
 
           this.changeDetection.detectChanges();
         }, (err) => console.error(err)
@@ -82,7 +86,7 @@ export class ViewBookmarksModalComponent implements OnInit {
   private static getClosestTimestampIndex(bookmarks: Bookmark[], currentTimestamp: number): number {
     let closest = Number.MAX_SAFE_INTEGER;
     let index = 0;
-    for (let i = 0; i<bookmarks.length; ++i) {
+    for (let i = 0; i < bookmarks.length; ++i) {
       const b = bookmarks[i];
       const dist = Math.abs(currentTimestamp - b.Timestamp);
       if (closest > dist) {
@@ -98,5 +102,21 @@ export class ViewBookmarksModalComponent implements OnInit {
 
   private getCategoryBookmarks(): void {
 
+  }
+
+  public onRemoveClick(b: Bookmark): void {
+    console.log('Bookmark to remove', b);
+    this.db.removeBookmark(b.Id)
+      .subscribe(
+        (res) => {
+          console.log('SQL result', res);
+          if (res.rowsAffected === 0) {
+            console.error('Couldn\'t remove bookmark');
+            return;
+          }
+
+          this.getBookmarks();
+        }, (err) => console.error(err)
+      );
   }
 }
