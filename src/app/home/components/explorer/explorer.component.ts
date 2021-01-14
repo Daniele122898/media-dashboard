@@ -251,8 +251,6 @@ export class ExplorerComponent implements OnInit, OnDestroy {
         }
       ).subscribe(
         resp => {
-          console.log('Received file Ids', resp);
-
           for (let i = 0; i<this.videos.length; ++i) {
             let v = this.videos[i];
             const fileResp = resp.find(h => h.path === path.join(this.currentPath, v.name));

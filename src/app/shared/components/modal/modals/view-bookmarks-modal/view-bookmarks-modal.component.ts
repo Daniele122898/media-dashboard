@@ -50,6 +50,11 @@ export class ViewBookmarksModalComponent implements OnInit {
     this.modalService.showModal(false);
   }
 
+  public getFilteredBookmarkList(): ExtendedBookmark[] {
+    const search = this.bookmarkSearchString.toLowerCase();
+    return this.bookmarks.filter(x => x.Description.toLowerCase().includes(search));
+  }
+
   public onRemoveClick(b: Bookmark): void {
     console.log('Bookmark to remove', b);
     this.db.removeBookmark(b.Id)
@@ -133,8 +138,6 @@ export class ViewBookmarksModalComponent implements OnInit {
       .replace(new RegExp("\\\\", "g"), '/')
       .trim();
 
-    console.log('Config ', this.config);
-
     this.db.getBookmarksWithCategoryIdOrPath(this.config.categoryData.categoryId, this.config.categoryData.dirPath)
       .subscribe(
         (bookmarks) => {
@@ -168,7 +171,9 @@ export class ViewBookmarksModalComponent implements OnInit {
 
   private createBookmarkSeparations(): void {
     this.relevantBookmarks = this.bookmarks
-      .filter(x => x.DirPath === this.config.categoryData.dirPath);
+      .sort((a,b) => {
+        return a.Id < b.Id ? 1 : -1;
+      }).slice(0,3);
     this.changeDetection.detectChanges();
   }
 }

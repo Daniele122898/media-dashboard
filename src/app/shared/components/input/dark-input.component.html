@@ -4,6 +4,7 @@
       type="text"
       placeholder="{{showPlaceholder ? ((!this.customPlaceholder ? 'INPUTS.SEARCH.SEARCH_BAR_PLACEHOLDER' : this.customPlaceholder) | translate) : ''}}"
       [ngModel]="input"
+      [autofocus]="autoFocus"
        (ngModelChange)="searchChanged($event)">
     <div class="search-bar__icon" *ngIf="showSearchIcon">
       <img src="assets/images/search-icon.svg">

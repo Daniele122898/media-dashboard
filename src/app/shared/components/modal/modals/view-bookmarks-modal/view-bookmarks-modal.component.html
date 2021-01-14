@@ -5,52 +5,78 @@
       ('COMPONENTS.BOOKMARKS.BOOKMARK_TITLE_CATEGORY' | translate))}}</h2>
     <app-input
       [(input)]="bookmarkSearchString"
-      [showSearchIcon]="true"></app-input>
+      [showSearchIcon]="true"
+      [autoFocus]="true"></app-input>
   </div>
 
   <div class="bookmark-content">
     <div class="bookmark-scroller custom-scrollbar">
-      <p class="list-header" *ngIf="!this.bookmarks || this.bookmarks.length === 0">{{'COMPONENTS.BOOKMARKS.NO_BOOKMARKS' | translate}}</p>
-
-      <p class="list-header" *ngIf="this.relevantBookmarks && this.relevantBookmarks.length > 0">{{'COMPONENTS.BOOKMARKS.RELEVANT_BOOKMARKS' | translate}}</p>
-      <!--    <div class="bookmark-list">-->
-      <div class="bookmark-item" *ngFor="let b of relevantBookmarks">
-        <div class="bookmark-item-info">
-          <span class="bookmark-desc">{{b.Description}}</span>
-          <span class="bookmark-timestamp" *ngIf="b.FileDbo">{{this.getFilename(b)}}</span>
-          <span class="bookmark-timestamp">{{this.getTimestamp(b)}}</span>
-        </div>
-        <div class="bookmark-item-actions">
-          <div class="button" (click)="onJumpClick(b)">
-            <fa-icon [icon]="faCompressArrowsAlt"></fa-icon>
+      <ng-container *ngIf="!this.bookmarkSearchString">
+        <p class="list-header"
+           *ngIf="!this.bookmarks || this.bookmarks.length === 0">{{'COMPONENTS.BOOKMARKS.NO_BOOKMARKS' | translate}}</p>
+        <p class="list-header"
+           *ngIf="this.relevantBookmarks && this.relevantBookmarks.length > 0">{{'COMPONENTS.BOOKMARKS.RELEVANT_BOOKMARKS' | translate}}</p>
+        <!--    <div class="bookmark-list">-->
+        <div class="bookmark-item" *ngFor="let b of relevantBookmarks">
+          <div class="bookmark-item-info">
+            <span class="bookmark-desc">{{b.Description}}</span>
+            <span class="bookmark-timestamp" *ngIf="b.FileDbo">{{this.getFilename(b)}}</span>
+            <span class="bookmark-timestamp">{{this.getTimestamp(b)}}</span>
           </div>
+          <div class="bookmark-item-actions">
+            <div class="button" (click)="onJumpClick(b)">
+              <fa-icon [icon]="faCompressArrowsAlt"></fa-icon>
+            </div>
 
-          <div class="button button-red" (click)="onRemoveClick(b)">
-            <fa-icon [icon]="faTrash"></fa-icon>
-          </div>
-        </div>
-      </div>
-      <!--    </div>-->
-
-      <p class="list-header" *ngIf="this.bookmarks && this.bookmarks.length > 0"
-         style="margin-top: 15px">{{'COMPONENTS.BOOKMARKS.ALL_BOOKMARKS' | translate}}</p>
-      <!--    <div class="bookmark-list">-->
-      <div class="bookmark-item" *ngFor="let b of bookmarks">
-        <div class="bookmark-item-info">
-          <span class="bookmark-desc">{{b.Description}}</span>
-          <span class="bookmark-timestamp" *ngIf="b.FileDbo">{{this.getFilename(b)}}</span>
-          <span class="bookmark-timestamp">{{this.getTimestamp(b)}}</span>
-        </div>
-        <div class="bookmark-item-actions">
-          <div class="button" (click)="onJumpClick(b)">
-            <fa-icon [icon]="faCompressArrowsAlt"></fa-icon>
-          </div>
-
-          <div class="button button-red" (click)="onRemoveClick(b)">
-            <fa-icon [icon]="faTrash"></fa-icon>
+            <div class="button button-red" (click)="onRemoveClick(b)">
+              <fa-icon [icon]="faTrash"></fa-icon>
+            </div>
           </div>
         </div>
-      </div>
+        <!--    </div>-->
+
+        <p class="list-header" *ngIf="!this.bookmarkSearchString && this.bookmarks && this.bookmarks.length > 0"
+           style="margin-top: 15px">{{'COMPONENTS.BOOKMARKS.ALL_BOOKMARKS' | translate}}</p>
+        <!--    <div class="bookmark-list">-->
+        <div class="bookmark-item" *ngFor="let b of bookmarks">
+          <div class="bookmark-item-info">
+            <span class="bookmark-desc">{{b.Description}}</span>
+            <span class="bookmark-timestamp" *ngIf="b.FileDbo">{{this.getFilename(b)}}</span>
+            <span class="bookmark-timestamp">{{this.getTimestamp(b)}}</span>
+          </div>
+          <div class="bookmark-item-actions">
+            <div class="button" (click)="onJumpClick(b)">
+              <fa-icon [icon]="faCompressArrowsAlt"></fa-icon>
+            </div>
+
+            <div class="button button-red" (click)="onRemoveClick(b)">
+              <fa-icon [icon]="faTrash"></fa-icon>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="this.bookmarkSearchString">
+        <p class="list-header">{{'COMPONENTS.BOOKMARKS.SEARCH_RESULTS' | translate}}</p>
+        <!--    <div class="bookmark-list">-->
+        <div class="bookmark-item" *ngFor="let b of this.getFilteredBookmarkList()">
+          <div class="bookmark-item-info">
+            <span class="bookmark-desc">{{b.Description}}</span>
+            <span class="bookmark-timestamp" *ngIf="b.FileDbo">{{this.getFilename(b)}}</span>
+            <span class="bookmark-timestamp">{{this.getTimestamp(b)}}</span>
+          </div>
+          <div class="bookmark-item-actions">
+            <div class="button" (click)="onJumpClick(b)">
+              <fa-icon [icon]="faCompressArrowsAlt"></fa-icon>
+            </div>
+
+            <div class="button button-red" (click)="onRemoveClick(b)">
+              <fa-icon [icon]="faTrash"></fa-icon>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
       <!--    </div>-->
     </div>
   </div>

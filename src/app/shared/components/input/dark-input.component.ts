@@ -7,6 +7,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 })
 export class DarkInputComponent implements OnInit {
   @Input() enableSmall = false;
+  @Input() autoFocus = false;
   @Input() customPlaceholder = "";
   @Input() showPlaceholder = true;
   @Input() showSearchIcon = false;
