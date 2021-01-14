@@ -177,6 +177,7 @@ export class ExplorerComponent implements OnInit, OnDestroy {
     const fs = this.electronService.fs;
 
     fs.readdir(this.currentPath, {withFileTypes: true, encoding: "utf8"}, (err, contents: Dirent[]) => {
+      this.changeDetector.detectChanges();
 
       if (!contents || contents.length === 0)
         return;
@@ -184,7 +185,6 @@ export class ExplorerComponent implements OnInit, OnDestroy {
       this.directories = contents.filter(x => x.isDirectory());
       const files = contents.filter(x => x.isFile());
       this.videos = files.filter(x => this.isVideo(x.name));
-      console.log('VIDEOS: ', this.videos);
 
       const path = this.electronService.path;
       this.loadingText = 'Indexing Files...'
