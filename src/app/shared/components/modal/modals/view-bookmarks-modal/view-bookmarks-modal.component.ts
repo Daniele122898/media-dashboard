@@ -50,6 +50,30 @@ export class ViewBookmarksModalComponent implements OnInit {
     this.modalService.showModal(false);
   }
 
+  public onRemoveClick(b: Bookmark): void {
+    console.log('Bookmark to remove', b);
+    this.db.removeBookmark(b.Id)
+      .subscribe(
+        (res) => {
+          console.log('SQL result', res);
+          if (res.rowsAffected === 0) {
+            console.error('Couldn\'t remove bookmark');
+            return;
+          }
+
+          this.getBookmarks();
+        }, (err) => console.error(err)
+      );
+  }
+
+  public getTimestamp(b: Bookmark): string {
+    let timeStr = new Date(b.Timestamp * 1000).toISOString().substr(11, 8);
+    if (timeStr.startsWith('00:'))
+      timeStr = timeStr.substr(3);
+
+    return timeStr;
+  }
+
   private getBookmarks(): void {
     if (this.config.isFile) {
       this.getFileBookmarks();
@@ -102,21 +126,5 @@ export class ViewBookmarksModalComponent implements OnInit {
 
   private getCategoryBookmarks(): void {
 
-  }
-
-  public onRemoveClick(b: Bookmark): void {
-    console.log('Bookmark to remove', b);
-    this.db.removeBookmark(b.Id)
-      .subscribe(
-        (res) => {
-          console.log('SQL result', res);
-          if (res.rowsAffected === 0) {
-            console.error('Couldn\'t remove bookmark');
-            return;
-          }
-
-          this.getBookmarks();
-        }, (err) => console.error(err)
-      );
   }
 }
