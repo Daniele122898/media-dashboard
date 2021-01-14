@@ -15,11 +15,8 @@ import {ModalService} from "../shared/services/modal.service";
 import {CreateBookmarkModalComponent} from "../shared/components/modal/modals/create-bookmark-modal/create-bookmark-modal.component";
 import {LastExplorerStateService} from "../shared/services/last-explorer-state.service";
 import {Bookmark} from "../shared/models/Bookmark";
-import {
-  BookmarkModalData,
-  ViewBookmarksModalComponent
-} from "../shared/components/modal/modals/view-bookmarks-modal/view-bookmarks-modal.component";
-
+import {ViewBookmarksModalComponent} from "../shared/components/modal/modals/view-bookmarks-modal/view-bookmarks-modal.component";
+import {BookmarkModalData, BookmarkModalResponse} from "../shared/models/BookmarkModal";
 
 @Component({
   selector: 'app-detail',
@@ -136,8 +133,12 @@ export class VideoComponent implements OnInit, OnDestroy {
     this.modalValueSub = modalRef.Value$
       .pipe(first())
       .subscribe(
-        val => {
+        (val: BookmarkModalResponse) => {
+          const b = val.selectedBookmark;
+          this.player.currentTime(b.Timestamp);
 
+          if (!paused)
+            this.player.play();
         }, err => console.error(err)
       );
   }

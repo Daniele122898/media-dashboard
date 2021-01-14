@@ -5,22 +5,7 @@ import {ModalConfig} from "../../../../models/ModalConfig";
 import {DatabaseService} from "../../../../services/database.service";
 import {Bookmark} from "../../../../models/Bookmark";
 import {faTrash, faCompressArrowsAlt} from '@fortawesome/free-solid-svg-icons';
-
-export interface BookmarkModalData {
-  isFile: boolean;
-  fileData?: BookmarkModalFileData;
-  categoryData?: BookmarkModalCategoryData;
-}
-
-export interface BookmarkModalFileData {
-  fileId: number;
-  currentTimestamp: number;
-}
-
-export interface BookmarkModalCategoryData {
-  categoryId: number;
-  dirPath: string;
-}
+import {BookmarkModalData, BookmarkModalResponse} from "../../../../models/BookmarkModal";
 
 @Component({
   selector: 'app-view-bookmarks-modal',
@@ -55,6 +40,18 @@ export class ViewBookmarksModalComponent implements OnInit {
     } else {
       this.getCategoryBookmarks();
     }
+  }
+
+  public onClose(): void {
+    this.modalService.showModal(false);
+  }
+
+  public onJumpClick(b: Bookmark): void {
+    this.modalRef.submit(<BookmarkModalResponse>{
+      selectedBookmark: b
+    });
+
+    this.modalService.showModal(false);
   }
 
   private getFileBookmarks(): void {
@@ -102,9 +99,4 @@ export class ViewBookmarksModalComponent implements OnInit {
   private getCategoryBookmarks(): void {
 
   }
-
-  public onClose(): void {
-    this.modalService.showModal(false);
-  }
-
 }
