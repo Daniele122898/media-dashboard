@@ -95,6 +95,9 @@ export class ViewBookmarksModalComponent implements OnInit {
     this.db.getBookmarksWithFileId(this.config.fileData.fileId)
       .subscribe(
         bookmarks => {
+          if (!bookmarks || bookmarks.length === 0)
+            return;
+
           this.bookmarks = bookmarks.sort((a, b) =>
             a.Timestamp > b.Timestamp ? 1 : -1);
 
