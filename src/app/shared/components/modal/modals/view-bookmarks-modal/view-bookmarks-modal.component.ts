@@ -5,12 +5,7 @@ import {ModalConfig} from "../../../../models/ModalConfig";
 import {DatabaseService} from "../../../../services/database.service";
 import {Bookmark} from "../../../../models/Bookmark";
 import {faTrash, faCompressArrowsAlt} from '@fortawesome/free-solid-svg-icons';
-import {BookmarkModalData, BookmarkModalResponse} from "../../../../models/BookmarkModal";
-import {FileDbo} from "../../../../models/FileDbo";
-
-interface ExtendedBookmark extends Bookmark {
-  fileDbo?: FileDbo;
-}
+import {BookmarkModalData, BookmarkModalResponse, ExtendedBookmark} from "../../../../models/BookmarkModal";
 
 @Component({
   selector: 'app-view-bookmarks-modal',
@@ -72,7 +67,7 @@ export class ViewBookmarksModalComponent implements OnInit {
   }
 
   public getFilename(b: ExtendedBookmark): string {
-    return b.fileDbo.LKPath.substring(b.fileDbo.LKPath.lastIndexOf('/')+1);
+    return b.FileDbo.LKPath.substring(b.FileDbo.LKPath.lastIndexOf('/')+1);
   }
 
   public getTimestamp(b: Bookmark): string {
@@ -140,7 +135,7 @@ export class ViewBookmarksModalComponent implements OnInit {
 
     console.log('Config ', this.config);
 
-    this.db.getBookmarksWithCategoryId(this.config.categoryData.categoryId)
+    this.db.getBookmarksWithCategoryIdOrPath(this.config.categoryData.categoryId, this.config.categoryData.dirPath)
       .subscribe(
         (bookmarks) => {
           this.bookmarks = bookmarks
@@ -158,7 +153,7 @@ export class ViewBookmarksModalComponent implements OnInit {
               .subscribe(
                 (file) => {
                   file.LKPath = file.LKPath.replace(new RegExp("\\\\", "g"), '/');
-                  b.fileDbo = file;
+                  b.FileDbo = file;
                   this.bookmarks[i] = b;
 
                   if (i === this.bookmarks.length -1)

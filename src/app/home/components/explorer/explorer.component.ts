@@ -157,7 +157,7 @@ export class ExplorerComponent implements OnInit, OnDestroy {
           filePath: btoa(filePath)
         }
       })
-    })
+    });
   }
 
   // TODO Rework search - This is very slow and just overall a very bad implementation
@@ -211,6 +211,15 @@ export class ExplorerComponent implements OnInit, OnDestroy {
         (val: BookmarkModalResponse) => {
           const b = val.selectedBookmark;
 
+
+          this.ngZone.run(() => {
+            this.router.navigate(['/video'], {
+              queryParams: {
+                filePath: btoa(b.FileDbo.LKPath),
+                skipTo: b.Timestamp,
+              }
+            })
+          });
         }, err => console.error(err)
       );
   }

@@ -17,7 +17,7 @@
       <div class="bookmark-item" *ngFor="let b of relevantBookmarks">
         <div class="bookmark-item-info">
           <span class="bookmark-desc">{{b.Description}}</span>
-          <span class="bookmark-timestamp" *ngIf="b.fileDbo">{{this.getFilename(b)}}</span>
+          <span class="bookmark-timestamp" *ngIf="b.FileDbo">{{this.getFilename(b)}}</span>
           <span class="bookmark-timestamp">{{this.getTimestamp(b)}}</span>
         </div>
         <div class="bookmark-item-actions">
@@ -38,7 +38,7 @@
       <div class="bookmark-item" *ngFor="let b of bookmarks">
         <div class="bookmark-item-info">
           <span class="bookmark-desc">{{b.Description}}</span>
-          <span class="bookmark-timestamp" *ngIf="b.fileDbo">{{this.getFilename(b)}}</span>
+          <span class="bookmark-timestamp" *ngIf="b.FileDbo">{{this.getFilename(b)}}</span>
           <span class="bookmark-timestamp">{{this.getTimestamp(b)}}</span>
         </div>
         <div class="bookmark-item-actions">

@@ -39,6 +39,7 @@ export class VideoComponent implements OnInit, OnDestroy {
   private modalValueSub: Subscription;
   private destroy$ = new Subject();
   private player: videojs.Player;
+  private skipToTimestampOnStart?: number = undefined;
 
   @HostListener('document:keydown', ['$event']) onKeyDown(e: KeyboardEvent): void {
     if (e.ctrlKey && e.code === 'KeyB' && !this.modalService.isModalActive()) {
@@ -59,6 +60,8 @@ export class VideoComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const filepath = this.route.snapshot.queryParams.filePath;
+    this.skipToTimestampOnStart = this.route.snapshot.queryParams.skipTo;
+
     if (filepath) {
       this.filePath = atob(filepath);
       const fs = this.electronService.fs;
@@ -78,8 +81,6 @@ export class VideoComponent implements OnInit, OnDestroy {
           this.fileType = res.mime;
         })
         .catch(e => console.error(e));
-
-
     }
   }
 
@@ -256,7 +257,11 @@ export class VideoComponent implements OnInit, OnDestroy {
                 }
 
                 // Got file so we can skip
-                player.currentTime(Math.floor(fileDbo.LastTimestamp));
+                if (!!this.skipToTimestampOnStart) {
+                  player.currentTime(Math.floor(this.skipToTimestampOnStart));
+                } else {
+                  player.currentTime(Math.floor(fileDbo.LastTimestamp));
+                }
                 this.fileDbo = fileDbo;
 
                 this.loadBookmarks();

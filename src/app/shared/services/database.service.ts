@@ -39,8 +39,8 @@ export class DatabaseService {
       )
   }
 
-  public getBookmarksWithCategoryId(id: number): Observable<Bookmark[]> {
-    return this.executeTransaction(`SELECT * FROM Bookmarks WHERE CategoryId = ${id.toString()}`)
+  public getBookmarksWithCategoryIdOrPath(id: number, dirPath: string): Observable<Bookmark[]> {
+    return this.executeTransaction(`SELECT * FROM Bookmarks WHERE CategoryId = ${id.toString()} OR DirPath LIKE '${dirPath}%'`)
       .pipe(
         map(values => DatabaseService.mapRowsToArray<Bookmark>(values.rows))
       )
