@@ -40,7 +40,7 @@ export class VideoPlayerComponent implements OnInit, OnDestroy {
       this.target.nativeElement,
       <extendedOptions>{
         ...this.options,
-        playbackRates: [0.5, 0.75, 1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 2],
+        playbackRates: [0.5, 0.7, 1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 2],
         preload: 'auto',
         userActions: {
           doubleClick: true,

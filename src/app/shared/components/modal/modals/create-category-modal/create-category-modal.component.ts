@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 import {ModalService} from "../../../../services/modal.service";
 import {ElectronService} from "../../../../../core/services";
 import {DIALOG_EVENT_CHANNEL} from "../../../../../../../shared/models/EventChannels";
@@ -17,7 +17,7 @@ import {ModalRef} from "../../../../models/ModalRef";
   templateUrl: './create-category-modal.component.html',
   styleUrls: ['./create-category-modal.component.scss']
 })
-export class CreateCategoryModalComponent implements OnInit {
+export class CreateCategoryModalComponent {
 
   public faFolderOpen = faFolderOpen;
 
@@ -26,14 +26,17 @@ export class CreateCategoryModalComponent implements OnInit {
   public filePath: string;
   public categoryName: string;
 
+  @HostListener('document:keydown', ['$event']) onKeyDown(e: KeyboardEvent): void {
+    if (e.code === 'Enter') {
+      this.onSubmit();
+    }
+  }
+
   constructor(
     private modalService: ModalService,
     private electronService: ElectronService,
     private modalRef: ModalRef,
   ) { }
-
-  ngOnInit(): void {
-  }
 
   public onClose(): void {
     this.modalService.showModal(false);

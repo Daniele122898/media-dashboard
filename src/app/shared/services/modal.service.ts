@@ -27,6 +27,10 @@ export class ModalService {
     this.displaySubj.next(show);
   }
 
+  public isModalActive(): boolean {
+    return this.displaySubj.value;
+  }
+
   public createModal(componentType: Type<any>, config: Partial<ModalConfig> = {}): ModalRef {
     // Create extended dependency injection for our created modal
     const map = new WeakMap();

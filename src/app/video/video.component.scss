@@ -55,6 +55,16 @@
   max-height: calc(100vh - 90px);
   height: calc(100vh - 90px);
   padding-top: 0;
+
+  video {
+    &:focus {
+      outline: none;
+    }
+
+    &:focus-visible {
+      outline: none;
+    }
+  }
 }
 
 :host ::ng-deep .video-player .video-js video {
