@@ -1,5 +1,6 @@
 # Media Dashboard
 <hr>
+
 ### For bingers and students alike
 Manage your video files, create and search for bookmarks and find exactly the 
 spot you needed in your series or lecture!
