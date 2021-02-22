@@ -1,11 +1,12 @@
 {
   "name": "media-dashboard",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Media Dashboard",
   "homepage": "https://github.com/Daniele122898/media-dashboard",
   "repository": "https://github.com/Daniele122898/media-dashboard",
   "author": {
-    "name": "Serenity"
+    "name": "Serenity",
+    "email": "noreply@argonaut.pw"
   },
   "main": "main.js",
   "private": true,
