@@ -13,17 +13,16 @@ const updateApp = (mainWindow: BrowserWindow) => {
   // Check for update
   autoUpdater.checkForUpdates()
     .catch(e => logger.error('Check for updates failed', e));
-
-  autoUpdater.on('update-available', () => {
+autoUpdater
+  autoUpdater.on('update-available', (info) => {
     // prompt user to start download
     dialog.showMessageBox({
       type: 'info',
       title: 'Update available',
-      message: 'A new version of Media Dashboard is available. Do you want to download now?',
+      message: `A new version of Media Dashboard is available ${autoUpdater.currentVersion.version} -> ${info.version}. Do you want to download now?`,
       buttons: ['Yes', 'No']
     }).then(res => {
       const buttonIndex = res.response;
-
       if (buttonIndex === 0) {
         shell.openExternal('https://github.com/Daniele122898/media-dashboard/releases')
         // autoUpdater.downloadUpdate()
