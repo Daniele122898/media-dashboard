@@ -29,7 +29,8 @@
   "win": {
     "icon": "dist/assets/icons",
     "target": [
-      "nsis"
+      "nsis",
+      "zip"
     ],
     "publisherName": "ArgonautDevelopments",
     "certificateFile": "private/ArgonautDevelopments.pfx",
@@ -43,8 +44,11 @@
   },
   "linux": {
     "icon": "dist/assets/icons",
+    "category": "Utility",
     "target": [
-      "AppImage"
+      "AppImage",
+      "tar.gz",
+      "snap"
     ]
   }
 }

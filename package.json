@@ -27,7 +27,7 @@
     "version": "conventional-changelog -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md",
     "lint": "ng lint",
     "win-cert": "electron-builder create-self-signed-cert -p ArgonautDevelopments",
-    "release": "npm run build:prod && electron-builder -w -p 'onTagOrDraft'"
+    "release": "npm run build:prod && electron-builder -mwl -p 'onTagOrDraft'"
   },
   "dependencies": {
     "@fortawesome/angular-fontawesome": "0.8.0",
