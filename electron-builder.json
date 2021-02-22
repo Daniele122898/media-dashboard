@@ -46,9 +46,8 @@
     "icon": "dist/assets/icons",
     "category": "Utility",
     "target": [
-      "AppImage",
       "tar.gz",
-      "snap"
+      "deb"
     ]
   }
 }

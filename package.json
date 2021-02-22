@@ -5,7 +5,8 @@
   "homepage": "https://github.com/Daniele122898/media-dashboard",
   "repository": "https://github.com/Daniele122898/media-dashboard",
   "author": {
-    "name": "Serenity"
+    "name": "Serenity",
+    "email": "noreply@argonaut.pw"
   },
   "main": "main.js",
   "private": true,
@@ -27,7 +28,7 @@
     "version": "conventional-changelog -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md",
     "lint": "ng lint",
     "win-cert": "electron-builder create-self-signed-cert -p ArgonautDevelopments",
-    "release": "npm run build:prod && electron-builder -mwl -p 'onTagOrDraft'"
+    "release": "npm run build:prod && electron-builder -w -p 'onTagOrDraft'"
   },
   "dependencies": {
     "@fortawesome/angular-fontawesome": "0.8.0",
