@@ -13,7 +13,7 @@ const updateApp = (mainWindow: BrowserWindow) => {
   // Check for update
   autoUpdater.checkForUpdates()
     .catch(e => logger.error('Check for updates failed', e));
-autoUpdater
+
   autoUpdater.on('update-available', (info) => {
     // prompt user to start download
     dialog.showMessageBox({
