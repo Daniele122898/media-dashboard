@@ -71,6 +71,7 @@ function createWindow(): BrowserWindow {
     frame: false,
     resizable: true,
     closable: true,
+    fullscreen: false,
     webPreferences: {
       nodeIntegration: true,
       allowRunningInsecureContent: false,
