@@ -11,7 +11,7 @@
   "main": "main.js",
   "private": true,
   "scripts": {
-    "postinstall": "electron-builder install-app-deps",
+    "postinstall": "patch-package && electron-builder install-app-deps",
     "ng": "ng",
     "start": "npm-run-all -p electron:serve ng:serve",
     "build": "npm run electron:serve-tsc && ng build --base-href ./",
@@ -43,6 +43,7 @@
     "file-type": "16.1.0",
     "md5-file": "5.0.0",
     "node-cache": "5.1.2",
+    "patch-package": "6.4.7",
     "video.js": "7.10.2"
   },
   "devDependencies": {
@@ -80,7 +81,7 @@
     "core-js": "3.6.5",
     "cross-env": "7.0.2",
     "electron": "11.1.1",
-    "electron-builder": "22.9.1",
+    "electron-builder": "22.11.1",
     "electron-reload": "1.5.0",
     "eslint": "7.13.0",
     "eslint-plugin-import": "2.22.1",

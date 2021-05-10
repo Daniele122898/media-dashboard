@@ -1,0 +1,26 @@
+diff --git a/node_modules/builder-util-runtime/out/httpExecutor.js b/node_modules/builder-util-runtime/out/httpExecutor.js
+index 476421c..850a7ad 100644
+--- a/node_modules/builder-util-runtime/out/httpExecutor.js
++++ b/node_modules/builder-util-runtime/out/httpExecutor.js
+@@ -237,8 +237,8 @@ Please double check that your authentication token is correct. Due to security r
+             const size = parseInt(contentLength, 10);
+ 
+             if (size > 0) {
+-              if (size > 52428800) {
+-                callback(new Error("Maximum allowed size is 50 MB"));
++              if (size > 524288000) {
++                callback(new Error("Maximum allowed size is 500 MB"));
+                 return;
+               }
+ 
+@@ -254,8 +254,8 @@ Please double check that your authentication token is correct. Due to security r
+             } else if (result == null) {
+               result = chunk;
+             } else {
+-              if (result.length > 52428800) {
+-                callback(new Error("Maximum allowed size is 50 MB"));
++              if (result.length > 524288000) {
++                callback(new Error("Maximum allowed size is 500 MB"));
+                 return;
+               }
+ 
