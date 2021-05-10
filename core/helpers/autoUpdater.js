@@ -12,22 +12,24 @@ var updateApp = function (mainWindow) {
     // Check for update
     electron_updater_1.autoUpdater.checkForUpdates()
         .catch(function (e) { return electron_log_1.default.error('Check for updates failed', e); });
-    electron_updater_1.autoUpdater.on('update-available', function () {
+    electron_updater_1.autoUpdater.on('update-available', function (info) {
         // prompt user to start download
         electron_1.dialog.showMessageBox({
             type: 'info',
             title: 'Update available',
-            message: 'A new version of Media Dashboard is available. Do you want to update now?',
-            buttons: ['Update', 'No']
+            message: "A new version of Media Dashboard is available " + electron_updater_1.autoUpdater.currentVersion.version + " -> " + info.version + ". Do you want to update now?",
+            buttons: ['Yes', 'No']
         }).then(function (res) {
             var buttonIndex = res.response;
             if (buttonIndex === 0) {
+                // shell.openExternal('https://github.com/Daniele122898/media-dashboard/releases')
                 electron_updater_1.autoUpdater.downloadUpdate()
                     .catch(function (e) { return electron_log_1.default.error('Update download failed', e); });
             }
         });
     });
     // Listen for update download finished
+    // TODO periodically check if this crap is ever fixed
     electron_updater_1.autoUpdater.on('update-downloaded', function () {
         mainWindow.setProgressBar(-1);
         electron_1.dialog.showMessageBox({
